@@ -38,6 +38,7 @@ npm run build    # static bundle in dist/ (deployable)
 - **Next:** migrate Week 1 into the content model, then add progress, in-app spaced repetition,
   glossary content/search, PWA installability, and deploy. Full spec in `docs/PROJECT-PLAN.md`
   ("EXPANSION - Distribute as a deployable learning app").
+- **Next branch:** `codex/content-model-migration` from the latest `main`.
 
 ## For the next agent
 

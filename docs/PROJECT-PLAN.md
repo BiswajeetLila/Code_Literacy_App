@@ -3,6 +3,12 @@
 > single source of truth. The section that matters next is **"EXPANSION — Distribute as a
 > deployable learning app (PWA)"**. Ignore vault paths; they're history.
 
+> **Current state (2026-05-31):** the app shell slice is now built and pushed: hash routing,
+> Home, Course Map, Week 1 bridge, placeholder Glossary/Review routes, header week strip,
+> Week 1 FAQ, and persistent dark mode are complete. The next slice is the behavior-preserving
+> Week 1 content-model migration. Start a new branch from `main` named
+> `codex/content-model-migration`.
+
 # V2 — Interactive ELI5 Vertical Slice (Week 01)
 
 ## Context

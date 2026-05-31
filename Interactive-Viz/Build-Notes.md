@@ -75,6 +75,13 @@ GitHub Pages. `base: "./"` in `vite.config.ts` keeps asset paths relative for st
 4. Keep each widget small, commented, and readable as a teaching artifact.
 5. Every week must ship `00 Start`, interactive lessons, **FAQ**, and a final **Read more** tab.
 
+## Next session
+
+Create `codex/content-model-migration` from the latest `main`. The next slice is the
+behavior-preserving Week 1 content-model migration: move lesson/card/resource/FAQ data toward the
+planned content model while reusing the current widgets and keeping the rendered Week 1 experience
+unchanged.
+
 ## Verification done (2026-05-30)
 
 - `npm run build` passed for the original Week 01 page.
