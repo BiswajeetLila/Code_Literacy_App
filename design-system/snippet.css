@@ -1,0 +1,107 @@
+/* ============================================================
+   NASA TECHNICAL MANUAL — drop-in stylesheet
+   slug: nasa-technical-manual
+   Paste into a project and you start styled. Fonts via:
+   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+   ============================================================ */
+
+:root {
+  --paper: #f4f1e8;
+  --paper-2: #ece7d8;
+  --ink: #1a1a1a;
+  --red: #fc3d21;   /* NASA "worm" red — the one hot accent */
+  --cyan: #5b8db8;  /* blueprint blue */
+  --amber: #e8a33d; /* caution */
+  --grid: rgba(26, 26, 26, 0.06);
+  --mono: "Space Mono", ui-monospace, "Courier New", monospace;
+  --grotesk: "Space Grotesk", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 32px 16px;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--mono);
+  line-height: 1.6;
+}
+
+/* the "sheet" — one page from a technical manual */
+.sheet {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 32px 36px 20px;
+}
+
+/* corner registration marks (put 4 empty <span class="reg tl/tr/bl/br"> in .sheet) */
+.reg { position: absolute; width: 14px; height: 14px; }
+.reg::before, .reg::after { content: ""; position: absolute; background: var(--ink); }
+.reg::before { left: 6px; top: 0; width: 1px; height: 14px; }
+.reg::after { top: 6px; left: 0; width: 14px; height: 1px; }
+.reg.tl { left: -7px; top: -7px; } .reg.tr { right: -7px; top: -7px; }
+.reg.bl { left: -7px; bottom: -7px; } .reg.br { right: -7px; bottom: -7px; }
+
+/* headers / figure tags */
+h1, h2, h3 { font-family: var(--grotesk); text-transform: uppercase; letter-spacing: 0.03em; }
+h1 { font-size: 26px; font-weight: 700; margin: 0 0 8px; }
+h2 { font-size: 16px; font-weight: 700; border-bottom: 1px solid var(--ink); padding-bottom: 6px; margin: 28px 0 12px; }
+.doc-tag, .doc-foot { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--red); }
+.doc-foot { display: flex; justify-content: space-between; color: var(--ink); border-top: 1px solid var(--ink); margin-top: 28px; padding-top: 8px; }
+code { font-family: var(--mono); background: var(--paper-2); border: 1px solid var(--ink); padding: 0 4px; }
+.hint { font-size: 12px; color: #6f6b5c; }
+
+/* buttons */
+button {
+  font-family: var(--mono); font-weight: 700; font-size: 13px; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--paper); background: var(--ink);
+  border: 1px solid var(--ink); padding: 9px 14px; cursor: pointer; transition: opacity 200ms;
+}
+button:hover { opacity: 0.82; }
+button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+
+/* tabs */
+.tabs { display: flex; margin: 24px 0 0; border-bottom: 2px solid var(--ink); }
+.tab {
+  font-family: var(--grotesk); font-weight: 700; font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--ink); background: var(--paper-2);
+  border: 1px solid var(--ink); border-bottom: none; padding: 10px 16px; cursor: pointer;
+  margin-right: 4px; position: relative; top: 2px;
+}
+.tab:hover { background: var(--paper); }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--paper); top: 0; padding-bottom: 12px; }
+.tab-num { color: var(--red); margin-right: 6px; }
+.tab[aria-selected="true"] .tab-num { color: var(--amber); }
+
+/* card */
+.card { border: 1px solid var(--ink); background: var(--paper-2); margin: 10px 0; }
+.card-q { display: flex; align-items: baseline; gap: 8px; padding: 12px 14px; cursor: pointer; }
+.card-q::before { content: "Q"; color: var(--red); font-weight: 700; }
+.card-q > span:first-of-type { flex: 1; text-align: left; }
+.card-a { display: none; padding: 0 14px 14px; border-top: 1px dashed var(--ink); }
+.card.open .card-a { display: block; padding-top: 12px; }
+
+/* code block (dark surface + per-line notes) */
+.code-block { border: 1px solid var(--ink); background: #14140f; color: #e8e4d8; margin: 16px 0; }
+.code-block-title {
+  font-family: var(--mono); font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; background: var(--ink); color: var(--paper); padding: 6px 12px;
+  display: flex; justify-content: space-between;
+}
+.code-block-title .lang { color: var(--amber); }
+.code-line { display: grid; grid-template-columns: 1fr auto; gap: 16px; padding: 3px 12px; font-family: var(--mono); font-size: 13px; line-height: 1.7; }
+.code-line code { background: none; border: none; color: #e8e4d8; padding: 0; white-space: pre; }
+.code-line .note { color: #8a8676; font-size: 11px; text-align: right; }
+.code-line .note::before { content: "← "; color: var(--red); }
+.code-kw { color: #f08a6c; } .code-str { color: #9fd49f; } .code-com { color: #6f6b5c; }
+
+@media (prefers-reduced-motion: reduce) { button, .tab { transition: none; } }

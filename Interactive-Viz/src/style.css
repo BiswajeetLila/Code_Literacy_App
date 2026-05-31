@@ -1,0 +1,294 @@
+/* NASA 1980s technical-manual look — mirrors the Obsidian snippet
+   (.obsidian/snippets/nasa-manual.css) so both surfaces feel like one
+   document. Palette + fonts kept identical on purpose. */
+
+:root {
+  --paper: #f4f1e8;
+  --paper-2: #ece7d8;
+  --ink: #1a1a1a;
+  --red: #fc3d21; /* NASA "worm" red */
+  --cyan: #5b8db8; /* blueprint blue */
+  --amber: #e8a33d; /* caution */
+  --grid: rgba(26, 26, 26, 0.06);
+  --mono: "Space Mono", ui-monospace, "Courier New", monospace;
+  --grotesk: "Space Grotesk", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 32px 16px;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--mono);
+  line-height: 1.6;
+}
+
+/* the "sheet" — a page from a technical manual */
+.sheet {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 32px 36px 20px;
+}
+
+/* corner registration marks */
+.reg { position: absolute; width: 14px; height: 14px; }
+.reg::before, .reg::after { content: ""; position: absolute; background: var(--ink); }
+.reg::before { width: 14px; height: 2px; top: 6px; }
+.reg::after { width: 2px; height: 14px; left: 6px; }
+.reg.tl { top: 6px; left: 6px; }
+.reg.tr { top: 6px; right: 6px; }
+.reg.bl { bottom: 6px; left: 6px; }
+.reg.br { bottom: 6px; right: 6px; }
+
+.doc-tag {
+  font-size: 11px; letter-spacing: 0.18em; color: var(--red);
+  font-weight: 700; margin: 0 0 4px;
+}
+h1 {
+  font-family: var(--grotesk); font-size: 26px; text-transform: uppercase;
+  letter-spacing: 0.04em; margin: 0 0 8px; border-bottom: 2px solid var(--ink);
+  padding-bottom: 8px;
+}
+.subtitle { margin: 8px 0 0; max-width: 60ch; }
+
+h2 {
+  font-family: var(--grotesk); font-size: 16px; text-transform: uppercase;
+  letter-spacing: 0.06em; margin: 0 0 12px;
+  border-bottom: 1px solid var(--ink); padding-bottom: 4px;
+}
+
+.panel { margin-top: 28px; }
+
+/* the 3D canvas frame */
+.scene {
+  width: 100%; height: 360px; border: 1px solid var(--ink);
+  background: var(--paper-2); position: relative; overflow: hidden;
+}
+.scene canvas { display: block; }
+
+/* floating labels drawn over the canvas (CSS2D) */
+.viz-label {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--ink); background: var(--paper);
+  border: 1px solid var(--ink); padding: 2px 6px; white-space: nowrap;
+  pointer-events: none;
+}
+.viz-label.accent { color: var(--paper); background: var(--red); border-color: var(--red); }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 14px 0 6px; }
+button {
+  font-family: var(--mono); font-weight: 700; font-size: 13px;
+  color: var(--paper); background: var(--ink); border: 1px solid var(--ink);
+  padding: 8px 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+button:hover { background: var(--red); border-color: var(--red); }
+button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.ortho-toggle { font-size: 12px; display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+
+.phase-readout {
+  font-size: 13px; border-left: 4px solid var(--red); background: var(--paper-2);
+  padding: 8px 12px; margin: 8px 0 0;
+}
+
+.lesson { padding-left: 18px; }
+.lesson li { margin-bottom: 8px; }
+.lesson b { color: var(--ink); }
+
+.hint { font-size: 12px; color: #5a5648; margin: 0 0 12px; }
+
+/* predict-then-peek cards */
+.cards { display: grid; gap: 12px; }
+.card {
+  border: 1px solid var(--ink); background: var(--paper-2);
+}
+.card-q {
+  font-weight: 700; padding: 12px 14px; cursor: pointer;
+  display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+}
+.card-q::before { content: "Q"; color: var(--red); font-weight: 700; margin-right: 8px; }
+.card-q > span:first-of-type { flex: 1; text-align: left; }
+.card-reveal { font-size: 12px; color: var(--cyan); white-space: nowrap; }
+.card-a {
+  border-top: 1px dashed var(--ink); padding: 12px 14px;
+  display: none; background: var(--paper);
+}
+.card-a::before { content: "A "; color: var(--red); font-weight: 700; }
+.card.open .card-a { display: block; }
+.card.open .card-reveal { color: var(--ink); }
+
+.doc-foot {
+  display: flex; justify-content: space-between; font-size: 11px;
+  letter-spacing: 0.08em; margin-top: 28px; border-top: 2px solid var(--ink);
+  padding-top: 8px; color: #5a5648;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button { transition: none; }
+}
+
+/* ============ TABS ============ */
+.tabs {
+  display: flex; flex-wrap: wrap; gap: 0; margin: 24px 0 0; border-bottom: 2px solid var(--ink);
+}
+@media (max-width: 620px) {
+  .tabs { gap: 4px 0; }
+  .tab { padding: 8px 10px; font-size: 11px; margin-right: 3px; top: 0; }
+  .tab[aria-selected="true"] { padding-bottom: 9px; }
+}
+.tab {
+  font-family: var(--grotesk); font-weight: 700; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--ink); background: var(--paper-2);
+  border: 1px solid var(--ink); border-bottom: none; padding: 10px 16px;
+  cursor: pointer; margin-right: 4px; position: relative; top: 2px;
+}
+.tab:hover { background: var(--paper); }
+.tab[aria-selected="true"] {
+  background: var(--ink); color: var(--paper); top: 0; padding-bottom: 12px;
+}
+.tab:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.tab-num { color: var(--red); margin-right: 6px; }
+.tab[aria-selected="true"] .tab-num { color: var(--amber); }
+
+.panel[hidden] { display: none; }
+
+/* ============ READING LIST (Lesson 4 — Read more) ============ */
+.res-head {
+  font-family: var(--grotesk); text-transform: uppercase; letter-spacing: 0.05em;
+  font-size: 13px; color: var(--red); margin: 20px 0 10px;
+}
+.res-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 4px 14px;
+  border: 1px solid var(--ink); background: var(--paper-2);
+  padding: 12px 14px; margin-bottom: 8px; text-decoration: none; color: var(--ink);
+  transition: background 200ms;
+}
+.res-item:hover { background: var(--paper); }
+.res-item:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.res-main { display: flex; flex-direction: column; gap: 2px; }
+.res-title { font-weight: 700; font-size: 14px; }
+.res-meta { font-size: 11px; color: #6f6b5c; text-transform: uppercase; letter-spacing: 0.03em; }
+.res-why { grid-column: 1 / -1; margin: 4px 0 0; font-size: 13px; line-height: 1.5; }
+.res-go { font-size: 11px; color: var(--cyan); white-space: nowrap; align-self: start; }
+
+/* ============ FTUE (Lesson 0 — Start here) ============ */
+.ftue-lead { font-size: 16px; line-height: 1.6; max-width: 60ch; }
+.ftue-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0 8px;
+}
+@media (max-width: 680px) { .ftue-grid { grid-template-columns: 1fr; } }
+.ftue-card {
+  border: 1px solid var(--ink); background: var(--paper-2); padding: 14px;
+  position: relative;
+}
+.ftue-card p { margin: 0 0 8px; font-size: 13px; line-height: 1.55; }
+.ftue-card p:last-child { margin-bottom: 0; }
+.ftue-k {
+  position: absolute; top: -10px; left: 10px; background: var(--red); color: var(--paper);
+  font-family: var(--grotesk); font-weight: 700; font-size: 12px;
+  width: 22px; height: 22px; display: grid; place-items: center;
+}
+.ftue-roadmap {
+  list-style: none; counter-reset: none; padding: 0; margin: 8px 0 0;
+}
+.ftue-roadmap li {
+  border-left: 3px solid var(--red); background: var(--paper-2);
+  padding: 10px 14px; margin-bottom: 8px; font-size: 14px; line-height: 1.5;
+}
+
+/* ============ CODE BLOCK (Rule 8: picture -> real code) ============ */
+.code-block {
+  border: 1px solid var(--ink); background: #14140f; color: #e8e4d8;
+  margin: 16px 0; overflow: hidden;
+}
+.code-block-title {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  background: var(--ink); color: var(--paper); padding: 6px 12px;
+  display: flex; justify-content: space-between;
+}
+.code-block-title .lang { color: var(--amber); }
+.code-line {
+  display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: baseline;
+  padding: 3px 12px; font-family: var(--mono); font-size: 13px; line-height: 1.7;
+}
+.code-line code { background: none; border: none; color: #e8e4d8; padding: 0; white-space: pre; }
+.code-line .note {
+  color: #8a8676; font-size: 11px; text-align: right; white-space: nowrap;
+}
+.code-line .note::before { content: "← "; color: var(--red); }
+.code-kw { color: #f08a6c; }      /* keywords */
+.code-str { color: #9fd49f; }     /* strings */
+.code-fn { color: #7fb6df; }      /* function names */
+.code-com { color: #6f6b5c; }     /* comments */
+
+/* ============ FILE TREE (Lesson 2) ============ */
+.file-tree-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 620px) { .file-tree-wrap { grid-template-columns: 1fr; } }
+.file-tree {
+  border: 1px solid var(--ink); background: var(--paper-2);
+  padding: 12px; font-family: var(--mono); font-size: 13px;
+}
+.ft-row {
+  display: flex; align-items: center; gap: 8px; padding: 3px 6px;
+  cursor: pointer; border: 1px solid transparent; white-space: nowrap;
+}
+.ft-row:hover { background: var(--paper); }
+.ft-row.selected { border-color: var(--ink); background: var(--paper); }
+.ft-row.entry { box-shadow: inset 3px 0 0 var(--red); }
+.ft-row.dim { color: #8a8676; }
+.ft-icon { color: var(--cyan); font-weight: 700; }
+.ft-folder .ft-icon { color: var(--amber); }
+.ft-badge {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.04em;
+  border: 1px solid currentColor; padding: 0 4px; margin-left: auto;
+}
+.ft-badge.first { color: var(--red); }
+.ft-badge.skip { color: #8a8676; }
+.ft-detail {
+  border: 1px solid var(--ink); background: var(--paper); padding: 14px;
+  font-size: 13px; min-height: 120px;
+}
+.ft-detail h4 {
+  font-family: var(--mono); margin: 0 0 8px; font-size: 13px;
+  border-bottom: 1px solid var(--ink); padding-bottom: 6px;
+}
+.ft-detail .ft-empty { color: #8a8676; }
+
+/* ============ ERROR WINDOWS (Lesson 3) ============ */
+.err-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; }
+.err-windows { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 620px) { .err-windows { grid-template-columns: 1fr; } }
+.err-win { border: 1px solid var(--ink); background: #14140f; overflow: hidden; }
+.err-win-title {
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 6px 10px; color: var(--paper); background: var(--ink);
+  display: flex; justify-content: space-between;
+}
+.err-win-title .who { color: var(--cyan); }
+.err-body {
+  font-family: var(--mono); font-size: 12px; line-height: 1.6;
+  padding: 12px; color: #b9b5a6; min-height: 110px; white-space: pre-wrap;
+}
+.err-line { color: #b9b5a6; }
+.err-line.red { color: #ff6b53; cursor: pointer; }
+.err-line.red:hover { text-decoration: underline; }
+.err-quiet { color: #6f6b5c; font-style: italic; }
+.err-decode {
+  border: 1px solid var(--red); background: var(--paper-2); color: var(--ink);
+  padding: 12px; margin-top: 14px; font-size: 13px; display: none;
+}
+.err-decode.show { display: block; }
+.err-decode h4 { margin: 0 0 6px; font-family: var(--mono); font-size: 13px; }
