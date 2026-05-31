@@ -1,6 +1,6 @@
 # Build Notes - Interactive-Viz (Code Literacy V2)
 
-The interactive layer for the curriculum. Holds the deployable web app and visualizations.
+The interaction-first layer for the curriculum. Holds the deployable web app and visualizations.
 Week 01 is built, and the app now has the first routed shell for the PWA path.
 
 ## What this is
@@ -8,7 +8,7 @@ Week 01 is built, and the app now has the first routed shell for the PWA path.
 A tiny **Vite + TypeScript + Three.js** app. `index.html` is the persistent app shell,
 `src/router.ts` handles hash routes, and `#/week/01` bridges to the existing Week 01 lesson.
 
-Week 01 contains three tabbed lessons plus Start and Read more:
+Week 01 contains three tabbed lessons plus Start, FAQ, and Read more:
 
 1. **Restaurant** - animated 3D request/response, plus the real `fetch()` code.
 2. **Files & the front door** - clickable file tree, entry-point reveal, real `package.json`,
@@ -16,8 +16,9 @@ Week 01 contains three tabbed lessons plus Start and Read more:
 3. **Where errors show up** - terminal vs browser console; break a side, click the red line,
    and decode the error.
 
-Every lesson follows the content rule **picture then real code**: an everyday picture, then
-4-6 lines of real syntax annotated back to it. Pace is ELI10.
+Every lesson follows the content rule **picture, interact, then real code**: an everyday
+picture, a learner action, and 4-6 lines of real syntax annotated back to the action.
+Pace is ELI10.
 
 The code stays deliberately small and readable because later course weeks use this project as
 a student reading target.
@@ -40,7 +41,8 @@ GitHub Pages. `base: "./"` in `vite.config.ts` keeps asset paths relative for st
 | File | Role |
 |---|---|
 | `index.html` | Entry point. Persistent app shell with `#view`. Loads `src/main.ts`. |
-| `src/main.ts` | Starts the hash router. |
+| `src/main.ts` | Applies theme and starts the hash router. |
+| `src/theme.ts` | Applies the light/dark theme toggle and persists user choice. |
 | `src/router.ts` | Routes `#/`, `#/weeks`, `#/week/NN`, `#/glossary`, and `#/review`. |
 | `src/pages/` | Home, Course Map, placeholders, and the temporary Week 01 bridge. |
 | `src/weekMeta.ts` | The 10-week course-map metadata from the project plan. |
@@ -51,24 +53,27 @@ GitHub Pages. `base: "./"` in `vite.config.ts` keeps asset paths relative for st
 | `src/codeBlock.ts` | Shared helper: real code + per-line picture notes. |
 | `src/cards.ts` | Predict-then-peek cards; one array per lesson. |
 | `src/resources.ts` | The mandatory Week 01 Read more list. |
-| `src/style.css` | NASA technical-manual theme and app-shell layout. |
+| `src/style.css` | NASA technical-manual theme, dark mode, and app-shell layout. |
 
 ## Design decisions
 
 - **Plain TypeScript, no UI framework.** Fewer moving parts makes the app easier to read.
+- **Interaction first.** Prose supports the action; it does not replace the action.
 - **Hash routes.** Static-host friendly and enough for this PWA milestone.
 - **Temporary Week 01 bridge.** Current behavior stays intact until the content-model migration.
+- **Light by default, dark as a choice.** The NASA manual look stays light-first, with a
+  persistent dark-mode toggle for comfort.
 - **Flat line-art 3D.** `MeshBasicMaterial` fills + black `EdgesGeometry` outlines; no lights.
 - **Orthographic camera by default.** Matches the technical-manual drawing style.
 - **One shared visual language.** The web app follows the approved NASA technical-manual system.
 
 ## How to extend
 
-1. Add the concept and everyday picture to `docs/CONTENT-GUIDE.md` first.
+1. Add the concept, everyday picture, and primary interaction to `docs/CONTENT-GUIDE.md` first.
 2. Add course metadata in `src/weekMeta.ts` if the week/topic changes.
 3. Add or update routes/pages through `src/router.ts`.
 4. Keep each widget small, commented, and readable as a teaching artifact.
-5. Every week must ship `00 Start`, lessons, and a final **Read more** tab.
+5. Every week must ship `00 Start`, interactive lessons, **FAQ**, and a final **Read more** tab.
 
 ## Verification done (2026-05-30)
 
@@ -83,8 +88,7 @@ GitHub Pages. `base: "./"` in `vite.config.ts` keeps asset paths relative for st
 - Headless Edge verified production `dist/` routes: `#/`, `#/weeks`, `#/week/01`,
   `#/week/02`, `#/glossary`, and `#/review`, including reloads.
 - Browser back/forward works between Home, Course Map, and Glossary.
-- Week 01 regression passed: five tabs, lazy Restaurant canvas, step control, card reveal,
-  file-tree entry reveal, terminal error decode, and Read more resources.
+- Week 01 regression passed: tabs, lazy Restaurant canvas, step control, card reveal,
+  file-tree entry reveal, terminal error decode, FAQ, and Read more resources.
 - Mobile checks at 375x812 passed for Course Map and Week 01 with no horizontal overflow.
-- Verification screenshots were written to ignored `dist/verification-week01.png` and
-  `dist/verification-week01-mobile.png`.
+- Dark mode persists with `localStorage` and keeps Week 01 readable.

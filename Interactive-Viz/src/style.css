@@ -10,8 +10,34 @@
   --cyan: #5b8db8; /* blueprint blue */
   --amber: #e8a33d; /* caution */
   --grid: rgba(26, 26, 26, 0.06);
+  --muted: #5a5648;
+  --muted-2: #6f6b5c;
+  --dim: #8a8676;
+  --code-bg: #14140f;
+  --code-fg: #e8e4d8;
+  --terminal-fg: #b9b5a6;
+  --error: #ff6b53;
   --mono: "Space Mono", ui-monospace, "Courier New", monospace;
   --grotesk: "Space Grotesk", system-ui, sans-serif;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --paper: #151513;
+  --paper-2: #22221d;
+  --ink: #f4f1e8;
+  --red: #ff624a;
+  --cyan: #8dbde0;
+  --amber: #f0bd68;
+  --grid: rgba(244, 241, 232, 0.07);
+  --muted: #b9b4a5;
+  --muted-2: #a7a192;
+  --dim: #8b8678;
+  --code-bg: #080807;
+  --code-fg: #f4f1e8;
+  --terminal-fg: #c9c3b4;
+  --error: #ff8068;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -96,6 +122,33 @@ button:hover { background: var(--red); border-color: var(--red); }
 button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .ortho-toggle { font-size: 12px; display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
 
+.theme-toggle {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 30;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  min-height: 34px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 6px 10px;
+  box-shadow: none;
+}
+
+.theme-toggle:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.theme-toggle-k {
+  color: var(--red);
+  font-family: var(--grotesk);
+}
+
 .phase-readout {
   font-size: 13px; border-left: 4px solid var(--red); background: var(--paper-2);
   padding: 8px 12px; margin: 8px 0 0;
@@ -105,7 +158,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .lesson li { margin-bottom: 8px; }
 .lesson b { color: var(--ink); }
 
-.hint { font-size: 12px; color: #5a5648; margin: 0 0 12px; }
+.hint { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
 
 /* predict-then-peek cards */
 .cards { display: grid; gap: 12px; }
@@ -130,7 +183,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .doc-foot {
   display: flex; justify-content: space-between; font-size: 11px;
   letter-spacing: 0.08em; margin-top: 28px; border-top: 2px solid var(--ink);
-  padding-top: 8px; color: #5a5648;
+  padding-top: 8px; color: var(--muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -178,7 +231,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .res-item:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .res-main { display: flex; flex-direction: column; gap: 2px; }
 .res-title { font-weight: 700; font-size: 14px; }
-.res-meta { font-size: 11px; color: #6f6b5c; text-transform: uppercase; letter-spacing: 0.03em; }
+.res-meta { font-size: 11px; color: var(--muted-2); text-transform: uppercase; letter-spacing: 0.03em; }
 .res-why { grid-column: 1 / -1; margin: 4px 0 0; font-size: 13px; line-height: 1.5; }
 .res-go { font-size: 11px; color: var(--cyan); white-space: nowrap; align-self: start; }
 
@@ -209,7 +262,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 
 /* ============ CODE BLOCK (Rule 8: picture -> real code) ============ */
 .code-block {
-  border: 1px solid var(--ink); background: #14140f; color: #e8e4d8;
+  border: 1px solid var(--ink); background: var(--code-bg); color: var(--code-fg);
   margin: 16px 0; overflow: hidden;
 }
 .code-block-title {
@@ -223,9 +276,9 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: baseline;
   padding: 3px 12px; font-family: var(--mono); font-size: 13px; line-height: 1.7;
 }
-.code-line code { background: none; border: none; color: #e8e4d8; padding: 0; white-space: pre; }
+.code-line code { background: none; border: none; color: var(--code-fg); padding: 0; white-space: pre; }
 .code-line .note {
-  color: #8a8676; font-size: 11px; text-align: right; white-space: nowrap;
+  color: var(--dim); font-size: 11px; text-align: right; white-space: nowrap;
 }
 .code-line .note::before { content: "← "; color: var(--red); }
 .code-kw { color: #f08a6c; }      /* keywords */
@@ -247,7 +300,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .ft-row:hover { background: var(--paper); }
 .ft-row.selected { border-color: var(--ink); background: var(--paper); }
 .ft-row.entry { box-shadow: inset 3px 0 0 var(--red); }
-.ft-row.dim { color: #8a8676; }
+.ft-row.dim { color: var(--dim); }
 .ft-icon { color: var(--cyan); font-weight: 700; }
 .ft-folder .ft-icon { color: var(--amber); }
 .ft-badge {
@@ -255,7 +308,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   border: 1px solid currentColor; padding: 0 4px; margin-left: auto;
 }
 .ft-badge.first { color: var(--red); }
-.ft-badge.skip { color: #8a8676; }
+.ft-badge.skip { color: var(--dim); }
 .ft-detail {
   border: 1px solid var(--ink); background: var(--paper); padding: 14px;
   font-size: 13px; min-height: 120px;
@@ -264,13 +317,13 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   font-family: var(--mono); margin: 0 0 8px; font-size: 13px;
   border-bottom: 1px solid var(--ink); padding-bottom: 6px;
 }
-.ft-detail .ft-empty { color: #8a8676; }
+.ft-detail .ft-empty { color: var(--dim); }
 
 /* ============ ERROR WINDOWS (Lesson 3) ============ */
 .err-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 0 0 14px; }
 .err-windows { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 620px) { .err-windows { grid-template-columns: 1fr; } }
-.err-win { border: 1px solid var(--ink); background: #14140f; overflow: hidden; }
+.err-win { border: 1px solid var(--ink); background: var(--code-bg); overflow: hidden; }
 .err-win-title {
   font-family: var(--mono); font-size: 11px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em;
@@ -280,12 +333,12 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .err-win-title .who { color: var(--cyan); }
 .err-body {
   font-family: var(--mono); font-size: 12px; line-height: 1.6;
-  padding: 12px; color: #b9b5a6; min-height: 110px; white-space: pre-wrap;
+  padding: 12px; color: var(--terminal-fg); min-height: 110px; white-space: pre-wrap;
 }
-.err-line { color: #b9b5a6; }
-.err-line.red { color: #ff6b53; cursor: pointer; }
+.err-line { color: var(--terminal-fg); }
+.err-line.red { color: var(--error); cursor: pointer; }
 .err-line.red:hover { text-decoration: underline; }
-.err-quiet { color: #6f6b5c; font-style: italic; }
+.err-quiet { color: var(--muted-2); font-style: italic; }
 .err-decode {
   border: 1px solid var(--red); background: var(--paper-2); color: var(--ink);
   padding: 12px; margin-top: 14px; font-size: 13px; display: none;
@@ -557,7 +610,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 
 .week-card p {
   grid-column: 2 / 4;
-  color: #5a5648;
+  color: var(--muted);
 }
 
 .placeholder-panel {
@@ -611,6 +664,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 }
 
 @media (max-width: 460px) {
+  .theme-toggle { top: 8px; right: 8px; }
   h1 { font-size: 22px; }
   .app-nav a { flex: 1 1 calc(50% - 6px); text-align: center; }
   .route-status { align-items: flex-start; flex-direction: column; }

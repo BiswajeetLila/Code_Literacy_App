@@ -2,11 +2,11 @@ export function renderHome(host: HTMLElement): void {
   host.innerHTML = `
     <section class="route-panel home-panel">
       <p class="route-kicker">MANUAL START</p>
-      <h2>Read code before you try to write it</h2>
+      <h2>Interact first, then read the code</h2>
       <p class="ftue-lead">
         Code Literacy is a 10-week course for beginners who use AI to build things.
-        The goal is to read generated code, spot bad work, debug calmly, and steer
-        the AI toward working software.
+        Each idea starts as something you can click, predict, break, reveal, or move.
+        Then you read the real code shape behind it.
       </p>
       <div class="home-actions">
         <a class="app-button" href="#/week/01">Start Week 01</a>
@@ -22,13 +22,13 @@ export function renderHome(host: HTMLElement): void {
       </article>
       <article class="route-card">
         <span class="card-index">02</span>
-        <h3>Then real code</h3>
-        <p>The picture immediately turns into 4-6 lines of real JavaScript, TypeScript, or Python.</p>
+        <h3>Interact next</h3>
+        <p>You click, scrub, choose, reveal, or debug before the explanation settles.</p>
       </article>
       <article class="route-card">
         <span class="card-index">03</span>
-        <h3>Predict, then peek</h3>
-        <p>You guess before revealing. That active pause is the whole learning loop.</p>
+        <h3>Then read code</h3>
+        <p>The interaction turns into 4-6 lines of real JavaScript, TypeScript, or Python.</p>
       </article>
     </section>
 
