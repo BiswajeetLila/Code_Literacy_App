@@ -373,11 +373,12 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   margin-left: auto;
   align-self: stretch;
   display: inline-flex;
+  gap: 10px;
   align-items: center;
   border: 1px solid var(--ink);
   background: var(--paper);
   color: var(--ink);
-  padding: 8px 12px;
+  padding: 6px 10px;
   font-family: var(--grotesk);
   font-size: 12px;
   font-weight: 700;
@@ -385,13 +386,29 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   text-transform: uppercase;
 }
 
-.route-status::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  background: var(--red);
+.route-status-label {
+  white-space: nowrap;
+}
+
+.week-strip {
+  display: inline-grid;
+  grid-template-columns: repeat(10, 12px);
+  gap: 4px;
+}
+
+.week-square {
+  width: 12px;
+  height: 12px;
   border: 1px solid var(--ink);
+  background: var(--paper);
+}
+
+.week-square.complete {
+  background: var(--ink);
+}
+
+.week-square.current {
+  background: var(--red);
 }
 
 .route-view {
@@ -556,19 +573,47 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   padding-bottom: 12px;
 }
 
+.faq-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.faq-item {
+  border: 1px solid var(--ink);
+  background: var(--paper-2);
+  padding: 12px;
+}
+
+.faq-item h3 {
+  margin: 0 0 6px;
+  font-family: var(--grotesk);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.faq-item p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 @media (max-width: 760px) {
   body { padding: 16px 8px; }
   .sheet { padding: 24px 18px 16px; }
   .app-head-row { grid-template-columns: 1fr; }
   .app-cta { justify-self: start; }
-  .route-status { flex-basis: 100%; margin-left: 0; }
+  .route-status { flex-basis: 100%; margin-left: 0; justify-content: space-between; }
   .route-grid,
-  .week-grid { grid-template-columns: 1fr; }
+  .week-grid,
+  .faq-list { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 460px) {
   h1 { font-size: 22px; }
   .app-nav a { flex: 1 1 calc(50% - 6px); text-align: center; }
+  .route-status { align-items: flex-start; flex-direction: column; }
   .week-card { grid-template-columns: auto 1fr; }
   .week-status { grid-column: 2; justify-self: start; }
   .week-card p { grid-column: 1 / -1; }

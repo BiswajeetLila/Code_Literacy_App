@@ -37,7 +37,10 @@ export function renderWeek01(host: HTMLElement): void {
           <span class="tab-num">03</span>Where errors show up
         </button>
         <button class="tab" role="tab" data-tab="l4" aria-selected="false">
-          <span class="tab-num">04</span>Read more
+          <span class="tab-num">04</span>FAQ
+        </button>
+        <button class="tab" role="tab" data-tab="l5" aria-selected="false">
+          <span class="tab-num">05</span>Read more
         </button>
       </nav>
 
@@ -76,6 +79,8 @@ export function renderWeek01(host: HTMLElement): void {
           <li><b>01 &middot; Restaurant</b> - how a screen <i>asks</i> for things and gets <i>answers</i> back.</li>
           <li><b>02 &middot; Files &amp; the front door</b> - what all those files/folders are, and which one runs first.</li>
           <li><b>03 &middot; Where errors show up</b> - the two windows a crash can print in, and how to read it.</li>
+          <li><b>04 &middot; FAQ</b> - quick meanings for small words and syntax you will see here.</li>
+          <li><b>05 &middot; Read more</b> - outside links once the week makes sense.</li>
         </ol>
 
         <h2>One thing before Lesson 2</h2>
@@ -150,6 +155,19 @@ export function renderWeek01(host: HTMLElement): void {
       </section>
 
       <section class="panel" id="panel-l4" role="tabpanel" hidden>
+        <h2>FAQ - quick meanings</h2>
+        <p class="hint">Short answers for words and syntax that show up in Week 01. Use this when a small symbol blocks the bigger idea.</p>
+        <div class="faq-list">
+          ${WEEK_01_FAQ.map((item) => `
+            <article class="faq-item">
+              <h3>${item.term}</h3>
+              <p>${item.meaning}</p>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+
+      <section class="panel" id="panel-l5" role="tabpanel" hidden>
         <h2>Read more - Week 01 reading list</h2>
         <div id="reading"></div>
       </section>
@@ -160,7 +178,7 @@ export function renderWeek01(host: HTMLElement): void {
     if (id === "l1") buildLesson1(host);
     if (id === "l2") buildLesson2(host);
     if (id === "l3") buildLesson3(host);
-    if (id === "l4") buildLesson4(host);
+    if (id === "l5") buildLesson4(host);
   }, host);
 
   host
@@ -169,6 +187,73 @@ export function renderWeek01(host: HTMLElement): void {
       host.querySelector<HTMLButtonElement>('.tab[data-tab="l1"]')!.click(),
     );
 }
+
+const WEEK_01_FAQ = [
+  {
+    term: "src/",
+    meaning: "Short for source. This is usually the folder with your project's own code, not downloaded parts.",
+  },
+  {
+    term: "JSON",
+    meaning: "A plain data shape made of names and values. Curly braces hold the thing, colons connect names to values.",
+  },
+  {
+    term: "package.json",
+    meaning: "The web project's parts label. It names the app and lists outside packages it needs.",
+  },
+  {
+    term: "node_modules/",
+    meaning: "Downloaded web-project parts. It can be huge. Read the label in package.json; do not edit this folder by hand.",
+  },
+  {
+    term: ".venv/",
+    meaning: "A Python project's local box of installed parts. Same idea as node_modules, but for Python.",
+  },
+  {
+    term: "requirements.txt",
+    meaning: "A Python parts list. It tells Python which packages the project needs.",
+  },
+  {
+    term: ".bat",
+    meaning: "A Windows batch file. It is a small command script that runs terminal commands for you.",
+  },
+  {
+    term: "terminal",
+    meaning: "The text window where commands run and many Python/server errors print.",
+  },
+  {
+    term: "browser console",
+    meaning: "The browser's error window for the page's JavaScript. Open it from DevTools.",
+  },
+  {
+    term: "fetch()",
+    meaning: "JavaScript's way for the browser to ask another URL for data. In the restaurant picture, it places the order.",
+  },
+  {
+    term: "await",
+    meaning: "Wait here until the answer comes back, then keep reading the next line.",
+  },
+  {
+    term: "const",
+    meaning: "Make a named box for a value that this code does not plan to replace.",
+  },
+  {
+    term: "return",
+    meaning: "Hand a value back to the code that asked for it.",
+  },
+  {
+    term: "print()",
+    meaning: "Show a value in the terminal so a human can read it.",
+  },
+  {
+    term: "NameError",
+    meaning: "Python used a name that has not been made yet. Often a typo or missing setup line.",
+  },
+  {
+    term: "TypeError",
+    meaning: "JavaScript was given the wrong kind of thing. Example: trying to call something that is not a function.",
+  },
+];
 
 function buildLesson1(root: HTMLElement): void {
   const scene = root.querySelector<HTMLElement>("#scene")!;

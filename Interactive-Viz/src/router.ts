@@ -68,16 +68,40 @@ function markActiveNav(route: Route): void {
   });
 
   const status = document.querySelector<HTMLElement>("#route-status");
-  if (status) status.textContent = routeStatusText(route);
+  if (status) {
+    status.innerHTML = routeStatusMarkup(route);
+  }
+}
+
+function routeStatusMarkup(route: Route): string {
+  const label = routeStatusText(route);
+  const currentWeek = route.name === "week" ? Number(route.id) : 0;
+
+  return `
+    <span class="route-status-label">${label}</span>
+    <span class="week-strip" role="img" aria-label="${weekStripLabel(currentWeek)}">
+      ${Array.from({ length: 10 }, (_, index) => weekSquare(index + 1, currentWeek)).join("")}
+    </span>
+  `;
 }
 
 function routeStatusText(route: Route): string {
-  if (route.name === "home") return "Current: Home";
-  if (route.name === "weeks") return "Current: Course Map";
-  if (route.name === "glossary") return "Current: Glossary";
-  if (route.name === "review") return "Current: Review";
+  if (route.name === "week") {
+    const week = WEEKS.find((item) => item.id === route.id);
+    if (week) return `Week ${week.id} of 10`;
+    return `Week ${route.id} of 10`;
+  }
+  return "10 week course";
+}
 
-  const week = WEEKS.find((item) => item.id === route.id);
-  if (!week) return `Current: Week ${route.id}`;
-  return `Current: Week ${week.id} - ${week.title}`;
+function weekStripLabel(currentWeek: number): string {
+  if (currentWeek === 0) return "Ten week course map. No week route selected.";
+  return `Week ${currentWeek} of 10 selected. Earlier squares are completed, the bright square is current, and later squares are empty.`;
+}
+
+function weekSquare(week: number, currentWeek: number): string {
+  let state = "future";
+  if (currentWeek > 0 && week < currentWeek) state = "complete";
+  if (week === currentWeek) state = "current";
+  return `<span class="week-square ${state}" title="Week ${week}"></span>`;
 }
