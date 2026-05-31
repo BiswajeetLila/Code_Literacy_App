@@ -1,14 +1,13 @@
 <!doctype html>
 <!--
-  index.html — the ENTRY POINT (the "front door" from Week 01).
-  The browser reads this file first, then loads /src/main.ts, which builds the
-  three lessons. Finding this file is exactly the skill Lesson 2 teaches.
+  index.html is still the front door. It now loads the app shell, and the
+  TypeScript router decides which page to draw inside #view.
 -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Week 01 — What is this thing? (Code Literacy)</title>
+    <title>Code Literacy</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap"
       rel="stylesheet"
@@ -16,161 +15,35 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
-    <div class="sheet">
+    <div class="sheet app-shell">
       <span class="reg tl"></span><span class="reg tr"></span>
       <span class="reg bl"></span><span class="reg br"></span>
 
-      <header class="doc-head">
-        <p class="doc-tag">CODE LITERACY · V2 · MANUAL 01 · WEEK 1 OF 10</p>
-        <h1>FIG. 1 — What is this thing on my screen?</h1>
-        <p class="subtitle">
-          Three short lessons. Each one shows you an everyday picture, then the
-          <b>real code</b> it turns into.
-        </p>
+      <header class="doc-head app-head">
+        <p class="doc-tag">CODE LITERACY &middot; APP SHELL &middot; WEEK 1 OF 10</p>
+        <div class="app-head-row">
+          <div>
+            <h1>Code Literacy</h1>
+            <p class="subtitle">
+              A reading-first course for understanding AI-generated code, debugging it,
+              and steering the work with confidence.
+            </p>
+          </div>
+          <a class="app-cta" href="#/week/01">Start Week 01</a>
+        </div>
+        <nav class="app-nav" aria-label="Primary">
+          <a href="#/" data-route="home">Home</a>
+          <a href="#/weeks" data-route="weeks">Weeks</a>
+          <a href="#/glossary" data-route="glossary">Glossary</a>
+          <a href="#/review" data-route="review">Review</a>
+        </nav>
       </header>
 
-      <!-- TAB BAR -->
-      <nav class="tabs" role="tablist" aria-label="Week 01 lessons">
-        <button class="tab" role="tab" data-tab="l0" aria-selected="true">
-          <span class="tab-num">00</span>Start here
-        </button>
-        <button class="tab" role="tab" data-tab="l1" aria-selected="false">
-          <span class="tab-num">01</span>Restaurant
-        </button>
-        <button class="tab" role="tab" data-tab="l2" aria-selected="false">
-          <span class="tab-num">02</span>Files &amp; the front door
-        </button>
-        <button class="tab" role="tab" data-tab="l3" aria-selected="false">
-          <span class="tab-num">03</span>Where errors show up
-        </button>
-        <button class="tab" role="tab" data-tab="l4" aria-selected="false">
-          <span class="tab-num">04</span>Read more
-        </button>
-      </nav>
-
-      <!-- ============ LESSON 0 — START HERE (FTUE) ============ -->
-      <section class="panel" id="panel-l0" role="tabpanel">
-        <h2>What is this?</h2>
-        <p class="ftue-lead">
-          A short course that teaches you to <b>read code</b> — the kind an AI (Claude,
-          Cursor, ChatGPT) writes for you — so you can tell good from broken, fix it, and
-          steer the AI like a pro. You are <b>not</b> here to write code from a blank page.
-        </p>
-
-        <div class="ftue-grid">
-          <div class="ftue-card">
-            <span class="ftue-k">Q</span>
-            <p><b>Am I learning to build a web app?</b></p>
-            <p>No. You're learning to <i>read</i> code in general. This page just happens to
-              be a small web app — we use it as a live specimen to poke at.</p>
-          </div>
-          <div class="ftue-card">
-            <span class="ftue-k">Q</span>
-            <p><b>Which languages?</b></p>
-            <p>Both worlds you'll actually meet: <b>JavaScript/web</b> (what most AIs scaffold)
-              and <b>Python</b> (scripts, servers, AI tools). Same ideas, slightly different
-              spelling.</p>
-          </div>
-          <div class="ftue-card">
-            <span class="ftue-k">Q</span>
-            <p><b>Do I need to install anything?</b></p>
-            <p>No. Everything here runs in your browser. Click, predict, reveal. Guessing
-              before peeking is the whole trick.</p>
-          </div>
-        </div>
-
-        <h2>This week — 3 short lessons</h2>
-        <p class="hint">This is <b>Week 1 of a 10-week course</b>. Each week adds a manual like this one.</p>
-        <ol class="ftue-roadmap">
-          <li><b>01 · Restaurant</b> — how a screen <i>asks</i> for things and gets <i>answers</i> back (client &amp; server).</li>
-          <li><b>02 · Files &amp; the front door</b> — what all those files/folders are, and which one runs first.</li>
-          <li><b>03 · Where errors show up</b> — the two windows a crash can print in, and how to read it.</li>
-        </ol>
-
-        <h2>One thing before Lesson 2</h2>
-        <p>
-          The example project in Lesson 2 is a <b>web app layout</b> (a "Vite" project). We
-          picked it on purpose: it's exactly what this page is built from (so you're reading
-          something real), and it's the shape most AIs hand you. A <b>Python</b> project looks
-          a little different — you'll see <code>.venv/</code> instead of <code>node_modules/</code>,
-          and <code>requirements.txt</code> instead of <code>package.json</code> — but the idea
-          (your code vs installed parts vs the label) is identical.
-        </p>
-
-        <div class="controls">
-          <button id="btn-start" type="button">Start with Lesson 01 →</button>
-        </div>
-      </section>
-
-      <!-- ============ LESSON 1 — RESTAURANT ============ -->
-      <section class="panel" id="panel-l1" role="tabpanel" hidden>
-        <h2>Ask &amp; answer — a restaurant</h2>
-        <div id="scene" class="scene"></div>
-        <div class="controls">
-          <button id="btn-play" type="button">▶ Play the order</button>
-          <button id="btn-step" type="button">Step ›</button>
-          <button id="btn-reset" type="button">⟲ Reset</button>
-          <label class="ortho-toggle">
-            <input id="chk-ortho" type="checkbox" checked />
-            Engineering view (flat)
-          </label>
-        </div>
-        <p id="phase" class="phase-readout">Ready. Press “Play the order”.</p>
-
-        <h2>The same order, in real code</h2>
-        <p>This is what "the browser places an order" actually looks like:</p>
-        <div id="code-l1"></div>
-
-        <ul class="lesson">
-          <li><b>You are the client.</b> The customer who orders. (Your browser.)</li>
-          <li><b>The kitchen is the server.</b> It waits, makes the food, sends it back.</li>
-          <li><b>Dining room = frontend</b> (what you see). <b>Kitchen = backend</b> (hidden work).</li>
-        </ul>
-
-        <h2>Predict, then peek</h2>
-        <p class="hint">Say your answer out loud first. Then click to reveal.</p>
-        <div id="cards-l1" class="cards"></div>
-      </section>
-
-      <!-- ============ LESSON 2 — FILES ============ -->
-      <section class="panel" id="panel-l2" role="tabpanel" hidden>
-        <h2>What’s in a project folder?</h2>
-        <div id="filetree"></div>
-
-        <h2>The parts label, in real code</h2>
-        <p>Every project has a <code>package.json</code> — its label:</p>
-        <div id="code-l2-pkg"></div>
-
-        <h2>print vs return</h2>
-        <p>Two things beginners mix up. One <i>shows</i> you a value; the other <i>hands it back</i>.</p>
-        <div id="code-l2-pr"></div>
-
-        <h2>Predict, then peek</h2>
-        <div id="cards-l2" class="cards"></div>
-      </section>
-
-      <!-- ============ LESSON 3 — ERRORS ============ -->
-      <section class="panel" id="panel-l3" role="tabpanel" hidden>
-        <h2>Two windows: where errors show up</h2>
-        <p>
-          When something breaks, the error prints in <b>one</b> of two windows.
-          Knowing which to check is half the fix.
-        </p>
-        <div id="errorwindows"></div>
-
-        <h2>Predict, then peek</h2>
-        <div id="cards-l3" class="cards"></div>
-      </section>
-
-      <!-- ============ LESSON 4 — READ MORE (resources) ============ -->
-      <section class="panel" id="panel-l4" role="tabpanel" hidden>
-        <h2>Read more — Week 01 reading list</h2>
-        <div id="reading"></div>
-      </section>
+      <main id="view" class="route-view" tabindex="-1"></main>
 
       <footer class="doc-foot">
-        <span>DWG. WEEK-01 · REV. B</span>
-        <span>SHEET 1 OF 1</span>
+        <span>DWG. CODE-LITERACY &middot; REV. APP-SHELL</span>
+        <span>STATIC WEB APP</span>
       </footer>
     </div>
 

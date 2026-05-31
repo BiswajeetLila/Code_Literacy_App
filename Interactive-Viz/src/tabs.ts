@@ -4,15 +4,18 @@
 // only builds itself when needed (the 3D scene doesn't start until Lesson 1
 // is on screen).
 
-export function setupTabs(onFirstShow: (id: string) => void): void {
-  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>(".tab"));
+export function setupTabs(
+  onFirstShow: (id: string) => void,
+  root: ParentNode = document,
+): void {
+  const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>(".tab"));
   const shown = new Set<string>();
 
   function show(id: string): void {
     for (const tab of tabs) {
       const isTarget = tab.dataset.tab === id;
       tab.setAttribute("aria-selected", String(isTarget));
-      const panel = document.querySelector<HTMLElement>(`#panel-${tab.dataset.tab}`)!;
+      const panel = root.querySelector<HTMLElement>(`#panel-${tab.dataset.tab}`)!;
       panel.hidden = !isTarget;
     }
     if (!shown.has(id)) {
