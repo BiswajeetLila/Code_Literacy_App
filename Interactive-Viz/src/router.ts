@@ -2,6 +2,7 @@ import { renderCourseMap } from "./pages/courseMap.ts";
 import { renderGlossaryPlaceholder, renderReviewPlaceholder } from "./pages/placeholders.ts";
 import { renderHome } from "./pages/home.ts";
 import { renderWeek } from "./pages/week.ts";
+import { WEEKS } from "./weekMeta.ts";
 
 type Route =
   | { name: "home" }
@@ -65,4 +66,18 @@ function markActiveNav(route: Route): void {
   document.querySelectorAll<HTMLAnchorElement>(".app-nav a").forEach((link) => {
     link.setAttribute("aria-current", link.dataset.route === active ? "page" : "false");
   });
+
+  const status = document.querySelector<HTMLElement>("#route-status");
+  if (status) status.textContent = routeStatusText(route);
+}
+
+function routeStatusText(route: Route): string {
+  if (route.name === "home") return "Current: Home";
+  if (route.name === "weeks") return "Current: Course Map";
+  if (route.name === "glossary") return "Current: Glossary";
+  if (route.name === "review") return "Current: Review";
+
+  const week = WEEKS.find((item) => item.id === route.id);
+  if (!week) return `Current: Week ${route.id}`;
+  return `Current: Week ${week.id} - ${week.title}`;
 }

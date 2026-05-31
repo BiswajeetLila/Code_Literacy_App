@@ -369,6 +369,31 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   color: var(--paper);
 }
 
+.route-status {
+  margin-left: auto;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 8px 12px;
+  font-family: var(--grotesk);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.route-status::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  background: var(--red);
+  border: 1px solid var(--ink);
+}
+
 .route-view {
   margin-top: 28px;
 }
@@ -536,6 +561,7 @@ button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   .sheet { padding: 24px 18px 16px; }
   .app-head-row { grid-template-columns: 1fr; }
   .app-cta { justify-self: start; }
+  .route-status { flex-basis: 100%; margin-left: 0; }
   .route-grid,
   .week-grid { grid-template-columns: 1fr; }
 }
