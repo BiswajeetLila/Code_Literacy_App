@@ -4,6 +4,8 @@ import { renderHome } from "./pages/home.ts";
 import { renderWeek } from "./pages/week.ts";
 import { WEEKS } from "./weekMeta.ts";
 
+const WEEK_COUNT = WEEKS.length;
+
 type Route =
   | { name: "home" }
   | { name: "weeks" }
@@ -80,7 +82,7 @@ function routeStatusMarkup(route: Route): string {
   return `
     <span class="route-status-label">${label}</span>
     <span class="week-strip" role="img" aria-label="${weekStripLabel(currentWeek)}">
-      ${Array.from({ length: 10 }, (_, index) => weekSquare(index + 1, currentWeek)).join("")}
+      ${Array.from({ length: WEEK_COUNT }, (_, index) => weekSquare(index + 1, currentWeek)).join("")}
     </span>
   `;
 }
@@ -88,15 +90,15 @@ function routeStatusMarkup(route: Route): string {
 function routeStatusText(route: Route): string {
   if (route.name === "week") {
     const week = WEEKS.find((item) => item.id === route.id);
-    if (week) return `Week ${week.id} of 10`;
-    return `Week ${route.id} of 10`;
+    if (week) return `Week ${week.id} of ${WEEK_COUNT}`;
+    return `Week ${route.id} of ${WEEK_COUNT}`;
   }
-  return "10 week course";
+  return `${WEEK_COUNT} week course`;
 }
 
 function weekStripLabel(currentWeek: number): string {
-  if (currentWeek === 0) return "Ten week course map. No week route selected.";
-  return `Week ${currentWeek} of 10 selected. Earlier squares are completed, the bright square is current, and later squares are empty.`;
+  if (currentWeek === 0) return `${WEEK_COUNT} week course map. No week route selected.`;
+  return `Week ${currentWeek} of ${WEEK_COUNT} selected. Earlier squares are completed, the bright square is current, and later squares are empty.`;
 }
 
 function weekSquare(week: number, currentWeek: number): string {

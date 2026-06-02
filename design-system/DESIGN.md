@@ -66,6 +66,14 @@ Google Fonts: `Space+Mono:wght@400;700` + `Space+Grotesk:wght@500;700`.
   a red left-bar + `runs 1st` badge.
 - **Terminal / console panes:** dark windows, ink title bar with a cyan "who" label, red error
   lines are clickable.
+- **Instrument lab:** a lesson-local dark panel used for live systems: WebGPU/WebGL canvas,
+  console lanes, sliders, toggles, trace cards, and compact status captions. The outer app
+  still stays light/manual.
+- **3D teaching scene:** use for flows, routing, ownership, or state. The scene must be
+  inspectable when practical: rotate, zoom, hover, click, scrub, or focus a code line. Passive
+  3D is not enough for the current quality bar.
+- **Decode strip:** explanation panels that are not constantly useful should be compact strips
+  below the primary scene, not tall empty side panels.
 - **Buttons:** ink fill, paper text, square, mono, uppercase; hover lightens. No gradients.
 
 ## 5. Motion & a11y
@@ -74,6 +82,11 @@ Google Fonts: `Space+Mono:wght@400;700` + `Space+Grotesk:wght@500;700`.
 - Respect `prefers-reduced-motion`.
 - Contrast is high by default (ink on paper ≈ AAA). Keep red text ≥ 18px or bold.
 - Visible focus rings (cyan, 3px). Square focus, matches the aesthetic.
+- 3D scenes need a non-motion interpretation: static positions, status text, logs, or decoded
+  output must still teach the point.
+- Verify every new lab at desktop and 375px mobile with no horizontal overflow.
+- Canvas scenes should expose meaning outside pixels through captions, logs, labels, or
+  adjacent real artifacts.
 
 ## 6. Do / Don't
 
@@ -83,7 +96,7 @@ Google Fonts: `Space+Mono:wght@400;700` + `Space+Grotesk:wght@500;700`.
 | One red accent, rest ink/paper | Rainbow of accents |
 | Monospace everywhere | Friendly humanist sans for body |
 | Number things (FIG/DWG/REV) | Generic "Section 1" headers |
-| Flat / orthographic visuals | Glossy 3D, perspective, glow |
+| Inspectable line-art 3D when it teaches | Glossy decorative 3D, perspective, glow |
 | Light paper page | Dark-mode-first |
 
 ## 7. Source files (this project)

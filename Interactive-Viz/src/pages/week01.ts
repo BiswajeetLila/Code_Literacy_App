@@ -1,25 +1,20 @@
-import { setupTabs } from "../tabs.ts";
-import { Restaurant } from "../restaurant.ts";
-import { mountFileTree } from "../fileTree.ts";
-import { mountErrorWindows } from "../errorWindows.ts";
-import { mountCodeBlock } from "../codeBlock.ts";
+import { LESSON_1_CARDS, LESSON_2_CARDS, LESSON_3_CARDS, mountCards } from "../cards.ts";
+import { mountErrorRoutingLab } from "../errorRoutingLab.ts";
+import { mountProjectFolderLab } from "../projectFolderLab.ts";
 import { mountResources, WEEK_01_RESOURCES } from "../resources.ts";
-import {
-  LESSON_1_CARDS,
-  LESSON_2_CARDS,
-  LESSON_3_CARDS,
-  mountCards,
-} from "../cards.ts";
+import { SignalLab, type SignalFocus, type SignalTripEvent } from "../signalLab.ts";
+import { mountSignalCodeWalk } from "../signalCodeWalk.ts";
+import { setupTabs } from "../tabs.ts";
 
 export function renderWeek01(host: HTMLElement): void {
   host.innerHTML = `
     <section class="week-manual">
       <header class="doc-head week-head">
-        <p class="doc-tag">CODE LITERACY &middot; V2 &middot; MANUAL 01 &middot; WEEK 1 OF 10</p>
+        <p class="doc-tag">CODE LITERACY &middot; V2 &middot; MANUAL 01 &middot; WEEK 1 OF 11</p>
         <h1>FIG. 1 - What is this thing on my screen?</h1>
         <p class="subtitle">
-          Three short lessons. Each one shows you an everyday picture, then the
-          <b>real code</b> it turns into.
+          Three short lessons. Each one starts with an action, then shows the
+          <b>real code</b> shape behind it.
         </p>
       </header>
 
@@ -28,7 +23,7 @@ export function renderWeek01(host: HTMLElement): void {
           <span class="tab-num">00</span>Start here
         </button>
         <button class="tab" role="tab" data-tab="l1" aria-selected="false">
-          <span class="tab-num">01</span>Restaurant
+          <span class="tab-num">01</span>Round Trip Lab
         </button>
         <button class="tab" role="tab" data-tab="l2" aria-selected="false">
           <span class="tab-num">02</span>Files &amp; the front door
@@ -49,20 +44,20 @@ export function renderWeek01(host: HTMLElement): void {
         <p class="ftue-lead">
           A short course that teaches you to <b>read code</b> - the kind an AI
           writes for you - so you can tell good from broken, fix it, and steer
-          the AI like a pro. You are <b>not</b> here to write code from a blank page.
+          the AI. You are <b>not</b> here to write code from a blank page.
         </p>
 
         <div class="ftue-grid">
           <div class="ftue-card">
             <span class="ftue-k">Q</span>
             <p><b>Am I learning to build a web app?</b></p>
-            <p>No. You're learning to <i>read</i> code in general. This page just
-              happens to be a small web app - we use it as a live specimen to poke at.</p>
+            <p>No. You are learning to read code in general. This page is a live
+              specimen because it is small enough to poke at.</p>
           </div>
           <div class="ftue-card">
             <span class="ftue-k">Q</span>
             <p><b>Which languages?</b></p>
-            <p>Both worlds you'll actually meet: <b>JavaScript/web</b> and
+            <p>Both worlds you will actually meet: <b>JavaScript/web</b> and
               <b>Python</b>. Same ideas, slightly different spelling.</p>
           </div>
           <div class="ftue-card">
@@ -74,10 +69,10 @@ export function renderWeek01(host: HTMLElement): void {
         </div>
 
         <h2>This week - 3 short lessons</h2>
-        <p class="hint">This is <b>Week 1 of a 10-week course</b>. Each week adds a manual like this one.</p>
+        <p class="hint">This is <b>Week 1 of an 11-week course</b>. Each week adds a manual like this one.</p>
         <ol class="ftue-roadmap">
-          <li><b>01 &middot; Restaurant</b> - how a screen <i>asks</i> for things and gets <i>answers</i> back.</li>
-          <li><b>02 &middot; Files &amp; the front door</b> - what all those files/folders are, and which one runs first.</li>
+          <li><b>01 &middot; Round Trip Lab</b> - how a screen asks for things and gets answers back.</li>
+          <li><b>02 &middot; Files &amp; the front door</b> - what files/folders are, and which one runs first.</li>
           <li><b>03 &middot; Where errors show up</b> - the two windows a crash can print in, and how to read it.</li>
           <li><b>04 &middot; FAQ</b> - quick meanings for small words and syntax you will see here.</li>
           <li><b>05 &middot; Read more</b> - outside links once the week makes sense.</li>
@@ -85,70 +80,100 @@ export function renderWeek01(host: HTMLElement): void {
 
         <h2>One thing before Lesson 2</h2>
         <p>
-          The example project in Lesson 2 is a <b>web app layout</b> (a "Vite" project).
-          We picked it on purpose: it's exactly what this page is built from, and it's
+          The example project in Lesson 2 is a <b>web app layout</b> (a Vite project).
+          We picked it on purpose: it is exactly what this page is built from, and it is
           the shape most AIs hand you. A <b>Python</b> project looks a little different:
-          you'll see <code>.venv/</code> instead of <code>node_modules/</code>, and
+          you will see <code>.venv/</code> instead of <code>node_modules/</code>, and
           <code>requirements.txt</code> instead of <code>package.json</code>.
         </p>
 
         <div class="controls">
-          <button id="btn-start" type="button">Start with Lesson 01 &rarr;</button>
+          <button id="btn-start" type="button">Start with Lesson 01</button>
         </div>
       </section>
 
-      <section class="panel" id="panel-l1" role="tabpanel" hidden>
-        <h2>Ask &amp; answer - a restaurant</h2>
-        <div id="scene" class="scene"></div>
-        <div class="controls">
-          <button id="btn-play" type="button">Play the order</button>
-          <button id="btn-step" type="button">Step &rsaquo;</button>
-          <button id="btn-reset" type="button">Reset</button>
-          <label class="ortho-toggle">
-            <input id="chk-ortho" type="checkbox" checked />
-            Engineering view (flat)
-          </label>
+      <section class="panel lab-lesson" id="panel-l1" role="tabpanel" hidden>
+        <div class="lab-head">
+          <p class="route-kicker">INTERACTIVE LESSON 01</p>
+          <h2>The round trip</h2>
+          <p>
+            A request leaves the client, the server works, and a response comes back.
+            Click code lines or break the server to see the loop change.
+          </p>
         </div>
-        <p id="phase" class="phase-readout">Ready. Press "Play the order".</p>
 
-        <h2>The same order, in real code</h2>
-        <p>This is what "the browser places an order" actually looks like:</p>
-        <div id="code-l1"></div>
+        <div
+          id="signal-stage"
+          class="lab-stage"
+          role="img"
+          aria-label="Interactive diagram: a request signal leaves the client, reaches the server, and a response signal returns. Error mode stops the response."
+        >
+          <canvas id="signal-canvas"></canvas>
+          <div class="lab-stage-overlay" aria-hidden="true">
+            <span class="lab-node-tag lab-node-client">CLIENT / browser</span>
+            <span class="lab-node-tag lab-node-server">SERVER</span>
+            <span class="lab-viewport-tag">VIEWPORT 01</span>
+          </div>
+          <p id="signal-badge" class="lab-renderer-badge" aria-hidden="true">renderer pending</p>
+        </div>
+        <p id="signal-caption" class="lab-caption" role="status" aria-live="polite">
+          Starting the round trip.
+        </p>
 
-        <ul class="lesson">
-          <li><b>You are the client.</b> The customer who orders. (Your browser.)</li>
-          <li><b>The kitchen is the server.</b> It waits, makes the food, sends it back.</li>
-          <li><b>Dining room = frontend</b> (what you see). <b>Kitchen = backend</b> (hidden work).</li>
-        </ul>
+        <div class="lab-workbench">
+          <section class="lab-codewalk-wrap" aria-labelledby="lab-codewalk-title">
+            <h3 id="lab-codewalk-title">Real code, linked to the scene</h3>
+            <div id="signal-codewalk"></div>
+          </section>
+
+          <section class="lab-control-wrap" aria-labelledby="lab-controls-title">
+            <h3 id="lab-controls-title">Controls</h3>
+            <button id="signal-error" class="lab-toggle" type="button" aria-pressed="false">
+              <span class="lab-led"></span>
+              <span id="signal-error-label">Inject server error</span>
+            </button>
+            <label class="lab-slider">
+              <span>Latency <b id="signal-latency-read">0ms</b></span>
+              <input id="signal-latency" type="range" min="0" max="100" value="40" />
+            </label>
+            <label class="lab-slider">
+              <span>Payload <b id="signal-payload-read">medium</b></span>
+              <input id="signal-payload" type="range" min="0" max="100" value="50" />
+            </label>
+          </section>
+        </div>
+
+        <section class="lab-console-grid" aria-label="Live error windows">
+          <article class="lab-console">
+            <div class="lab-console-bar">
+              <span>Terminal</span>
+              <span>server window</span>
+            </div>
+            <ol id="signal-terminal" class="lab-console-log" aria-live="polite"></ol>
+          </article>
+          <article class="lab-console">
+            <div class="lab-console-bar">
+              <span>Browser console</span>
+              <span>page window</span>
+            </div>
+            <ol id="signal-browser" class="lab-console-log" aria-live="polite"></ol>
+          </article>
+        </section>
 
         <h2>Predict, then peek</h2>
         <p class="hint">Say your answer out loud first. Then click to reveal.</p>
         <div id="cards-l1" class="cards"></div>
       </section>
 
-      <section class="panel" id="panel-l2" role="tabpanel" hidden>
-        <h2>What's in a project folder?</h2>
-        <div id="filetree"></div>
-
-        <h2>The parts label, in real code</h2>
-        <p>Every project has a <code>package.json</code> - its label:</p>
-        <div id="code-l2-pkg"></div>
-
-        <h2>print vs return</h2>
-        <p>Two things beginners mix up. One <i>shows</i> you a value; the other <i>hands it back</i>.</p>
-        <div id="code-l2-pr"></div>
+      <section class="panel folder-lesson" id="panel-l2" role="tabpanel" hidden>
+        <div id="project-folder-lab"></div>
 
         <h2>Predict, then peek</h2>
         <div id="cards-l2" class="cards"></div>
       </section>
 
-      <section class="panel" id="panel-l3" role="tabpanel" hidden>
-        <h2>Two windows: where errors show up</h2>
-        <p>
-          When something breaks, the error prints in <b>one</b> of two windows.
-          Knowing which to check is half the fix.
-        </p>
-        <div id="errorwindows"></div>
+      <section class="panel error-lesson" id="panel-l3" role="tabpanel" hidden>
+        <div id="error-routing-lab"></div>
 
         <h2>Predict, then peek</h2>
         <div id="cards-l3" class="cards"></div>
@@ -227,7 +252,7 @@ const WEEK_01_FAQ = [
   },
   {
     term: "fetch()",
-    meaning: "JavaScript's way for the browser to ask another URL for data. In the restaurant picture, it places the order.",
+    meaning: "JavaScript's way for the browser to ask another URL for data. In the round-trip lab, it sends the request.",
   },
   {
     term: "await",
@@ -256,64 +281,123 @@ const WEEK_01_FAQ = [
 ];
 
 function buildLesson1(root: HTMLElement): void {
-  const scene = root.querySelector<HTMLElement>("#scene")!;
-  const phase = root.querySelector<HTMLElement>("#phase")!;
+  const stage = root.querySelector<HTMLElement>("#signal-stage")!;
+  const canvas = root.querySelector<HTMLCanvasElement>("#signal-canvas")!;
+  const badge = root.querySelector<HTMLElement>("#signal-badge")!;
+  const caption = root.querySelector<HTMLElement>("#signal-caption")!;
+  const btnError = root.querySelector<HTMLButtonElement>("#signal-error")!;
+  const errorLabel = root.querySelector<HTMLElement>("#signal-error-label")!;
+  const latency = root.querySelector<HTMLInputElement>("#signal-latency")!;
+  const payload = root.querySelector<HTMLInputElement>("#signal-payload")!;
+  const latencyRead = root.querySelector<HTMLElement>("#signal-latency-read")!;
+  const payloadRead = root.querySelector<HTMLElement>("#signal-payload-read")!;
+  const terminal = root.querySelector<HTMLOListElement>("#signal-terminal")!;
+  const browser = root.querySelector<HTMLOListElement>("#signal-browser")!;
 
-  const restaurant = new Restaurant();
-  restaurant.mount(scene, (text) => (phase.textContent = text));
+  const lab = new SignalLab();
+  lab.setCaptionSink((text) => {
+    caption.textContent = text;
+  });
+  lab.setTripSink((event) => printTrip(terminal, browser, event));
 
-  root.querySelector("#btn-play")!.addEventListener("click", () => restaurant.play());
-  root.querySelector("#btn-step")!.addEventListener("click", () => restaurant.step());
-  root.querySelector("#btn-reset")!.addEventListener("click", () => restaurant.reset());
-  const ortho = root.querySelector<HTMLInputElement>("#chk-ortho")!;
-  ortho.addEventListener("change", () => restaurant.setOrthographic(ortho.checked));
+  void startSignalLab(lab, stage, canvas, badge, caption, latencyRead);
 
-  mountCodeBlock(root.querySelector("#code-l1")!, {
-    title: "the browser orders, then shows the food",
-    lang: "javascript",
-    lines: [
-      { code: 'const response = await fetch("https://api.cafe.com/order")', note: "place the order" },
-      { code: "const food = await response.json()", note: "the food comes back" },
-      { code: "showOnScreen(food)", note: "serve it at the table" },
-    ],
+  mountSignalCodeWalk(
+    root.querySelector<HTMLElement>("#signal-codewalk")!,
+    (focus: SignalFocus, note: string) => {
+      lab.setFocus(focus);
+      caption.textContent = note;
+    },
+  );
+
+  btnError.addEventListener("click", () => {
+    const on = btnError.getAttribute("aria-pressed") !== "true";
+    btnError.setAttribute("aria-pressed", String(on));
+    errorLabel.textContent = on ? "Server error: on" : "Inject server error";
+    lab.setError(on);
+  });
+
+  latency.addEventListener("input", () => {
+    lab.setLatency(Number(latency.value) / 100);
+    latencyRead.textContent = `${lab.latencyMs}ms`;
+  });
+
+  payload.addEventListener("input", () => {
+    const value = Number(payload.value);
+    lab.setPayload(value / 100);
+    payloadRead.textContent = payloadLabel(value);
   });
 
   mountCards(root.querySelector("#cards-l1")!, LESSON_1_CARDS);
 }
 
+async function startSignalLab(
+  lab: SignalLab,
+  stage: HTMLElement,
+  canvas: HTMLCanvasElement,
+  badge: HTMLElement,
+  caption: HTMLElement,
+  latencyRead: HTMLElement,
+): Promise<void> {
+  try {
+    const backend = await lab.mount(canvas);
+    badge.textContent = `renderer: ${backend}`;
+    latencyRead.textContent = `${lab.latencyMs}ms`;
+
+    const resize = () => lab.resize(stage.clientWidth, stage.clientHeight);
+    resize();
+    new ResizeObserver(resize).observe(stage);
+  } catch (error) {
+    console.error("[SignalLab] failed to start:", error);
+    badge.textContent = "3D unavailable";
+    caption.textContent =
+      "The 3D lab could not start in this browser. The code walk still shows request -> server -> response.";
+  }
+}
+
+function printTrip(
+  terminal: HTMLOListElement,
+  browser: HTMLOListElement,
+  event: SignalTripEvent,
+): void {
+  printLine(terminal, "$", "GET /menu");
+  printLine(browser, ">", "fetch('/menu')");
+  if (event.ok) {
+    printLine(terminal, "$", `200 ok - ${event.latencyMs}ms`, "ok");
+    printLine(browser, ">", "rendered response", "ok");
+  } else {
+    printLine(terminal, "$", "500 internal server error", "err");
+    printLine(browser, ">", "quiet: failure was server-side", "dim");
+  }
+}
+
+function printLine(
+  lane: HTMLOListElement,
+  prompt: string,
+  text: string,
+  className = "",
+): void {
+  const item = document.createElement("li");
+  item.dataset.prompt = prompt;
+  item.textContent = text;
+  if (className) item.className = className;
+  lane.appendChild(item);
+  while (lane.children.length > 6) lane.removeChild(lane.firstElementChild!);
+}
+
+function payloadLabel(value: number): string {
+  if (value < 33) return "low";
+  if (value < 67) return "medium";
+  return "high";
+}
+
 function buildLesson2(root: HTMLElement): void {
-  mountFileTree(root.querySelector("#filetree")!);
-
-  mountCodeBlock(root.querySelector("#code-l2-pkg")!, {
-    title: "package.json - the parts label",
-    lang: "json",
-    lines: [
-      { code: "{" },
-      { code: '  "name": "my-app",', note: "the project's name" },
-      { code: '  "dependencies": {', note: "outside parts it needs" },
-      { code: '    "three": "^0.169.0"', note: "one part + its version" },
-      { code: "  }" },
-      { code: "}" },
-    ],
-  });
-
-  mountCodeBlock(root.querySelector("#code-l2-pr")!, {
-    title: "print vs return",
-    lang: "python",
-    lines: [
-      { code: "def total(a, b):" },
-      { code: "    print(a + b)", note: "SHOWS the answer to you" },
-      { code: "    return a + b", note: "HANDS the answer back" },
-      { code: "" },
-      { code: "x = total(2, 3)", note: "x holds 5 (from return)" },
-    ],
-  });
-
+  mountProjectFolderLab(root.querySelector("#project-folder-lab")!);
   mountCards(root.querySelector("#cards-l2")!, LESSON_2_CARDS);
 }
 
 function buildLesson3(root: HTMLElement): void {
-  mountErrorWindows(root.querySelector("#errorwindows")!);
+  mountErrorRoutingLab(root.querySelector("#error-routing-lab")!);
   mountCards(root.querySelector("#cards-l3")!, LESSON_3_CARDS);
 }
 

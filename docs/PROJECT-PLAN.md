@@ -5,9 +5,19 @@
 
 > **Current state (2026-05-31):** the app shell slice is now built and pushed: hash routing,
 > Home, Course Map, Week 1 bridge, placeholder Glossary/Review routes, header week strip,
-> Week 1 FAQ, and persistent dark mode are complete. The next slice is the behavior-preserving
-> Week 1 content-model migration. Start a new branch from `main` named
-> `codex/content-model-migration`.
+> Week 1 FAQ, and persistent dark mode are complete. This note is historical; the final course
+> spec imported on 2026-06-02 supersedes the earlier next-step branch.
+
+> **Current state (2026-06-02):** Week 1 has been refreshed into the quality bar for later
+> weeks: Round Trip Lab, Project Folder Lab, and Error Routing Lab. The governing design
+> decision is `docs/adr/0001-interactive-lab-design-standard.md`. Start Week 2 from that
+> standard rather than from the older restaurant/file-tree/error-window plan below.
+
+> **Current state (2026-06-02, final course spec imported):** `docs/COURSE-1-CODE-LITERACY-FINAL.md`
+> is now the canonical Course 1 plan. It supersedes the older 10-week map below. The course is
+> Weeks 1-11, and the build order is deliberate: build Week 08 first after Week 1, then Weeks
+> 02-07, then Weeks 09-11. Treat the rest of this file as historical architecture context unless
+> it agrees with the final course spec.
 
 # V2 — Interactive ELI5 Vertical Slice (Week 01)
 
@@ -169,7 +179,7 @@ and becomes private author scratch — this also kills the earlier card-drift de
 Refactor `Interactive-Viz/` from one Week-1 page into an app shell.
 
 - **Router** (`src/router.ts`): hash routes — `#/` home · `#/weeks` course map ·
-  `#/week/01..10` · `#/glossary` · `#/review`. Renders into one `#app` root; shared header/nav.
+  `#/week/01..11` · `#/glossary` · `#/review`. Renders into one `#app` root; shared header/nav.
 - **Content model** (single source): `src/content/weeks/weekNN.ts` each exports
   `WeekData { meta, lessons[], cards[], resources[], glossaryTerms[] }`. A lesson references an
   interactive widget by id through a **registry** (`src/content/registry.ts`) so custom viz plug
@@ -187,8 +197,8 @@ Refactor `Interactive-Viz/` from one Week-1 page into an app shell.
   worker (offline cache) → installable / add-to-home-screen.
 
 ## Pages (all within nasa-technical-manual)
-- **Home** (`src/pages/home.ts`): what this is, "start / continue", week-1-of-10 framing.
-- **Course map** (`src/pages/courseMap.ts`): 10 week cards w/ progress rings; all open
+- **Home** (`src/pages/home.ts`): what this is, "start / continue", week-1-of-11 framing.
+- **Course map** (`src/pages/courseMap.ts`): 11 week cards w/ progress rings; all open
   (not gated).
 - **Week** (`src/pages/week.ts`): renders the tabbed lessons from `WeekData` (00 Start →
   lessons → Read more) — the current Week-1 layout, now data-driven.

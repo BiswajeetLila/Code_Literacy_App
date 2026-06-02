@@ -82,6 +82,31 @@ enough yet.
 - `FAQ`: quick meanings for tiny syntax/word blockers.
 - `Read more`: curated outside resources after the learner has a mental model.
 
+## Week 1 Design Findings
+
+These findings are now project-wide rules.
+
+1. **Manual shell, instrument labs.** The course keeps the light NASA technical-manual page
+   as the stable shell. Individual lesson labs may become dark, dense instrument panels when
+   the concept needs focus, motion, or console-like output.
+2. **3D must teach a model.** Use WebGPU/Three.js when motion or spatial inspection clarifies
+   flow, routing, ownership, or state. Do not add 3D only for decoration.
+3. **Make 3D inspectable.** If a lesson has a 3D scene, the learner should usually be able to
+   rotate, zoom, click, hover, or otherwise inspect meaningful objects. A passive animation is
+   below the Week 1 quality bar unless reduced motion is active.
+4. **Compact support panels.** Avoid tall empty side panels. If a decode/explanation panel is
+   not always useful, make it a compact strip or reveal state so the primary interaction gets
+   the space.
+5. **Manual/reference tabs stay text-heavy.** FAQ and Read more are support tabs. They should
+   stay scan-friendly, dense, and technical-manual styled unless there is a specific action
+   that teaches better than text.
+6. **Instrument labs still need real code or artifacts.** A learner should leave the lab able
+   to recognize the real shape: a `fetch()` line, a project folder, an error message, a package
+   file, or a command.
+7. **Accessibility is part of the lesson.** Every lab must keep keyboard focus states, live
+   status text for changing captions/logs, mobile layouts with no horizontal overflow, dark
+   mode readability, and `prefers-reduced-motion` behavior.
+
 ## Concept To Everyday-Picture Map
 
 | Concept | Everyday picture | Real-code shape it shows up as |
@@ -105,6 +130,16 @@ enough yet.
 | browser console | The dining-room window: where page notes and errors print. | DevTools Console; `console.log(...)`, red errors |
 | print vs return | Print = saying it out loud. Return = handing the plate back. | `print(x)` shows you; `return x` hands a value back |
 | error / where it prints | A note saying something went wrong, in a specific window. | `NameError: ...` vs `Uncaught TypeError` |
+| dependency | A bought outside part the project uses instead of making from scratch. | `dependencies`, `import`, `from ... import ...` |
+| dependency list | A shopping list of outside parts needed before the project runs. | `package.json`, `requirements.txt`, `pyproject.toml` |
+| install command | Going shopping before cooking: fetch the listed parts into the local project. | `npm install`, `pip install -r requirements.txt` |
+| import | Taking a bought part off the shelf so this file can use it. | `import express from "express"` / `import requests` |
+| version | The exact model or edition of a bought part. | `"three": "^0.180.0"`, `requests==2.32.3` |
+| version range | A label that says which editions are allowed, not always one exact box. | `"three": "^0.180.0"` allows compatible updates |
+| lockfile | The receipt that records exactly what got bought this time. | `package-lock.json`, `pnpm-lock.yaml`, `uv.lock` |
+| dev dependency | A tool used while building, not a part shipped to the user. | `"devDependencies": { "vite": "..." }` |
+| hallucinated import | Asking for a part that does not exist on the shelf. | `import { missingThing } from "fake-package"` |
+| slopsquatting | A fake or risky package name that looks close enough to fool you. | `npm install expres` instead of `express` |
 
 Extend this table as later weeks are written. Each new concept must land here before its lesson
 is considered done.
