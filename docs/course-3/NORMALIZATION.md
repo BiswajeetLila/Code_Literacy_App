@@ -91,6 +91,12 @@ Use these operational docs exactly:
 - `BRIDGE-PACK.md`
 - `COHORT-OPS.md`
 
+## Sample Docs
+
+Use these sample docs exactly:
+
+- `samples/UNITY-AGENTS-CLAUDE-SAMPLE.md`
+
 ## App Folder Convention
 
 Each course app is a sibling folder at the repository root.

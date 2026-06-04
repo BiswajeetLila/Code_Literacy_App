@@ -19,6 +19,7 @@ package should link back.
 Normalization rules live in [`NORMALIZATION.md`](NORMALIZATION.md). Module docs must conform to
 [`schemas/teachable-unit-schema.md`](schemas/teachable-unit-schema.md). Templates must conform to
 [`schemas/runnable-template-schema.md`](schemas/runnable-template-schema.md).
+Unity repo-rules samples live in [`samples/`](samples/).
 
 ## Operating Loop
 
