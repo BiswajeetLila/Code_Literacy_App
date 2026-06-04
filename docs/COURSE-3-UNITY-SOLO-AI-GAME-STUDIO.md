@@ -78,6 +78,15 @@ the production loop itself: real agent runs, real diffs, real Unity scenes, real
 playtests, and real critique. The Course 1 app can later host templates, checklists, and progress
 gates, but the primary product is a studio course.
 
+The policy/procedure split is recorded in
+[`course-3/NORMALIZATION.md`](course-3/NORMALIZATION.md). Operational docs live in
+[`course-3/`](course-3/README.md), modules conform to the
+[`Teachable-Unit schema`](course-3/schemas/teachable-unit-schema.md), and templates conform to the
+[`Runnable-Template schema`](course-3/schemas/runnable-template-schema.md).
+
+Each course app is a sibling folder at the repository root. Course 1 uses `Interactive-Viz/`.
+Course 3 reserves `course-3-app/`, but this docs-first pass does not create that folder.
+
 ## Human Vs Agent Ownership
 
 The course must teach what to delegate and what not to delegate.
@@ -563,8 +572,14 @@ The course should provide these reusable templates:
 - `PLAYTEST-RUBRIC.md`
 - `STEAM-DEMO-CANDIDATE-CHECKLIST.md`
 - `FRESH-AGENT-HANDOFF.md`
-- `COHORT-OPS.md`
 - `CUT-PLAN.md`
+
+The course also provides these operational interfaces:
+
+- `COHORT-OPS.md`
+- `PREFLIGHT-GATE.md`
+- `NORMALIZATION.md`
+- `README.md`
 
 These are the course's real "APIs." Agents and humans both work through them.
 
