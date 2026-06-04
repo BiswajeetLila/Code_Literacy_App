@@ -36,7 +36,7 @@ Use these names exactly:
 | Gate | Meaning | Operational surface |
 |---|---|---|
 | Preflight gate | Admission check before studio pace begins | `PREFLIGHT-GATE.md` |
-| Bridge pack retake | Retest after targeted remediation | `PREFLIGHT-GATE.md` |
+| Bridge pack retake | Retest after targeted remediation | `BRIDGE-PACK.md`, then `PREFLIGHT-GATE.md` |
 | Module gate | Pass/fail bar at the end of a module | `modules/` |
 | Capstone gate | Final Steam-demo candidate assessment | `rubrics/CAPSTONE-RUBRIC.md` |
 | Adversarial assessment | Failure-mode stress test before pass | `rubrics/ADVERSARIAL-ASSESSMENT.md` |
@@ -88,6 +88,7 @@ Use these operational docs exactly:
 - `README.md`
 - `NORMALIZATION.md`
 - `PREFLIGHT-GATE.md`
+- `BRIDGE-PACK.md`
 - `COHORT-OPS.md`
 
 ## App Folder Convention

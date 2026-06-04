@@ -28,10 +28,11 @@ Normalization rules live in [`NORMALIZATION.md`](NORMALIZATION.md). Module docs 
 
 1. Run `PREFLIGHT-GATE.md`.
 2. Place the learner into studio-ready, bridge-required, or not-ready.
-3. Use `COHORT-OPS.md` to run the cohort cadence.
-4. Complete modules in order.
-5. Use templates as the course APIs.
-6. Finish with `rubrics/CAPSTONE-RUBRIC.md` and `rubrics/ADVERSARIAL-ASSESSMENT.md`.
+3. If needed, assign `BRIDGE-PACK.md` labs and retake the same preflight gate.
+4. Use `COHORT-OPS.md` to run the cohort cadence.
+5. Complete modules in order.
+6. Use templates as the course APIs.
+7. Finish with `rubrics/CAPSTONE-RUBRIC.md` and `rubrics/ADVERSARIAL-ASSESSMENT.md`.
 
 ## Defaults
 
