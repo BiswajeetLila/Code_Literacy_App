@@ -1,5 +1,12 @@
 # Module 6: Hybrid Asset And Technical Art Pipeline
 
+## Status
+
+deferred
+
+Status note: deferred - out of scope for this front-of-funnel docs pass. This stub is a placeholder
+for future teachable-unit expansion and does not claim schema conformance yet.
+
 ## Objective
 
 Build an art/audio pipeline that is style-consistent and commercially trackable.

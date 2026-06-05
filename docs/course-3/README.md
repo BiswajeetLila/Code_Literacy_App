@@ -20,6 +20,8 @@ Normalization rules live in [`NORMALIZATION.md`](NORMALIZATION.md). Module docs 
 [`schemas/teachable-unit-schema.md`](schemas/teachable-unit-schema.md). Templates must conform to
 [`schemas/runnable-template-schema.md`](schemas/runnable-template-schema.md).
 Unity repo-rules samples live in [`samples/`](samples/).
+Front-of-funnel close-out verification lives in
+[`FRONT-OF-FUNNEL-CLOSEOUT.md`](FRONT-OF-FUNNEL-CLOSEOUT.md).
 
 ## Operating Loop
 

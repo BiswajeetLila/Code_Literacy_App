@@ -1,5 +1,5 @@
 ---
-tags: [status/draft, meta, build-spec, course-3]
+tags: [status/final, meta, build-spec, course-3]
 aliases: [Unity Solo AI Game Studio, Course 3 Plan]
 ---
 

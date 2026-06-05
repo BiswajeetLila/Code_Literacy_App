@@ -2,7 +2,9 @@
 
 ## Status
 
-Complete for issue #11.
+complete
+
+Issue #11 filled this sample.
 
 ## Use When
 

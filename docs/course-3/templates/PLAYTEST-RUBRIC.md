@@ -1,5 +1,12 @@
 # Playtest Rubric
 
+## Status
+
+deferred
+
+Status note: deferred - out of scope for this front-of-funnel docs pass. This stub is a placeholder
+for future runnable-template expansion and does not claim schema conformance yet.
+
 ## Setup
 
 ## Player Instructions

@@ -1,5 +1,12 @@
 # Module 8: Verification For Games
 
+## Status
+
+deferred
+
+Status note: deferred - out of scope for this front-of-funnel docs pass. This stub is a placeholder
+for future teachable-unit expansion and does not claim schema conformance yet.
+
 ## Objective
 
 Build verification systems that fit game production.

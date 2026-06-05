@@ -1,5 +1,12 @@
 # Module 10: Steam-Demo Candidate Package And Maintenance
 
+## Status
+
+deferred
+
+Status note: deferred - out of scope for this front-of-funnel docs pass. This stub is a placeholder
+for future teachable-unit expansion and does not claim schema conformance yet.
+
 ## Objective
 
 Package the vertical slice like a real demo candidate without requiring every learner to complete
