@@ -48,25 +48,22 @@ Master spec:
 
 ## Deferred Out-Of-Scope Stubs
 
-These module stubs are intentionally deferred for later Course 3 expansion. Modules 4 and 5 were
-expanded after this front-of-funnel closeout and are no longer deferred.
+These module stubs are intentionally deferred for later Course 3 expansion. Modules 4, 5, and 6
+were expanded after this front-of-funnel closeout and are no longer deferred.
 
-- [`modules/MODULE-06-HYBRID-ASSET-PIPELINE.md`](modules/MODULE-06-HYBRID-ASSET-PIPELINE.md)
 - [`modules/MODULE-07-EDITOR-AUTOMATION-TOOLING.md`](modules/MODULE-07-EDITOR-AUTOMATION-TOOLING.md)
 - [`modules/MODULE-08-GAME-VERIFICATION.md`](modules/MODULE-08-GAME-VERIFICATION.md)
 - [`modules/MODULE-09-POLISH-FEEL-UX.md`](modules/MODULE-09-POLISH-FEEL-UX.md)
 - [`modules/MODULE-10-STEAM-DEMO-CANDIDATE.md`](modules/MODULE-10-STEAM-DEMO-CANDIDATE.md)
 
 These remaining template stubs are intentionally deferred for later runnable-template expansion.
-`UNITY-ARCHITECTURE.md` and `TASK-GRAPH.md` were expanded after this front-of-funnel closeout and
-are no longer deferred.
+`UNITY-ARCHITECTURE.md`, `TASK-GRAPH.md`, `ASSET-LEDGER.md`, and `STYLE-BIBLE.md` were expanded
+after this front-of-funnel closeout and are no longer deferred.
 
-- [`templates/ASSET-LEDGER.md`](templates/ASSET-LEDGER.md)
 - [`templates/FRESH-AGENT-HANDOFF.md`](templates/FRESH-AGENT-HANDOFF.md)
 - [`templates/PLAYTEST-RUBRIC.md`](templates/PLAYTEST-RUBRIC.md)
 - [`templates/QA-PLAN.md`](templates/QA-PLAN.md)
 - [`templates/STEAM-DEMO-CANDIDATE-CHECKLIST.md`](templates/STEAM-DEMO-CANDIDATE-CHECKLIST.md)
-- [`templates/STYLE-BIBLE.md`](templates/STYLE-BIBLE.md)
 ## Closeout Decision
 
 The front-of-funnel docs chunk is complete. The remaining Course 3 production modules and later
