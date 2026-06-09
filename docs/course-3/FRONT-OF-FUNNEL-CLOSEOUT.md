@@ -43,7 +43,7 @@ Master spec:
 | Runnable-template schema for in-scope templates/sample | Pass | `Status`, `Use When`, `Before You Fill This`, `Fillable Template`, `Worked Example`, `Required Fields`, `Reject If Missing`, and `Reviewer Notes` are present. |
 | Cross-link integrity | Pass | Markdown links in `docs/course-3/` and Course 3 master spec resolve to existing docs, directories, or headings. |
 | Preflight discrimination | Pass | [`PREFLIGHT-GATE.md`](PREFLIGHT-GATE.md) includes an under-qualified profile with total score `2`, routed to `not-ready`, not `studio-ready`. |
-| Deferred stub marking | Pass | Modules 4-10 and the remaining template stubs are marked `deferred` with an out-of-scope note. |
+| Deferred stub marking | Pass | At issue #16 time, Modules 4-10 and the remaining template stubs were explicitly marked `deferred` with an out-of-scope note. |
 | Master spec status | Pass | Master spec front matter is tagged `status/final`. |
 
 ## Deferred Out-Of-Scope Stubs
@@ -51,6 +51,7 @@ Master spec:
 This section is historical. At the time of issue #16, Modules 4-10 and several later templates were
 explicitly deferred. Those deferred Course 3 stubs were expanded in later issues, so no deferred
 Course 3 module or template stubs remain in this docs package.
+
 ## Closeout Decision
 
 The front-of-funnel docs chunk is complete. The remaining Course 3 production modules and later
