@@ -48,18 +48,11 @@ Master spec:
 
 ## Deferred Out-Of-Scope Stubs
 
-These module stubs are intentionally deferred for later Course 3 expansion. Modules 4, 5, 6, 7, 8,
-and 9 were expanded after this front-of-funnel closeout and are no longer deferred.
-
-- [`modules/MODULE-10-STEAM-DEMO-CANDIDATE.md`](modules/MODULE-10-STEAM-DEMO-CANDIDATE.md)
-
-These remaining template stubs are intentionally deferred for later runnable-template expansion.
-`UNITY-ARCHITECTURE.md`, `TASK-GRAPH.md`, `ASSET-LEDGER.md`, `STYLE-BIBLE.md`, `QA-PLAN.md`, and
-`PLAYTEST-RUBRIC.md` were expanded after this front-of-funnel closeout and are no longer deferred.
-
-- [`templates/FRESH-AGENT-HANDOFF.md`](templates/FRESH-AGENT-HANDOFF.md)
-- [`templates/STEAM-DEMO-CANDIDATE-CHECKLIST.md`](templates/STEAM-DEMO-CANDIDATE-CHECKLIST.md)
+This section is historical. At the time of issue #16, Modules 4-10 and several later templates were
+explicitly deferred. Those deferred Course 3 stubs were expanded in later issues, so no deferred
+Course 3 module or template stubs remain in this docs package.
 ## Closeout Decision
 
 The front-of-funnel docs chunk is complete. The remaining Course 3 production modules and later
-templates are not silently incomplete; they are deferred and explicitly out of scope for this pass.
+templates were not silently incomplete at the time of this closeout; they were deferred and
+explicitly out of scope for that pass. Later issues expanded those deferred docs.
