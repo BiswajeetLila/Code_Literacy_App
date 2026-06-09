@@ -48,10 +48,9 @@ Master spec:
 
 ## Deferred Out-Of-Scope Stubs
 
-These module stubs are intentionally deferred for later Course 3 expansion. Modules 4, 5, and 6
+These module stubs are intentionally deferred for later Course 3 expansion. Modules 4, 5, 6, and 7
 were expanded after this front-of-funnel closeout and are no longer deferred.
 
-- [`modules/MODULE-07-EDITOR-AUTOMATION-TOOLING.md`](modules/MODULE-07-EDITOR-AUTOMATION-TOOLING.md)
 - [`modules/MODULE-08-GAME-VERIFICATION.md`](modules/MODULE-08-GAME-VERIFICATION.md)
 - [`modules/MODULE-09-POLISH-FEEL-UX.md`](modules/MODULE-09-POLISH-FEEL-UX.md)
 - [`modules/MODULE-10-STEAM-DEMO-CANDIDATE.md`](modules/MODULE-10-STEAM-DEMO-CANDIDATE.md)
