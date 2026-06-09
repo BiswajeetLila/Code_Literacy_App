@@ -48,18 +48,16 @@ Master spec:
 
 ## Deferred Out-Of-Scope Stubs
 
-These module stubs are intentionally deferred for later Course 3 expansion. Modules 4, 5, 6, 7,
-and 8 were expanded after this front-of-funnel closeout and are no longer deferred.
+These module stubs are intentionally deferred for later Course 3 expansion. Modules 4, 5, 6, 7, 8,
+and 9 were expanded after this front-of-funnel closeout and are no longer deferred.
 
-- [`modules/MODULE-09-POLISH-FEEL-UX.md`](modules/MODULE-09-POLISH-FEEL-UX.md)
 - [`modules/MODULE-10-STEAM-DEMO-CANDIDATE.md`](modules/MODULE-10-STEAM-DEMO-CANDIDATE.md)
 
 These remaining template stubs are intentionally deferred for later runnable-template expansion.
-`UNITY-ARCHITECTURE.md`, `TASK-GRAPH.md`, `ASSET-LEDGER.md`, `STYLE-BIBLE.md`, and `QA-PLAN.md`
-were expanded after this front-of-funnel closeout and are no longer deferred.
+`UNITY-ARCHITECTURE.md`, `TASK-GRAPH.md`, `ASSET-LEDGER.md`, `STYLE-BIBLE.md`, `QA-PLAN.md`, and
+`PLAYTEST-RUBRIC.md` were expanded after this front-of-funnel closeout and are no longer deferred.
 
 - [`templates/FRESH-AGENT-HANDOFF.md`](templates/FRESH-AGENT-HANDOFF.md)
-- [`templates/PLAYTEST-RUBRIC.md`](templates/PLAYTEST-RUBRIC.md)
 - [`templates/STEAM-DEMO-CANDIDATE-CHECKLIST.md`](templates/STEAM-DEMO-CANDIDATE-CHECKLIST.md)
 ## Closeout Decision
 
