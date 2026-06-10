@@ -1,6 +1,20 @@
 import { getModuleById, modules, operatingLoop } from "./courseData.js";
 import { moduleContent, templateContent } from "./generatedCourseContent.js";
-import { isModuleComplete, loadProgress, saveProgress, toggleModule } from "./progressStore.js";
+import {
+  getArtifactCaptureCount,
+  getArtifactEvidence,
+  getGateEvidence,
+  isArtifactCaptured,
+  isGateCaptured,
+  isModuleComplete,
+  loadProgress,
+  saveProgress,
+  setArtifactCaptured,
+  setArtifactEvidence,
+  setGateCaptured,
+  setGateEvidence,
+  toggleModule,
+} from "./progressStore.js";
 
 const app = document.querySelector("#app");
 const MODULE_RAIL_KEY = "course3.moduleRailOpen";
@@ -27,6 +41,28 @@ function handleToggle(moduleId) {
   progress = toggleModule(progress, moduleId);
   saveProgress(progress);
   render();
+}
+
+function handleGateCaptured(moduleId, captured) {
+  progress = setGateCaptured(progress, moduleId, captured);
+  saveProgress(progress);
+  render();
+}
+
+function handleGateEvidence(moduleId, evidence) {
+  progress = setGateEvidence(progress, moduleId, evidence);
+  saveProgress(progress);
+}
+
+function handleArtifactCaptured(moduleId, artifactIndex, captured) {
+  progress = setArtifactCaptured(progress, moduleId, artifactIndex, captured);
+  saveProgress(progress);
+  render();
+}
+
+function handleArtifactEvidence(moduleId, artifactIndex, evidence) {
+  progress = setArtifactEvidence(progress, moduleId, artifactIndex, evidence);
+  saveProgress(progress);
 }
 
 function handleModuleRailToggle() {
@@ -92,10 +128,36 @@ function render() {
   });
 
   app.querySelector("[data-toggle-modules]")?.addEventListener("click", handleModuleRailToggle);
+
+  app.querySelector("[data-gate-captured]")?.addEventListener("change", (event) => {
+    handleGateCaptured(current.id, event.target.checked);
+  });
+
+  app.querySelector("[data-gate-evidence]")?.addEventListener("input", (event) => {
+    handleGateEvidence(current.id, event.target.value);
+  });
+
+  app.querySelectorAll("[data-artifact-captured]").forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      handleArtifactCaptured(current.id, Number(checkbox.dataset.artifactIndex), checkbox.checked);
+    });
+  });
+
+  app.querySelectorAll("[data-artifact-evidence]").forEach((field) => {
+    field.addEventListener("input", () => {
+      handleArtifactEvidence(current.id, Number(field.dataset.artifactIndex), field.value);
+    });
+  });
 }
 
 function renderModuleButton(module, currentId) {
   const complete = isModuleComplete(progress, module.id);
+  const artifactCount = getArtifactCaptureCount(progress, module.id, module.artifacts.length);
+  const stateLabel = complete
+    ? "local complete"
+    : isGateCaptured(progress, module.id)
+      ? "gate captured"
+      : `${artifactCount}/${module.artifacts.length} artifacts`;
   return `
     <button
       class="module-tile ${module.id === currentId ? "selected" : ""} ${complete ? "complete" : ""}"
@@ -106,13 +168,14 @@ function renderModuleButton(module, currentId) {
       <span class="module-num">${String(module.number).padStart(2, "0")}</span>
       <span class="module-title">${module.title}</span>
       <span class="module-meta">${module.phase} / ${module.timeBudget}</span>
-      <span class="module-state">${complete ? "local complete" : module.status}</span>
+      <span class="module-state">${stateLabel}</span>
     </button>
   `;
 }
 
 function renderDetail(module) {
   const complete = isModuleComplete(progress, module.id);
+  const artifactCount = getArtifactCaptureCount(progress, module.id, module.artifacts.length);
 
   return `
     <div class="detail-header">
@@ -140,6 +203,10 @@ function renderDetail(module) {
         <span>Templates</span>
         <strong>${module.templates.length}</strong>
       </div>
+      <div>
+        <span>Artifacts</span>
+        <strong>${artifactCount}/${module.artifacts.length}</strong>
+      </div>
     </div>
 
     <section class="detail-section">
@@ -163,6 +230,7 @@ function renderDetail(module) {
       </div>
     </section>
 
+    ${renderGateArtifactChecklist(module)}
     ${renderCourseReader(module)}
     ${renderTemplateReader(module)}
   `;
@@ -173,6 +241,65 @@ render();
 
 function loadModuleRailState() {
   return window.localStorage.getItem(MODULE_RAIL_KEY) !== "false";
+}
+
+function renderGateArtifactChecklist(module) {
+  const gateCaptured = isGateCaptured(progress, module.id);
+  const artifactCount = getArtifactCaptureCount(progress, module.id, module.artifacts.length);
+
+  return `
+    <section class="checklist-panel" aria-label="Gate and artifact checklist">
+      <div class="checklist-heading">
+        <div>
+          <p class="kicker">Local Gate Capture</p>
+          <h3>Gate & Artifact Checklist</h3>
+        </div>
+        <span>${artifactCount}/${module.artifacts.length} artifacts</span>
+      </div>
+
+      <div class="gate-capture ${gateCaptured ? "is-captured" : ""}">
+        <label class="check-row">
+          <input type="checkbox" data-gate-captured ${gateCaptured ? "checked" : ""}>
+          <span>Gate evidence captured</span>
+        </label>
+        <label class="evidence-field">
+          <span>Gate evidence note</span>
+          <textarea data-gate-evidence rows="3">${escapeHtml(getGateEvidence(progress, module.id))}</textarea>
+        </label>
+      </div>
+
+      <div class="artifact-checklist">
+        ${module.artifacts.map((artifact, index) => renderArtifactCapture(module.id, artifact, index)).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderArtifactCapture(moduleId, artifact, index) {
+  const captured = isArtifactCaptured(progress, moduleId, index);
+
+  return `
+    <article class="artifact-capture ${captured ? "is-captured" : ""}">
+      <label class="check-row">
+        <input
+          type="checkbox"
+          data-artifact-captured
+          data-artifact-index="${index}"
+          ${captured ? "checked" : ""}
+        >
+        <span>${escapeHtml(artifact)}</span>
+      </label>
+      <label class="evidence-field">
+        <span>Evidence path or note</span>
+        <input
+          type="text"
+          data-artifact-evidence
+          data-artifact-index="${index}"
+          value="${escapeHtml(getArtifactEvidence(progress, moduleId, index))}"
+        >
+      </label>
+    </article>
+  `;
 }
 
 function renderCourseReader(module) {

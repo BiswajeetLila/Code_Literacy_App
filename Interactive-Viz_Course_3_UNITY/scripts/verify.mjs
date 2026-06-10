@@ -4,7 +4,22 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawn } from "node:child_process";
 import { modules, operatingLoop, templates } from "../src/courseData.js";
-import { isModuleComplete, loadProgress, saveProgress, STORAGE_KEY, toggleModule } from "../src/progressStore.js";
+import {
+  getArtifactCaptureCount,
+  getArtifactEvidence,
+  getGateEvidence,
+  isArtifactCaptured,
+  isGateCaptured,
+  isModuleComplete,
+  loadProgress,
+  saveProgress,
+  setArtifactCaptured,
+  setArtifactEvidence,
+  setGateCaptured,
+  setGateEvidence,
+  STORAGE_KEY,
+  toggleModule,
+} from "../src/progressStore.js";
 import { generateContent } from "./generateContent.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -61,6 +76,17 @@ expect(isModuleComplete(reloaded, "module-01"), "module progress persists after 
 progress = toggleModule(reloaded, "module-01");
 expect(!isModuleComplete(progress, "module-01"), "module progress can be reversed");
 expect(memoryStorage.getItem(STORAGE_KEY) !== null, "progress uses the Course 3 storage key");
+progress = setGateCaptured(progress, "module-02", true);
+progress = setGateEvidence(progress, "module-02", "docs/MODULE-02-GATE.md");
+progress = setArtifactCaptured(progress, "module-02", 0, true);
+progress = setArtifactEvidence(progress, "module-02", 0, "docs/GAME-THESIS.md");
+saveProgress(progress, memoryStorage);
+const evidenceReloaded = loadProgress(memoryStorage);
+expect(isGateCaptured(evidenceReloaded, "module-02"), "gate capture persists after reload");
+expect(getGateEvidence(evidenceReloaded, "module-02") === "docs/MODULE-02-GATE.md", "gate evidence note persists");
+expect(isArtifactCaptured(evidenceReloaded, "module-02", 0), "artifact capture persists after reload");
+expect(getArtifactEvidence(evidenceReloaded, "module-02", 0) === "docs/GAME-THESIS.md", "artifact evidence note persists");
+expect(getArtifactCaptureCount(evidenceReloaded, "module-02", 4) === 1, "artifact capture count is calculated");
 
 const indexHtml = await readFile(join(root, "index.html"), "utf8");
 expect(indexHtml.includes("./src/main.js"), "index references app entry module");
@@ -70,9 +96,12 @@ const stylesCss = await readFile(join(root, "src", "styles.css"), "utf8");
 expect(mainJs.includes("data-toggle-modules"), "module rail can be toggled");
 expect(mainJs.includes("renderCourseReader"), "module content reader is rendered");
 expect(mainJs.includes("renderTemplateReader"), "template reader is rendered");
+expect(mainJs.includes("renderGateArtifactChecklist"), "gate and artifact checklist is rendered");
+expect(mainJs.includes("data-artifact-captured"), "artifact checklist controls are present");
 expect(stylesCss.includes(".workspace.modules-collapsed"), "collapsed module rail expands detail view");
 expect(stylesCss.includes(".module-grid[hidden]"), "hidden module rail is removed from layout");
 expect(stylesCss.includes(".course-reader"), "reader styles are present");
+expect(stylesCss.includes(".checklist-panel"), "checklist styles are present");
 
 if (existsSync(join(root, "dist"))) {
   const distIndex = await readFile(join(root, "dist", "index.html"), "utf8");
@@ -125,6 +154,7 @@ async function verifyServerSmoke() {
     const styles = await fetchText(`http://localhost:${port}/src/styles.css`);
     expect(index.includes("Course 3 Studio Dashboard"), "server returns app shell");
     expect(main.includes("renderDetail"), "server returns app entry code");
+    expect(main.includes("renderGateArtifactChecklist"), "server returns checklist code");
     expect(generated.includes("Module 8: Verification For Games"), "server returns generated module content");
     expect(generated.includes("VERTICAL-SLICE-SPEC"), "server returns generated template content");
     expect(styles.includes("@media (max-width: 560px)"), "server returns responsive styles");

@@ -32,6 +32,9 @@ PowerShell on this machine blocks `npm.ps1`, so use `npm.cmd`.
   - toggles complete
   - persists through storage reload
   - toggles back to incomplete
+  - gate evidence capture persists
+  - artifact checklist capture persists
+  - artifact evidence notes persist
 - Dev-server smoke verification passed:
   - `index.html` served
   - `src/main.js` served
@@ -61,6 +64,7 @@ This verifies the first vertical slice only:
 - module detail view
 - full-module reader generated from Course 3 docs
 - related-template reader generated from Course 3 docs
+- local gate evidence and artifact checklist capture
 - local-only progress tracking
 
 It does not verify future LMS behavior, server persistence, submissions, grading, or Steamworks

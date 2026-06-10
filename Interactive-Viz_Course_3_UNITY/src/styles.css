@@ -36,7 +36,7 @@ button {
 }
 
 .app-shell {
-  width: min(1440px, 100%);
+  width: min(1440px, calc(100% - 16px));
   margin: 0 auto;
   padding: 24px;
 }
@@ -301,7 +301,7 @@ h3 {
 
 .summary-strip {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
   margin: 16px 0;
 }
@@ -352,6 +352,109 @@ ul {
 
 li {
   margin-bottom: 7px;
+}
+
+.checklist-panel {
+  margin-top: 22px;
+  border-top: 2px solid var(--line);
+  padding-top: 18px;
+}
+
+.checklist-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.checklist-heading h3 {
+  margin: 0;
+}
+
+.checklist-heading > span {
+  border: 2px solid var(--line);
+  background: var(--field);
+  padding: 8px 10px;
+  color: var(--signal);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.gate-capture,
+.artifact-capture {
+  border: 2px solid var(--line);
+  background: var(--field);
+  padding: 12px;
+}
+
+.gate-capture.is-captured,
+.artifact-capture.is-captured {
+  background: #edf6ec;
+}
+
+.gate-capture {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.artifact-checklist {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.artifact-capture {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.check-row,
+.evidence-field {
+  display: grid;
+  gap: 8px;
+}
+
+.check-row {
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.check-row input {
+  width: 16px;
+  height: 16px;
+  margin: 1px 0 0;
+  accent-color: var(--complete);
+}
+
+.evidence-field span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.evidence-field input,
+.evidence-field textarea {
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: 0;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  padding: 9px 10px;
+}
+
+.evidence-field textarea {
+  min-height: 84px;
+  resize: vertical;
 }
 
 .course-reader,
@@ -475,6 +578,7 @@ li {
   .topbar,
   .detail-header,
   .view-controls,
+  .checklist-heading,
   .reader-heading,
   .template-card-header {
     flex-direction: column;
@@ -498,6 +602,10 @@ li {
   }
 
   .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .artifact-checklist {
     grid-template-columns: 1fr;
   }
 
