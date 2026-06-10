@@ -333,6 +333,12 @@ h3 {
   margin: 0;
 }
 
+.empty-state {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .split-lists {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -348,6 +354,119 @@ li {
   margin-bottom: 7px;
 }
 
+.course-reader,
+.template-reader {
+  margin-top: 22px;
+  border-top: 2px solid var(--line);
+  padding-top: 18px;
+}
+
+.reader-heading,
+.template-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.reader-heading h3,
+.template-card-header h4 {
+  margin: 0;
+  text-transform: none;
+}
+
+.reader-heading span,
+.template-card-header span {
+  max-width: 44%;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: right;
+}
+
+.reader-sections {
+  display: grid;
+  gap: 10px;
+}
+
+.reader-sections.compact {
+  gap: 8px;
+}
+
+.reader-section {
+  border: 2px solid var(--line);
+  background: var(--field);
+}
+
+.reader-section summary {
+  min-height: 42px;
+  padding: 11px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.reader-section[open] summary {
+  border-bottom: 2px solid var(--line);
+  color: var(--accent);
+}
+
+.doc-body {
+  padding: 12px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.doc-body p,
+.doc-body blockquote,
+.doc-body pre {
+  margin: 0 0 10px;
+}
+
+.doc-body h4 {
+  margin: 14px 0 8px;
+  font-size: 13px;
+}
+
+.doc-body code {
+  background: rgba(29, 32, 29, 0.08);
+  padding: 1px 4px;
+  font-size: 12px;
+}
+
+.doc-code,
+.doc-table {
+  overflow-x: auto;
+  border: 1px solid rgba(29, 32, 29, 0.28);
+  background: var(--panel);
+  padding: 10px;
+  white-space: pre;
+}
+
+.doc-reference {
+  color: var(--signal);
+  font-weight: 800;
+}
+
+.doc-body blockquote {
+  border-left: 4px solid var(--warning);
+  background: var(--panel);
+  padding: 8px 10px;
+}
+
+.template-card {
+  border: 2px solid var(--line);
+  background: var(--panel);
+  padding: 14px;
+}
+
+.template-card + .template-card {
+  margin-top: 12px;
+}
+
 @media (max-width: 900px) {
   .app-shell {
     padding: 14px;
@@ -355,7 +474,9 @@ li {
 
   .topbar,
   .detail-header,
-  .view-controls {
+  .view-controls,
+  .reader-heading,
+  .template-card-header {
     flex-direction: column;
     align-items: stretch;
   }
@@ -367,6 +488,12 @@ li {
   }
 
   .current-readout {
+    text-align: left;
+  }
+
+  .reader-heading span,
+  .template-card-header span {
+    max-width: none;
     text-align: left;
   }
 

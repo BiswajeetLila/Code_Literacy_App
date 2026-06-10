@@ -12,12 +12,19 @@ Course 1 app.
 - Module detail cards with gate, budget, artifacts, and related templates
 - Local-only progress tracking
 - Collapsible module rail for full-width module detail viewing
+- Generated full-module reader from `docs/course-3/modules/`
+- Generated related-template reader from `docs/course-3/templates/`
 
 ## Next Slice
 
-The full course prose is still in `docs/course-3/`. The next app slice should add a course content
-reader or content ingestion path so the learner can read module assignments and template details
-inside the app instead of jumping back to markdown files.
+The next app slice should add richer course workflow behavior on top of the reader: artifact
+checklists, gate evidence capture, rubric views, or fresh-agent handoff surfaces.
+
+## Content Source
+
+Course content remains source-of-truth in `docs/course-3/`. The app runs
+`scripts/generateContent.mjs` during build and verification to generate
+`src/generatedCourseContent.js` from the module and template markdown files.
 
 ## Run
 
@@ -33,14 +40,19 @@ Default local URL: `http://localhost:4173`.
 npm run build
 ```
 
-The build copies the static app to `dist/` and validates the Course 3 registry contract.
+The build generates course content, copies the static app to `dist/`, and validates the Course 3
+registry contract.
 
 ## Verify
 
 ```bash
 npm run verify
+npm run smoke:browser
 ```
 
-The verification checks module ordering, registry completeness, related templates, local progress
-storage behavior, and build output references. Browser/mobile checks should be run against the dev
-server when changing UI layout.
+The verification checks module ordering, generated module/template content, registry completeness,
+related templates, local progress storage behavior, and build output references. Browser/mobile
+checks should be run against the dev server when changing UI layout. `smoke:browser` uses local
+Chrome or Edge in headless DOM mode to confirm early, middle, and late module reader paths render.
+If local browser DOM output is unavailable, it reports that limitation and falls back to checking the
+served generated content and app entry code.

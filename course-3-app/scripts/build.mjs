@@ -2,10 +2,12 @@ import { cp, mkdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { modules, operatingLoop, templates } from "../src/courseData.js";
+import { generateContent } from "./generateContent.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const dist = join(root, "dist");
 
+await generateContent();
 validateRegistry();
 
 await rm(dist, { recursive: true, force: true });

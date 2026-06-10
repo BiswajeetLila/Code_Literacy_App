@@ -1,4 +1,5 @@
 import { getModuleById, modules, operatingLoop } from "./courseData.js";
+import { moduleContent, templateContent } from "./generatedCourseContent.js";
 import { isModuleComplete, loadProgress, saveProgress, toggleModule } from "./progressStore.js";
 
 const app = document.querySelector("#app");
@@ -112,9 +113,6 @@ function renderModuleButton(module, currentId) {
 
 function renderDetail(module) {
   const complete = isModuleComplete(progress, module.id);
-  const templateRows = module.templates.length
-    ? module.templates.map((template) => `<li>${template}</li>`).join("")
-    : "<li>No dedicated template in this slice</li>";
 
   return `
     <div class="detail-header">
@@ -161,9 +159,12 @@ function renderDetail(module) {
       </div>
       <div class="detail-section">
         <h3>Related Templates</h3>
-        <ul>${templateRows}</ul>
+        ${renderTemplateSummary(module)}
       </div>
     </section>
+
+    ${renderCourseReader(module)}
+    ${renderTemplateReader(module)}
   `;
 }
 
@@ -172,4 +173,230 @@ render();
 
 function loadModuleRailState() {
   return window.localStorage.getItem(MODULE_RAIL_KEY) !== "false";
+}
+
+function renderCourseReader(module) {
+  const content = moduleContent[module.id];
+  if (!content) {
+    return `
+      <section class="course-reader" aria-label="Module reader">
+        <h3>Full Module Reader</h3>
+        <p class="empty-state">No generated content found for this module.</p>
+      </section>
+    `;
+  }
+
+  return `
+    <section class="course-reader" aria-label="Module reader">
+      <div class="reader-heading">
+        <div>
+          <p class="kicker">Full Course Unit</p>
+          <h3>${escapeHtml(content.title)}</h3>
+        </div>
+        <span>${escapeHtml(content.sourcePath)}</span>
+      </div>
+      <div class="reader-sections">
+        ${content.sections.map((section) => renderSectionDetails(section, shouldOpenModuleSection(section.title))).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderTemplateSummary(module) {
+  if (module.templates.length === 0) {
+    return `<p class="empty-state">No dedicated template for this module.</p>`;
+  }
+
+  return `
+    <ul>
+      ${module.templates.map((template) => `<li>${escapeHtml(template)}</li>`).join("")}
+    </ul>
+  `;
+}
+
+function renderTemplateReader(module) {
+  if (module.templates.length === 0) {
+    return `
+      <section class="template-reader" aria-label="Template reader">
+        <div class="reader-heading">
+          <div>
+            <p class="kicker">Related Templates</p>
+            <h3>Template Reader</h3>
+          </div>
+        </div>
+        <p class="empty-state">This module has no dedicated template. Use the module artifacts as the working checklist.</p>
+      </section>
+    `;
+  }
+
+  return `
+    <section class="template-reader" aria-label="Template reader">
+      <div class="reader-heading">
+        <div>
+          <p class="kicker">Related Templates</p>
+          <h3>Template Reader</h3>
+        </div>
+      </div>
+      ${module.templates.map((template) => renderTemplateCard(template)).join("")}
+    </section>
+  `;
+}
+
+function renderTemplateCard(template) {
+  const content = templateContent[template];
+  if (!content) {
+    return `
+      <article class="template-card" data-template-name="${escapeHtml(template)}">
+        <h4>${escapeHtml(template)}</h4>
+        <p class="empty-state">No generated template content found.</p>
+      </article>
+    `;
+  }
+
+  return `
+    <article class="template-card" data-template-name="${escapeHtml(template)}">
+      <div class="template-card-header">
+        <h4>${escapeHtml(content.title)}</h4>
+        <span>${escapeHtml(content.sourcePath)}</span>
+      </div>
+      <div class="reader-sections compact">
+        ${content.sections.map((section, index) => renderSectionDetails(section, index < 2)).join("")}
+      </div>
+    </article>
+  `;
+}
+
+function renderSectionDetails(section, open) {
+  return `
+    <details class="reader-section" ${open ? "open" : ""}>
+      <summary>${escapeHtml(section.title)}</summary>
+      <div class="doc-body">
+        ${renderMarkdownLite(section.body)}
+      </div>
+    </details>
+  `;
+}
+
+function shouldOpenModuleSection(title) {
+  return ["Objective", "Learner Assignment", "Required Artifacts"].includes(title);
+}
+
+function renderMarkdownLite(markdown) {
+  const lines = markdown.trim().split("\n");
+  let html = "";
+  let listType = "";
+  let inCode = false;
+  let codeLines = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const rawLine = lines[index];
+    const trimmed = rawLine.trim();
+
+    if (trimmed.startsWith("```")) {
+      if (inCode) {
+        html += `<pre class="doc-code"><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`;
+        codeLines = [];
+        inCode = false;
+      } else {
+        html += closeList(listType);
+        listType = "";
+        inCode = true;
+      }
+      continue;
+    }
+
+    if (inCode) {
+      codeLines.push(rawLine);
+      continue;
+    }
+
+    if (!trimmed) {
+      html += closeList(listType);
+      listType = "";
+      continue;
+    }
+
+    if (trimmed.startsWith("|")) {
+      html += closeList(listType);
+      listType = "";
+      const tableLines = [trimmed];
+      while (lines[index + 1]?.trim().startsWith("|")) {
+        index += 1;
+        tableLines.push(lines[index].trim());
+      }
+      html += `<pre class="doc-table">${escapeHtml(tableLines.join("\n"))}</pre>`;
+      continue;
+    }
+
+    if (trimmed.startsWith("### ")) {
+      html += closeList(listType);
+      listType = "";
+      html += `<h4>${renderInlineMarkdown(trimmed.slice(4))}</h4>`;
+      continue;
+    }
+
+    if (trimmed.startsWith("> ")) {
+      html += closeList(listType);
+      listType = "";
+      html += `<blockquote>${renderInlineMarkdown(trimmed.slice(2))}</blockquote>`;
+      continue;
+    }
+
+    if (trimmed.startsWith("- ")) {
+      if (listType !== "ul") {
+        html += closeList(listType);
+        html += "<ul>";
+        listType = "ul";
+      }
+      html += `<li>${renderInlineMarkdown(trimmed.slice(2))}</li>`;
+      continue;
+    }
+
+    const numbered = trimmed.match(/^\d+\.\s+(.+)$/);
+    if (numbered) {
+      if (listType !== "ol") {
+        html += closeList(listType);
+        html += "<ol>";
+        listType = "ol";
+      }
+      html += `<li>${renderInlineMarkdown(numbered[1])}</li>`;
+      continue;
+    }
+
+    html += closeList(listType);
+    listType = "";
+    html += `<p>${renderInlineMarkdown(trimmed)}</p>`;
+  }
+
+  if (inCode) {
+    html += `<pre class="doc-code"><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`;
+  }
+
+  html += closeList(listType);
+  return html;
+}
+
+function closeList(type) {
+  if (type === "ul") {
+    return "</ul>";
+  }
+  if (type === "ol") {
+    return "</ol>";
+  }
+  return "";
+}
+
+function renderInlineMarkdown(text) {
+  return escapeHtml(text)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<span class="doc-reference">$1</span>')
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
