@@ -38,6 +38,11 @@ expect(memoryStorage.getItem(STORAGE_KEY) !== null, "progress uses the Course 3 
 const indexHtml = await readFile(join(root, "index.html"), "utf8");
 expect(indexHtml.includes("./src/main.js"), "index references app entry module");
 expect(indexHtml.includes("./src/styles.css"), "index references app styles");
+const mainJs = await readFile(join(root, "src", "main.js"), "utf8");
+const stylesCss = await readFile(join(root, "src", "styles.css"), "utf8");
+expect(mainJs.includes("data-toggle-modules"), "module rail can be toggled");
+expect(stylesCss.includes(".workspace.modules-collapsed"), "collapsed module rail expands detail view");
+expect(stylesCss.includes(".module-grid[hidden]"), "hidden module rail is removed from layout");
 
 if (existsSync(join(root, "dist"))) {
   const distIndex = await readFile(join(root, "dist", "index.html"), "utf8");

@@ -116,6 +116,10 @@ h3 {
   margin-top: 22px;
 }
 
+.workspace.modules-collapsed {
+  grid-template-columns: 1fr;
+}
+
 .mission-band {
   grid-column: 1 / -1;
   display: grid;
@@ -123,6 +127,42 @@ h3 {
   border: 2px solid var(--line);
   background: var(--ink);
   color: var(--paper);
+}
+
+.view-controls {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border: 2px solid var(--line);
+  background: var(--panel);
+  padding: 10px 12px;
+}
+
+.rail-toggle {
+  min-width: 142px;
+  border: 2px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 9px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.rail-toggle:hover {
+  background: var(--accent);
+}
+
+.current-readout {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: right;
+  text-transform: uppercase;
 }
 
 .loop-step {
@@ -148,6 +188,10 @@ h3 {
   display: grid;
   gap: 10px;
   align-self: start;
+}
+
+.module-grid[hidden] {
+  display: none;
 }
 
 .module-tile {
@@ -212,6 +256,7 @@ h3 {
 }
 
 .detail-panel {
+  grid-column: auto;
   min-width: 0;
   border: 2px solid var(--line);
   background: var(--panel);
@@ -309,13 +354,20 @@ li {
   }
 
   .topbar,
-  .detail-header {
+  .detail-header,
+  .view-controls {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .progress-meter,
-  .complete-toggle {
+  .complete-toggle,
+  .rail-toggle {
     width: 100%;
+  }
+
+  .current-readout {
+    text-align: left;
   }
 
   .workspace {

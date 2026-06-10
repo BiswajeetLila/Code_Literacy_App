@@ -2,7 +2,9 @@ import { getModuleById, modules, operatingLoop } from "./courseData.js";
 import { isModuleComplete, loadProgress, saveProgress, toggleModule } from "./progressStore.js";
 
 const app = document.querySelector("#app");
+const MODULE_RAIL_KEY = "course3.moduleRailOpen";
 let progress = loadProgress();
+let moduleRailOpen = loadModuleRailState();
 
 function selectedModuleId() {
   const hash = window.location.hash.replace("#", "");
@@ -26,6 +28,12 @@ function handleToggle(moduleId) {
   render();
 }
 
+function handleModuleRailToggle() {
+  moduleRailOpen = !moduleRailOpen;
+  window.localStorage.setItem(MODULE_RAIL_KEY, String(moduleRailOpen));
+  render();
+}
+
 function render() {
   const current = getModuleById(selectedModuleId());
   const completedCount = modules.filter((module) => isModuleComplete(progress, module.id)).length;
@@ -42,7 +50,7 @@ function render() {
       </div>
     </header>
 
-    <main class="workspace">
+    <main class="workspace ${moduleRailOpen ? "" : "modules-collapsed"}">
       <section class="mission-band" aria-label="Course operating loop">
         ${operatingLoop.map((step, index) => `
           <span class="loop-step">
@@ -51,7 +59,20 @@ function render() {
           </span>`).join("")}
       </section>
 
-      <section class="module-grid" aria-label="Course 3 modules">
+      <div class="view-controls">
+        <button
+          class="rail-toggle"
+          type="button"
+          data-toggle-modules
+          aria-expanded="${moduleRailOpen}"
+          aria-controls="module-rail"
+        >
+          ${moduleRailOpen ? "Hide modules" : "Show modules"}
+        </button>
+        <span class="current-readout">Viewing Module ${String(current.number).padStart(2, "0")} / ${current.title}</span>
+      </div>
+
+      <section id="module-rail" class="module-grid" aria-label="Course 3 modules" ${moduleRailOpen ? "" : "hidden"}>
         ${modules.map((module) => renderModuleButton(module, current.id)).join("")}
       </section>
 
@@ -68,6 +89,8 @@ function render() {
   app.querySelector("[data-toggle-complete]")?.addEventListener("click", () => {
     handleToggle(current.id);
   });
+
+  app.querySelector("[data-toggle-modules]")?.addEventListener("click", handleModuleRailToggle);
 }
 
 function renderModuleButton(module, currentId) {
@@ -146,3 +169,7 @@ function renderDetail(module) {
 
 window.addEventListener("hashchange", render);
 render();
+
+function loadModuleRailState() {
+  return window.localStorage.getItem(MODULE_RAIL_KEY) !== "false";
+}

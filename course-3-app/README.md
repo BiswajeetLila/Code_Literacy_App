@@ -6,6 +6,19 @@ This first vertical slice exposes the completed Course 3 docs package as an oper
 reviewer dashboard. It is separate from `Interactive-Viz/` and does not share runtime code with the
 Course 1 app.
 
+## Current Slice
+
+- Course 3 module dashboard
+- Module detail cards with gate, budget, artifacts, and related templates
+- Local-only progress tracking
+- Collapsible module rail for full-width module detail viewing
+
+## Next Slice
+
+The full course prose is still in `docs/course-3/`. The next app slice should add a course content
+reader or content ingestion path so the learner can read module assignments and template details
+inside the app instead of jumping back to markdown files.
+
 ## Run
 
 ```bash
