@@ -1,0 +1,12 @@
+{
+  "name": "course-3-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Course 3 Unity Solo AI Game Studio interface vertical slice.",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "verify": "node scripts/verify.mjs"
+  }
+}

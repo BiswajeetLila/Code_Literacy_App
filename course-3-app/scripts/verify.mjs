@@ -1,0 +1,117 @@
+import { readFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
+import { modules, operatingLoop, templates } from "../src/courseData.js";
+import { isModuleComplete, loadProgress, saveProgress, STORAGE_KEY, toggleModule } from "../src/progressStore.js";
+
+const root = dirname(dirname(fileURLToPath(import.meta.url)));
+const errors = [];
+
+expect(modules.length === 10, "renders all ten Course 3 modules from registry");
+expect(templates.length === 12, "tracks twelve Course 3 runnable templates");
+expect(operatingLoop.join(" -> ") === "Intent -> Spec -> Prototype -> Delegate -> Integrate -> Verify -> Polish -> Package", "operating loop matches Course 3 docs");
+
+modules.forEach((module, index) => {
+  expect(module.number === index + 1, `module ${module.id} is in order`);
+  expect(module.status === "complete", `module ${module.id} is complete`);
+  expect(Boolean(module.gate), `module ${module.id} has a gate`);
+  expect(Boolean(module.timeBudget), `module ${module.id} has a time budget`);
+  expect(module.artifacts.length > 0, `module ${module.id} has artifacts`);
+  module.templates.forEach((template) => {
+    expect(templates.includes(template), `module ${module.id} references known template ${template}`);
+  });
+});
+
+const memoryStorage = createMemoryStorage();
+let progress = loadProgress(memoryStorage);
+expect(!isModuleComplete(progress, "module-01"), "module progress starts incomplete");
+progress = toggleModule(progress, "module-01");
+saveProgress(progress, memoryStorage);
+const reloaded = loadProgress(memoryStorage);
+expect(isModuleComplete(reloaded, "module-01"), "module progress persists after reload");
+progress = toggleModule(reloaded, "module-01");
+expect(!isModuleComplete(progress, "module-01"), "module progress can be reversed");
+expect(memoryStorage.getItem(STORAGE_KEY) !== null, "progress uses the Course 3 storage key");
+
+const indexHtml = await readFile(join(root, "index.html"), "utf8");
+expect(indexHtml.includes("./src/main.js"), "index references app entry module");
+expect(indexHtml.includes("./src/styles.css"), "index references app styles");
+
+if (existsSync(join(root, "dist"))) {
+  const distIndex = await readFile(join(root, "dist", "index.html"), "utf8");
+  expect(distIndex.includes("./src/main.js"), "built index references app entry module");
+}
+
+await verifyServerSmoke();
+
+if (errors.length > 0) {
+  console.error(errors.join("\n"));
+  process.exit(1);
+}
+
+console.log("Course 3 app verification passed.");
+
+function expect(condition, message) {
+  if (!condition) {
+    errors.push(`FAIL: ${message}`);
+  }
+}
+
+function createMemoryStorage() {
+  const data = new Map();
+  return {
+    getItem(key) {
+      return data.has(key) ? data.get(key) : null;
+    },
+    setItem(key, value) {
+      data.set(key, String(value));
+    },
+    removeItem(key) {
+      data.delete(key);
+    },
+  };
+}
+
+async function verifyServerSmoke() {
+  const port = 4273;
+  const child = spawn(process.execPath, ["scripts/dev.mjs"], {
+    cwd: root,
+    env: { ...process.env, PORT: String(port) },
+    stdio: "ignore",
+  });
+
+  try {
+    await waitForServer(port);
+    const index = await fetchText(`http://localhost:${port}/`);
+    const main = await fetchText(`http://localhost:${port}/src/main.js`);
+    const styles = await fetchText(`http://localhost:${port}/src/styles.css`);
+    expect(index.includes("Course 3 Studio Dashboard"), "server returns app shell");
+    expect(main.includes("renderDetail"), "server returns app entry code");
+    expect(styles.includes("@media (max-width: 560px)"), "server returns responsive styles");
+  } finally {
+    child.kill();
+  }
+}
+
+async function waitForServer(port) {
+  const deadline = Date.now() + 5000;
+  while (Date.now() < deadline) {
+    try {
+      await fetchText(`http://localhost:${port}/`);
+      return;
+    } catch {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  }
+  throw new Error(`Dev server did not respond on ${port}`);
+}
+
+async function fetchText(url) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`${url} returned ${response.status}`);
+  }
+  return response.text();
+}
