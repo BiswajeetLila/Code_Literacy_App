@@ -102,7 +102,6 @@ Use these sample docs exactly:
 Each course app is a sibling folder at the repository root.
 
 - Course 1 app: `Interactive-Viz/`
-- Reserved Course 3 app folder: `course-3-app/`
+- Course 3 app: `Interactive-Viz_Course_3_UNITY/`
 
-Issue #9 records the convention only. Do not create `course-3-app/` until a later app
-implementation issue explicitly asks for it.
+Issue #36 and the follow-up implementation issues moved Course 3 into this sibling app folder.

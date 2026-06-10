@@ -18,7 +18,7 @@ await writeFile(
   join(dist, "build-info.json"),
   JSON.stringify(
     {
-      app: "course-3-app",
+      app: "Interactive-Viz_Course_3_UNITY",
       modules: modules.length,
       templates: templates.length,
       loop: operatingLoop,

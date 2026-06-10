@@ -85,7 +85,7 @@ The policy/procedure split is recorded in
 [`Runnable-Template schema`](course-3/schemas/runnable-template-schema.md).
 
 Each course app is a sibling folder at the repository root. Course 1 uses `Interactive-Viz/`.
-Course 3 reserves `course-3-app/`, but this docs-first pass does not create that folder.
+Course 3 uses `Interactive-Viz_Course_3_UNITY/`.
 
 ## Human Vs Agent Ownership
 

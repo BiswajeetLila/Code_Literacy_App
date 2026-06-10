@@ -1,10 +1,10 @@
-# Course 3 App Verification Notes
+# Interactive-Viz_Course_3_UNITY Verification Notes
 
 Date: 2026-06-10
 
 ## Commands
 
-Run from `course-3-app/`.
+Run from `Interactive-Viz_Course_3_UNITY/`.
 
 ```bash
 npm.cmd run build
@@ -46,10 +46,10 @@ PowerShell on this machine blocks `npm.ps1`, so use `npm.cmd`.
 
 ## Browser Notes
 
-Chrome and Edge headless initially failed in this environment because the GPU process could not
-initialize. Chrome rendered DOM successfully when launched with the low-level headless flags used in
-the terminal verification. Screenshot output did not produce a file on this machine, so mobile
-layout confidence currently comes from responsive CSS checks plus the module-detail DOM render.
+Chrome and Edge headless are unreliable in this environment. The browser smoke command first tries
+local DOM output, then reports the limitation and uses a server-content fallback when `--dump-dom`
+times out or returns no DOM. Screenshot output did not produce a file on this machine, so mobile
+layout confidence currently comes from responsive CSS checks plus served app/content checks.
 
 ## Current Scope
 

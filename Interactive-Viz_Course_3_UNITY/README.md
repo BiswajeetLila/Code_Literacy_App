@@ -1,10 +1,12 @@
-# Course 3 App
+# Interactive-Viz_Course_3_UNITY
 
 Independent static app for Course 3: Unity Solo AI Game Studio.
 
 This first vertical slice exposes the completed Course 3 docs package as an operational learner and
 reviewer dashboard. It is separate from `Interactive-Viz/` and does not share runtime code with the
 Course 1 app.
+
+Folder name: `Interactive-Viz_Course_3_UNITY/`.
 
 ## Current Slice
 
