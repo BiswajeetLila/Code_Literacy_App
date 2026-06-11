@@ -21,6 +21,8 @@ PowerShell on this machine blocks `npm.ps1`, so use `npm.cmd`.
   - 10 Course 3 modules in order
   - 12 runnable templates
   - operating loop matches the Course 3 docs
+  - 10-week and 5-week cohort cadences match the Course 3 docs
+  - defense checkpoints are Modules 3, 5, 8, and 10
   - every module has status, time budget, gate, artifacts, and valid template references
 - Generated content verification passed:
   - 10 module docs parsed from `docs/course-3/modules/`
@@ -64,6 +66,7 @@ This verifies the first vertical slice only:
 - module detail view
 - full-module reader generated from Course 3 docs
 - related-template reader generated from Course 3 docs
+- 10-week and 5-week cohort timeline view
 - local gate evidence and artifact checklist capture
 - local-only progress tracking
 

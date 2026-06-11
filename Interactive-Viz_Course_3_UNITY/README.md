@@ -17,11 +17,12 @@ Folder name: `Interactive-Viz_Course_3_UNITY/`.
 - Generated full-module reader from `docs/course-3/modules/`
 - Generated related-template reader from `docs/course-3/templates/`
 - Local gate evidence and artifact checklist capture
+- 10-week studio timeline with 5-week hardcore cadence toggle
 
 ## Next Slice
 
-The next app slice should add richer course workflow behavior on top of the local checklist:
-rubric views, fresh-agent handoff surfaces, or exportable evidence summaries.
+The next app slice should add reviewer-facing synthesis on top of the local checklist: rubric views,
+fresh-agent handoff surfaces, or exportable evidence summaries.
 
 ## Content Source
 
@@ -53,9 +54,9 @@ npm run verify
 npm run smoke:browser
 ```
 
-The verification checks module ordering, generated module/template content, registry completeness,
-related templates, local progress and checklist storage behavior, and build output references.
-Browser/mobile checks should be run against the dev server when changing UI layout. `smoke:browser`
-uses local Chrome or Edge in headless DOM mode to confirm early, middle, and late module reader paths
-render. If local browser DOM output is unavailable, it reports that limitation and falls back to
-checking the served generated content and app entry code.
+The verification checks module ordering, cohort cadence data, generated module/template content,
+registry completeness, related templates, local progress and checklist storage behavior, and build
+output references. Browser/mobile checks should be run against the dev server when changing UI
+layout. `smoke:browser` uses local Chrome or Edge in headless DOM mode to confirm early, middle, and
+late module reader paths render. If local browser DOM output is unavailable, it reports that
+limitation and falls back to checking the served generated content and app entry code.

@@ -1,4 +1,4 @@
-import { getModuleById, modules, operatingLoop } from "./courseData.js";
+import { cohortCadences, defenseModuleNumbers, getCadenceById, getModuleById, modules, operatingLoop } from "./courseData.js";
 import { moduleContent, templateContent } from "./generatedCourseContent.js";
 import {
   getArtifactCaptureCount,
@@ -18,8 +18,10 @@ import {
 
 const app = document.querySelector("#app");
 const MODULE_RAIL_KEY = "course3.moduleRailOpen";
+const TIMELINE_CADENCE_KEY = "course3.timelineCadence";
 let progress = loadProgress();
 let moduleRailOpen = loadModuleRailState();
+let timelineCadenceId = loadTimelineCadence();
 
 function selectedModuleId() {
   const hash = window.location.hash.replace("#", "");
@@ -71,9 +73,16 @@ function handleModuleRailToggle() {
   render();
 }
 
+function handleTimelineCadence(cadenceId) {
+  timelineCadenceId = getCadenceById(cadenceId).id;
+  window.localStorage.setItem(TIMELINE_CADENCE_KEY, timelineCadenceId);
+  render();
+}
+
 function render() {
   const current = getModuleById(selectedModuleId());
   const completedCount = modules.filter((module) => isModuleComplete(progress, module.id)).length;
+  const timelineCadence = getCadenceById(timelineCadenceId);
 
   app.innerHTML = `
     <header class="topbar">
@@ -109,6 +118,8 @@ function render() {
         <span class="current-readout">Viewing Module ${String(current.number).padStart(2, "0")} / ${current.title}</span>
       </div>
 
+      ${renderTimeline(timelineCadence)}
+
       <section id="module-rail" class="module-grid" aria-label="Course 3 modules" ${moduleRailOpen ? "" : "hidden"}>
         ${modules.map((module) => renderModuleButton(module, current.id)).join("")}
       </section>
@@ -128,6 +139,14 @@ function render() {
   });
 
   app.querySelector("[data-toggle-modules]")?.addEventListener("click", handleModuleRailToggle);
+
+  app.querySelectorAll("[data-timeline-cadence]").forEach((button) => {
+    button.addEventListener("click", () => handleTimelineCadence(button.dataset.timelineCadence));
+  });
+
+  app.querySelectorAll("[data-timeline-module-id]").forEach((button) => {
+    button.addEventListener("click", () => setSelectedModule(button.dataset.timelineModuleId));
+  });
 
   app.querySelector("[data-gate-captured]")?.addEventListener("change", (event) => {
     handleGateCaptured(current.id, event.target.checked);
@@ -241,6 +260,97 @@ render();
 
 function loadModuleRailState() {
   return window.localStorage.getItem(MODULE_RAIL_KEY) !== "false";
+}
+
+function loadTimelineCadence() {
+  return getCadenceById(window.localStorage.getItem(TIMELINE_CADENCE_KEY)).id;
+}
+
+function renderTimeline(cadence) {
+  const weeks = buildTimelineWeeks(cadence.id);
+
+  return `
+    <section class="timeline-panel" aria-label="Course 3 cohort timeline">
+      <div class="timeline-header">
+        <div>
+          <p class="kicker">Full Course Timeline</p>
+          <h3>${escapeHtml(cadence.label)}</h3>
+        </div>
+        <div class="cadence-switch" role="group" aria-label="Timeline cadence">
+          ${cohortCadences.map((option) => `
+            <button
+              type="button"
+              data-timeline-cadence="${option.id}"
+              class="${option.id === cadence.id ? "selected" : ""}"
+              aria-pressed="${option.id === cadence.id}"
+            >
+              ${escapeHtml(option.length)}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+
+      <div class="timeline-stats">
+        <span>${escapeHtml(cadence.pace)}</span>
+        <span>${escapeHtml(cadence.workload)}</span>
+        <span>${escapeHtml(cadence.liveSessions)}</span>
+      </div>
+
+      <div class="timeline-weeks">
+        ${weeks.map((week) => renderTimelineWeek(week, cadence.id)).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function buildTimelineWeeks(cadenceId) {
+  if (cadenceId === "five-week") {
+    return Array.from({ length: 5 }, (_, index) => {
+      const weekNumber = index + 1;
+      return {
+        weekNumber,
+        modules: modules.slice(index * 2, index * 2 + 2),
+      };
+    });
+  }
+
+  return modules.map((module) => ({
+    weekNumber: module.number,
+    modules: [module],
+  }));
+}
+
+function renderTimelineWeek(week, cadenceId) {
+  return `
+    <div class="timeline-week">
+      <div class="week-label">
+        <span>Week</span>
+        <strong>${String(week.weekNumber).padStart(2, "0")}</strong>
+      </div>
+      <div class="week-modules">
+        ${week.modules.map((module, index) => renderTimelineModule(module, cadenceId === "five-week" ? index + 1 : null)).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderTimelineModule(module, slotNumber) {
+  const defense = defenseModuleNumbers.includes(module.number);
+  const artifactCount = getArtifactCaptureCount(progress, module.id, module.artifacts.length);
+  const gateLabel = isGateCaptured(progress, module.id) ? "gate captured" : "gate pending";
+
+  return `
+    <button class="timeline-module" type="button" data-timeline-module-id="${module.id}">
+      <span class="timeline-module-top">
+        <strong>${String(module.number).padStart(2, "0")} ${escapeHtml(module.phase)}</strong>
+        ${slotNumber ? `<em>slot ${slotNumber}</em>` : ""}
+      </span>
+      <span class="timeline-title">${escapeHtml(module.title)}</span>
+      <span class="timeline-meta">${escapeHtml(module.timeBudget)} / ${artifactCount}/${module.artifacts.length} artifacts / ${gateLabel}</span>
+      <span class="timeline-gate">${escapeHtml(module.gate)}</span>
+      ${defense ? `<span class="defense-chip">defense checkpoint</span>` : ""}
+    </button>
+  `;
 }
 
 function renderGateArtifactChecklist(module) {

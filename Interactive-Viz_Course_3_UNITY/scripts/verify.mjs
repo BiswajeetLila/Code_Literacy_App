@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawn } from "node:child_process";
-import { modules, operatingLoop, templates } from "../src/courseData.js";
+import { cohortCadences, defenseModuleNumbers, getCadenceById, modules, operatingLoop, templates } from "../src/courseData.js";
 import {
   getArtifactCaptureCount,
   getArtifactEvidence,
@@ -32,6 +32,10 @@ const { moduleContent, templateContent } = await import(generatedUrl.href);
 expect(modules.length === 10, "renders all ten Course 3 modules from registry");
 expect(templates.length === 12, "tracks twelve Course 3 runnable templates");
 expect(operatingLoop.join(" -> ") === "Intent -> Spec -> Prototype -> Delegate -> Integrate -> Verify -> Polish -> Package", "operating loop matches Course 3 docs");
+expect(cohortCadences.length === 2, "tracks two Course 3 cohort cadences");
+expect(getCadenceById("ten-week").pace === "1 module/week", "10-week cadence is the default slower plan");
+expect(getCadenceById("five-week").pace === "2 modules/week", "5-week cadence is the hardcore plan");
+expect(defenseModuleNumbers.join(",") === "3,5,8,10", "defense checkpoints match cohort ops docs");
 expect(Object.keys(moduleContent).length === 10, "generated content includes all ten module docs");
 expect(Object.keys(templateContent).length === 12, "generated content includes all twelve template docs");
 
@@ -97,11 +101,15 @@ expect(mainJs.includes("data-toggle-modules"), "module rail can be toggled");
 expect(mainJs.includes("renderCourseReader"), "module content reader is rendered");
 expect(mainJs.includes("renderTemplateReader"), "template reader is rendered");
 expect(mainJs.includes("renderGateArtifactChecklist"), "gate and artifact checklist is rendered");
+expect(mainJs.includes("renderTimeline"), "cohort timeline is rendered");
+expect(mainJs.includes("data-timeline-cadence"), "timeline cadence controls are present");
+expect(mainJs.includes("data-timeline-module-id"), "timeline module links are present");
 expect(mainJs.includes("data-artifact-captured"), "artifact checklist controls are present");
 expect(stylesCss.includes(".workspace.modules-collapsed"), "collapsed module rail expands detail view");
 expect(stylesCss.includes(".module-grid[hidden]"), "hidden module rail is removed from layout");
 expect(stylesCss.includes(".course-reader"), "reader styles are present");
 expect(stylesCss.includes(".checklist-panel"), "checklist styles are present");
+expect(stylesCss.includes(".timeline-panel"), "timeline styles are present");
 
 if (existsSync(join(root, "dist"))) {
   const distIndex = await readFile(join(root, "dist", "index.html"), "utf8");
@@ -155,6 +163,7 @@ async function verifyServerSmoke() {
     expect(index.includes("Course 3 Studio Dashboard"), "server returns app shell");
     expect(main.includes("renderDetail"), "server returns app entry code");
     expect(main.includes("renderGateArtifactChecklist"), "server returns checklist code");
+    expect(main.includes("renderTimeline"), "server returns timeline code");
     expect(generated.includes("Module 8: Verification For Games"), "server returns generated module content");
     expect(generated.includes("VERTICAL-SLICE-SPEC"), "server returns generated template content");
     expect(styles.includes("@media (max-width: 560px)"), "server returns responsive styles");

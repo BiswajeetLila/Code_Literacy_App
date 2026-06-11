@@ -9,6 +9,27 @@ export const operatingLoop = [
   "Package",
 ];
 
+export const cohortCadences = [
+  {
+    id: "ten-week",
+    label: "10-week studio",
+    length: "10 weeks",
+    pace: "1 module/week",
+    workload: "10-16 focused hours/week",
+    liveSessions: "briefing + critique/review",
+  },
+  {
+    id: "five-week",
+    label: "5-week hardcore",
+    length: "5 weeks",
+    pace: "2 modules/week",
+    workload: "18-30 focused hours/week",
+    liveSessions: "production briefing + critique/review",
+  },
+];
+
+export const defenseModuleNumbers = [3, 5, 8, 10];
+
 export const modules = [
   {
     id: "module-01",
@@ -199,4 +220,8 @@ export const templates = [
 
 export function getModuleById(id) {
   return modules.find((module) => module.id === id) ?? modules[0];
+}
+
+export function getCadenceById(id) {
+  return cohortCadences.find((cadence) => cadence.id === id) ?? cohortCadences[0];
 }
