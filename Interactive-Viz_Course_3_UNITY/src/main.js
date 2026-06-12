@@ -1,18 +1,33 @@
 import { cohortCadences, defenseModuleNumbers, getCadenceById, getModuleById, modules, operatingLoop } from "./courseData.js";
+import {
+  buildCourseEvidencePack,
+  buildModuleEvidenceMarkdown,
+  buildModuleEvidencePack,
+  downloadTextFile,
+  reviewCriteria,
+} from "./evidencePack.js";
 import { moduleContent, templateContent } from "./generatedCourseContent.js";
 import {
   getArtifactCaptureCount,
   getArtifactEvidence,
   getGateEvidence,
+  getReviewerName,
+  getReviewNotes,
+  getReviewStatus,
   isArtifactCaptured,
   isGateCaptured,
   isModuleComplete,
+  isReviewCriterionMet,
   loadProgress,
   saveProgress,
   setArtifactCaptured,
   setArtifactEvidence,
   setGateCaptured,
   setGateEvidence,
+  setReviewerName,
+  setReviewCriterion,
+  setReviewNotes,
+  setReviewStatus,
   toggleModule,
 } from "./progressStore.js";
 
@@ -65,6 +80,39 @@ function handleArtifactCaptured(moduleId, artifactIndex, captured) {
 function handleArtifactEvidence(moduleId, artifactIndex, evidence) {
   progress = setArtifactEvidence(progress, moduleId, artifactIndex, evidence);
   saveProgress(progress);
+}
+
+function handleReviewStatus(moduleId, status) {
+  progress = setReviewStatus(progress, moduleId, status);
+  saveProgress(progress);
+  render();
+}
+
+function handleReviewerName(moduleId, reviewer) {
+  progress = setReviewerName(progress, moduleId, reviewer);
+  saveProgress(progress);
+}
+
+function handleReviewNotes(moduleId, notes) {
+  progress = setReviewNotes(progress, moduleId, notes);
+  saveProgress(progress);
+}
+
+function handleReviewCriterion(moduleId, criterionId, met) {
+  progress = setReviewCriterion(progress, moduleId, criterionId, met);
+  saveProgress(progress);
+  render();
+}
+
+function handleModuleEvidenceExport(module) {
+  const pack = buildModuleEvidencePack(module, progress);
+  const filename = `course-3-module-${String(module.number).padStart(2, "0")}-evidence.md`;
+  downloadTextFile(filename, buildModuleEvidenceMarkdown(pack));
+}
+
+function handleCourseEvidenceExport() {
+  const pack = buildCourseEvidencePack(modules, progress);
+  downloadTextFile("course-3-full-evidence.json", `${JSON.stringify(pack, null, 2)}\n`);
 }
 
 function handleModuleRailToggle() {
@@ -167,6 +215,30 @@ function render() {
       handleArtifactEvidence(current.id, Number(field.dataset.artifactIndex), field.value);
     });
   });
+
+  app.querySelector("[data-export-module-evidence]")?.addEventListener("click", () => {
+    handleModuleEvidenceExport(current);
+  });
+
+  app.querySelector("[data-export-course-evidence]")?.addEventListener("click", handleCourseEvidenceExport);
+
+  app.querySelector("[data-review-status]")?.addEventListener("change", (event) => {
+    handleReviewStatus(current.id, event.target.value);
+  });
+
+  app.querySelector("[data-reviewer-name]")?.addEventListener("input", (event) => {
+    handleReviewerName(current.id, event.target.value);
+  });
+
+  app.querySelector("[data-review-notes]")?.addEventListener("input", (event) => {
+    handleReviewNotes(current.id, event.target.value);
+  });
+
+  app.querySelectorAll("[data-review-criterion]").forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      handleReviewCriterion(current.id, checkbox.dataset.reviewCriterion, checkbox.checked);
+    });
+  });
 }
 
 function renderModuleButton(module, currentId) {
@@ -250,6 +322,8 @@ function renderDetail(module) {
     </section>
 
     ${renderGateArtifactChecklist(module)}
+    ${renderEvidenceExportPanel(module)}
+    ${renderReviewerRubric(module)}
     ${renderCourseReader(module)}
     ${renderTemplateReader(module)}
   `;
@@ -408,6 +482,90 @@ function renderArtifactCapture(moduleId, artifact, index) {
           value="${escapeHtml(getArtifactEvidence(progress, moduleId, index))}"
         >
       </label>
+    </article>
+  `;
+}
+
+function renderEvidenceExportPanel(module) {
+  const artifactCount = getArtifactCaptureCount(progress, module.id, module.artifacts.length);
+  const readyCount = [
+    isGateCaptured(progress, module.id),
+    artifactCount === module.artifacts.length,
+    getReviewStatus(progress, module.id) === "approved",
+  ].filter(Boolean).length;
+
+  return `
+    <section class="export-panel" aria-label="Evidence export">
+      <div>
+        <p class="kicker">Evidence Pack</p>
+        <h3>Export Review Handoff</h3>
+        <p>${readyCount}/3 readiness signals captured for this module.</p>
+      </div>
+      <div class="export-actions">
+        <button type="button" data-export-module-evidence>Export Module MD</button>
+        <button type="button" data-export-course-evidence>Export Course JSON</button>
+      </div>
+    </section>
+  `;
+}
+
+function renderReviewerRubric(module) {
+  const status = getReviewStatus(progress, module.id);
+
+  return `
+    <section class="review-panel" aria-label="Reviewer rubric workflow">
+      <div class="review-heading">
+        <div>
+          <p class="kicker">Reviewer Workflow</p>
+          <h3>Rubric Decision</h3>
+        </div>
+        <label class="review-status">
+          <span>Decision</span>
+          <select data-review-status>
+            ${renderReviewOption("not-reviewed", "Not reviewed", status)}
+            ${renderReviewOption("needs-revision", "Needs revision", status)}
+            ${renderReviewOption("approved", "Approved", status)}
+            ${renderReviewOption("blocked", "Blocked", status)}
+          </select>
+        </label>
+      </div>
+
+      <div class="review-grid">
+        <label class="evidence-field">
+          <span>Reviewer</span>
+          <input type="text" data-reviewer-name value="${escapeHtml(getReviewerName(progress, module.id))}">
+        </label>
+        <label class="evidence-field">
+          <span>Reviewer notes</span>
+          <textarea data-review-notes rows="4">${escapeHtml(getReviewNotes(progress, module.id))}</textarea>
+        </label>
+      </div>
+
+      <div class="rubric-list">
+        ${reviewCriteria.map((criterion) => renderReviewCriterion(module.id, criterion)).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderReviewOption(value, label, currentValue) {
+  return `<option value="${value}" ${value === currentValue ? "selected" : ""}>${label}</option>`;
+}
+
+function renderReviewCriterion(moduleId, criterion) {
+  const met = isReviewCriterionMet(progress, moduleId, criterion.id);
+
+  return `
+    <article class="rubric-item ${met ? "is-met" : ""}">
+      <label class="check-row">
+        <input
+          type="checkbox"
+          data-review-criterion="${criterion.id}"
+          ${met ? "checked" : ""}
+        >
+        <span>${escapeHtml(criterion.label)}</span>
+      </label>
+      <p>${escapeHtml(criterion.prompt)}</p>
     </article>
   `;
 }

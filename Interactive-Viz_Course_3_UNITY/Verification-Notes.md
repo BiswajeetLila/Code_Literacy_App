@@ -1,6 +1,6 @@
 # Interactive-Viz_Course_3_UNITY Verification Notes
 
-Date: 2026-06-10
+Date: 2026-06-12
 
 ## Commands
 
@@ -37,6 +37,13 @@ PowerShell on this machine blocks `npm.ps1`, so use `npm.cmd`.
   - gate evidence capture persists
   - artifact checklist capture persists
   - artifact evidence notes persist
+  - reviewer decision persists
+  - reviewer name and notes persist
+  - reviewer rubric criteria persist
+- Evidence export verification passed:
+  - module evidence pack has a versioned schema
+  - full-course evidence pack includes all 10 modules
+  - Markdown export includes artifact evidence and reviewer notes
 - Dev-server smoke verification passed:
   - `index.html` served
   - `src/main.js` served
@@ -68,6 +75,8 @@ This verifies the first vertical slice only:
 - related-template reader generated from Course 3 docs
 - 10-week and 5-week cohort timeline view
 - local gate evidence and artifact checklist capture
+- exportable module and full-course evidence packs
+- reviewer decision, notes, and rubric checklist capture
 - local-only progress tracking
 
 It does not verify future LMS behavior, server persistence, submissions, grading, or Steamworks

@@ -18,11 +18,14 @@ Folder name: `Interactive-Viz_Course_3_UNITY/`.
 - Generated related-template reader from `docs/course-3/templates/`
 - Local gate evidence and artifact checklist capture
 - 10-week studio timeline with 5-week hardcore cadence toggle
+- Exportable module Markdown evidence packs
+- Exportable full-course JSON evidence pack
+- Reviewer decision, reviewer notes, and rubric criteria capture
 
 ## Next Slice
 
-The next app slice should add reviewer-facing synthesis on top of the local checklist: rubric views,
-fresh-agent handoff surfaces, or exportable evidence summaries.
+The next app slice should productize review handoff: import previously exported evidence, compare
+modules across a cohort, or prepare hosted submission/review flows.
 
 ## Content Source
 

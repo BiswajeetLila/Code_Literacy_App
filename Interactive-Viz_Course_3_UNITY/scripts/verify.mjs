@@ -4,19 +4,28 @@ import { join, dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { spawn } from "node:child_process";
 import { cohortCadences, defenseModuleNumbers, getCadenceById, modules, operatingLoop, templates } from "../src/courseData.js";
+import { buildCourseEvidencePack, buildModuleEvidenceMarkdown, buildModuleEvidencePack, reviewCriteria } from "../src/evidencePack.js";
 import {
   getArtifactCaptureCount,
   getArtifactEvidence,
   getGateEvidence,
+  getReviewerName,
+  getReviewNotes,
+  getReviewStatus,
   isArtifactCaptured,
   isGateCaptured,
   isModuleComplete,
+  isReviewCriterionMet,
   loadProgress,
   saveProgress,
   setArtifactCaptured,
   setArtifactEvidence,
   setGateCaptured,
   setGateEvidence,
+  setReviewerName,
+  setReviewCriterion,
+  setReviewNotes,
+  setReviewStatus,
   STORAGE_KEY,
   toggleModule,
 } from "../src/progressStore.js";
@@ -84,6 +93,10 @@ progress = setGateCaptured(progress, "module-02", true);
 progress = setGateEvidence(progress, "module-02", "docs/MODULE-02-GATE.md");
 progress = setArtifactCaptured(progress, "module-02", 0, true);
 progress = setArtifactEvidence(progress, "module-02", 0, "docs/GAME-THESIS.md");
+progress = setReviewStatus(progress, "module-02", "needs-revision");
+progress = setReviewerName(progress, "module-02", "Course reviewer");
+progress = setReviewNotes(progress, "module-02", "Spec needs a clearer cold-agent first task.");
+progress = setReviewCriterion(progress, "module-02", "gate", true);
 saveProgress(progress, memoryStorage);
 const evidenceReloaded = loadProgress(memoryStorage);
 expect(isGateCaptured(evidenceReloaded, "module-02"), "gate capture persists after reload");
@@ -91,6 +104,23 @@ expect(getGateEvidence(evidenceReloaded, "module-02") === "docs/MODULE-02-GATE.m
 expect(isArtifactCaptured(evidenceReloaded, "module-02", 0), "artifact capture persists after reload");
 expect(getArtifactEvidence(evidenceReloaded, "module-02", 0) === "docs/GAME-THESIS.md", "artifact evidence note persists");
 expect(getArtifactCaptureCount(evidenceReloaded, "module-02", 4) === 1, "artifact capture count is calculated");
+expect(getReviewStatus(evidenceReloaded, "module-02") === "needs-revision", "review status persists");
+expect(getReviewerName(evidenceReloaded, "module-02") === "Course reviewer", "reviewer name persists");
+expect(getReviewNotes(evidenceReloaded, "module-02").includes("clearer cold-agent"), "review notes persist");
+expect(isReviewCriterionMet(evidenceReloaded, "module-02", "gate"), "review criteria persist");
+expect(reviewCriteria.length === 4, "review workflow has four criteria");
+const moduleEvidencePack = buildModuleEvidencePack(modules[1], evidenceReloaded, "2026-06-12T00:00:00.000Z");
+expect(moduleEvidencePack.schema === "course3.module-evidence.v1", "module evidence pack has a schema");
+expect(moduleEvidencePack.module.id === "module-02", "module evidence pack identifies the module");
+expect(moduleEvidencePack.learnerProgress.artifacts.length === 4, "module evidence pack includes all artifacts");
+expect(moduleEvidencePack.reviewer.status === "needs-revision", "module evidence pack includes review decision");
+const evidenceMarkdown = buildModuleEvidenceMarkdown(moduleEvidencePack);
+expect(evidenceMarkdown.includes("Course 3 Module 02 Evidence Pack"), "module evidence markdown has a title");
+expect(evidenceMarkdown.includes("docs/GAME-THESIS.md"), "module evidence markdown includes artifact evidence");
+expect(evidenceMarkdown.includes("Spec needs a clearer cold-agent first task."), "module evidence markdown includes reviewer notes");
+const courseEvidencePack = buildCourseEvidencePack(modules, evidenceReloaded, "2026-06-12T00:00:00.000Z");
+expect(courseEvidencePack.schema === "course3.course-evidence.v1", "course evidence pack has a schema");
+expect(courseEvidencePack.modules.length === 10, "course evidence pack includes all modules");
 
 const indexHtml = await readFile(join(root, "index.html"), "utf8");
 expect(indexHtml.includes("./src/main.js"), "index references app entry module");
@@ -102,14 +132,23 @@ expect(mainJs.includes("renderCourseReader"), "module content reader is rendered
 expect(mainJs.includes("renderTemplateReader"), "template reader is rendered");
 expect(mainJs.includes("renderGateArtifactChecklist"), "gate and artifact checklist is rendered");
 expect(mainJs.includes("renderTimeline"), "cohort timeline is rendered");
+expect(mainJs.includes("renderEvidenceExportPanel"), "evidence export panel is rendered");
+expect(mainJs.includes("renderReviewerRubric"), "reviewer rubric workflow is rendered");
 expect(mainJs.includes("data-timeline-cadence"), "timeline cadence controls are present");
 expect(mainJs.includes("data-timeline-module-id"), "timeline module links are present");
 expect(mainJs.includes("data-artifact-captured"), "artifact checklist controls are present");
+expect(mainJs.includes("data-export-module-evidence"), "module evidence export control is present");
+expect(mainJs.includes("data-export-course-evidence"), "course evidence export control is present");
+expect(mainJs.includes("data-review-status"), "review decision control is present");
+expect(mainJs.includes("data-review-criterion"), "review criteria controls are present");
 expect(stylesCss.includes(".workspace.modules-collapsed"), "collapsed module rail expands detail view");
 expect(stylesCss.includes(".module-grid[hidden]"), "hidden module rail is removed from layout");
 expect(stylesCss.includes(".course-reader"), "reader styles are present");
 expect(stylesCss.includes(".checklist-panel"), "checklist styles are present");
 expect(stylesCss.includes(".timeline-panel"), "timeline styles are present");
+expect(stylesCss.includes(".export-panel"), "evidence export styles are present");
+expect(stylesCss.includes(".review-panel"), "review panel styles are present");
+expect(stylesCss.includes(".rubric-list"), "rubric list styles are present");
 
 if (existsSync(join(root, "dist"))) {
   const distIndex = await readFile(join(root, "dist", "index.html"), "utf8");
@@ -164,6 +203,8 @@ async function verifyServerSmoke() {
     expect(main.includes("renderDetail"), "server returns app entry code");
     expect(main.includes("renderGateArtifactChecklist"), "server returns checklist code");
     expect(main.includes("renderTimeline"), "server returns timeline code");
+    expect(main.includes("renderEvidenceExportPanel"), "server returns evidence export code");
+    expect(main.includes("renderReviewerRubric"), "server returns reviewer rubric code");
     expect(generated.includes("Module 8: Verification For Games"), "server returns generated module content");
     expect(generated.includes("VERTICAL-SLICE-SPEC"), "server returns generated template content");
     expect(styles.includes("@media (max-width: 560px)"), "server returns responsive styles");

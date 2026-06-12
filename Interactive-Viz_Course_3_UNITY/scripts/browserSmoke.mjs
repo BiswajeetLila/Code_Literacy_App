@@ -160,7 +160,13 @@ async function checkServerFallback() {
     }
   });
 
-  ["renderCourseReader", "renderTemplateReader", "data-toggle-modules"].forEach((text) => {
+  [
+    "renderCourseReader",
+    "renderTemplateReader",
+    "renderEvidenceExportPanel",
+    "renderReviewerRubric",
+    "data-toggle-modules",
+  ].forEach((text) => {
     if (!main.includes(text)) {
       throw new Error(`Server fallback did not include expected app code: ${text}`);
     }

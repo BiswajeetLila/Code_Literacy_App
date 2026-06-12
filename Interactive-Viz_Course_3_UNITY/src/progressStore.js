@@ -76,6 +76,73 @@ export function getArtifactCaptureCount(progress, moduleId, artifactTotal) {
   return Array.from({ length: artifactTotal }).filter((_, index) => isArtifactCaptured(progress, moduleId, index)).length;
 }
 
+export function getReviewStatus(progress, moduleId) {
+  return getModuleProgress(progress, moduleId).review?.status ?? "not-reviewed";
+}
+
+export function getReviewerName(progress, moduleId) {
+  return getModuleProgress(progress, moduleId).review?.reviewer ?? "";
+}
+
+export function getReviewNotes(progress, moduleId) {
+  return getModuleProgress(progress, moduleId).review?.notes ?? "";
+}
+
+export function isReviewCriterionMet(progress, moduleId, criterionId) {
+  return Boolean(getModuleProgress(progress, moduleId).review?.criteria?.[criterionId]);
+}
+
+export function setReviewStatus(progress, moduleId, status) {
+  const current = getModuleProgress(progress, moduleId);
+  return setModuleProgress(progress, moduleId, {
+    ...current,
+    review: {
+      ...current.review,
+      status: String(status),
+      updatedAt: new Date().toISOString(),
+    },
+  });
+}
+
+export function setReviewerName(progress, moduleId, reviewer) {
+  const current = getModuleProgress(progress, moduleId);
+  return setModuleProgress(progress, moduleId, {
+    ...current,
+    review: {
+      ...current.review,
+      reviewer: String(reviewer),
+      updatedAt: new Date().toISOString(),
+    },
+  });
+}
+
+export function setReviewNotes(progress, moduleId, notes) {
+  const current = getModuleProgress(progress, moduleId);
+  return setModuleProgress(progress, moduleId, {
+    ...current,
+    review: {
+      ...current.review,
+      notes: String(notes),
+      updatedAt: new Date().toISOString(),
+    },
+  });
+}
+
+export function setReviewCriterion(progress, moduleId, criterionId, met) {
+  const current = getModuleProgress(progress, moduleId);
+  return setModuleProgress(progress, moduleId, {
+    ...current,
+    review: {
+      ...current.review,
+      criteria: {
+        ...current.review?.criteria,
+        [criterionId]: Boolean(met),
+      },
+      updatedAt: new Date().toISOString(),
+    },
+  });
+}
+
 export function setArtifactCaptured(progress, moduleId, artifactIndex, captured) {
   const current = getModuleProgress(progress, moduleId);
   return setModuleProgress(progress, moduleId, {

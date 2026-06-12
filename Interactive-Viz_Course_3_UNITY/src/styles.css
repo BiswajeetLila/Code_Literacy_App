@@ -19,6 +19,10 @@
   box-sizing: border-box;
 }
 
+* {
+  min-width: 0;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -33,6 +37,21 @@ body {
 
 button {
   font: inherit;
+}
+
+button,
+input,
+select,
+textarea,
+p,
+li,
+span,
+strong,
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: anywhere;
 }
 
 .app-shell {
@@ -326,6 +345,7 @@ h3 {
 
 .timeline-module-top {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 10px;
   color: var(--accent);
@@ -629,6 +649,122 @@ li {
   resize: vertical;
 }
 
+.export-panel,
+.review-panel {
+  margin-top: 22px;
+  border-top: 2px solid var(--line);
+  padding-top: 18px;
+}
+
+.export-panel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.export-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.export-actions button {
+  border: 2px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.export-actions button:hover {
+  background: var(--accent);
+}
+
+.review-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.review-heading h3 {
+  margin: 0;
+}
+
+.review-status {
+  display: grid;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.review-status span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.review-status select {
+  width: 100%;
+  border: 2px solid var(--line);
+  border-radius: 0;
+  background: var(--field);
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 9px 10px;
+  text-transform: uppercase;
+}
+
+.review-status option {
+  overflow-wrap: normal;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.6fr) minmax(0, 1.4fr);
+  gap: 10px;
+}
+
+.rubric-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.rubric-item {
+  display: grid;
+  gap: 8px;
+  border: 2px solid var(--line);
+  background: var(--field);
+  padding: 12px;
+}
+
+.rubric-item.is-met {
+  background: #edf6ec;
+}
+
+.rubric-item p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .course-reader,
 .template-reader {
   margin-top: 22px;
@@ -751,6 +887,8 @@ li {
   .detail-header,
   .view-controls,
   .timeline-header,
+  .export-panel,
+  .review-heading,
   .checklist-heading,
   .reader-heading,
   .template-card-header {
@@ -760,8 +898,18 @@ li {
 
   .progress-meter,
   .complete-toggle,
-  .rail-toggle {
+  .rail-toggle,
+  .review-status {
     width: 100%;
+  }
+
+  .export-actions {
+    justify-content: stretch;
+    width: 100%;
+  }
+
+  .export-actions button {
+    flex: 1 1 180px;
   }
 
   .current-readout {
@@ -788,7 +936,9 @@ li {
   }
 
   .timeline-stats,
-  .week-modules {
+  .week-modules,
+  .review-grid,
+  .rubric-list {
     grid-template-columns: 1fr;
   }
 
