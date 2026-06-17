@@ -30,6 +30,7 @@ import {
   setReviewStatus,
   toggleModule,
 } from "./progressStore.js";
+import { getCourseReviewSummary } from "./reviewSummary.js";
 
 const app = document.querySelector("#app");
 const MODULE_RAIL_KEY = "course3.moduleRailOpen";
@@ -131,6 +132,7 @@ function render() {
   const current = getModuleById(selectedModuleId());
   const completedCount = modules.filter((module) => isModuleComplete(progress, module.id)).length;
   const timelineCadence = getCadenceById(timelineCadenceId);
+  const courseReviewSummary = getCourseReviewSummary(modules, progress);
 
   app.innerHTML = `
     <header class="topbar">
@@ -167,6 +169,7 @@ function render() {
       </div>
 
       ${renderTimeline(timelineCadence)}
+      ${renderCourseReviewDashboard(courseReviewSummary)}
 
       <section id="module-rail" class="module-grid" aria-label="Course 3 modules" ${moduleRailOpen ? "" : "hidden"}>
         ${modules.map((module) => renderModuleButton(module, current.id)).join("")}
@@ -194,6 +197,10 @@ function render() {
 
   app.querySelectorAll("[data-timeline-module-id]").forEach((button) => {
     button.addEventListener("click", () => setSelectedModule(button.dataset.timelineModuleId));
+  });
+
+  app.querySelectorAll("[data-review-summary-module-id]").forEach((button) => {
+    button.addEventListener("click", () => setSelectedModule(button.dataset.reviewSummaryModuleId));
   });
 
   app.querySelector("[data-gate-captured]")?.addEventListener("change", (event) => {
@@ -425,6 +432,70 @@ function renderTimelineModule(module, slotNumber) {
       ${defense ? `<span class="defense-chip">defense checkpoint</span>` : ""}
     </button>
   `;
+}
+
+function renderCourseReviewDashboard(summary) {
+  return `
+    <section class="review-dashboard" aria-label="Course 3 reviewer summary dashboard">
+      <div class="review-dashboard-header">
+        <div>
+          <p class="kicker">Reviewer Summary</p>
+          <h3>10-Module Review Dashboard</h3>
+        </div>
+        <span>${summary.readyModules}/10 modules product-ready</span>
+      </div>
+
+      <div class="review-stats">
+        <div>
+          <span>Gates</span>
+          <strong>${summary.gatesCaptured}/10</strong>
+        </div>
+        <div>
+          <span>Artifacts</span>
+          <strong>${summary.artifactCount}/${summary.artifactTotal}</strong>
+        </div>
+        <div>
+          <span>Approved</span>
+          <strong>${summary.approvedModules}/10</strong>
+        </div>
+        <div>
+          <span>Needs Work</span>
+          <strong>${summary.modules.length - summary.readyModules}/10</strong>
+        </div>
+      </div>
+
+      <div class="review-queue">
+        ${summary.modules.map((module) => renderReviewSummaryRow(module)).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderReviewSummaryRow(module) {
+  const missing = module.missing.length > 0 ? module.missing.join(", ") : "ready";
+
+  return `
+    <button
+      class="review-summary-row ${module.ready ? "is-ready" : ""} status-${module.reviewStatus}"
+      type="button"
+      data-review-summary-module-id="${module.moduleId}"
+    >
+      <span class="review-summary-module">
+        <b>${String(module.number).padStart(2, "0")}</b>
+        <span>${escapeHtml(module.title)}</span>
+      </span>
+      <span>${escapeHtml(module.phase)}</span>
+      <span>${module.gateCaptured ? "gate yes" : "gate no"}</span>
+      <span>${module.artifactCount}/${module.artifactTotal} artifacts</span>
+      <span>${module.criteriaCount}/${module.criteriaTotal} rubric</span>
+      <span>${formatReviewStatus(module.reviewStatus)}</span>
+      <span>${escapeHtml(missing)}</span>
+    </button>
+  `;
+}
+
+function formatReviewStatus(status) {
+  return status.replace(/-/g, " ");
 }
 
 function renderGateArtifactChecklist(module) {

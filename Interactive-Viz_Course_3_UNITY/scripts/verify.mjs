@@ -29,6 +29,7 @@ import {
   STORAGE_KEY,
   toggleModule,
 } from "../src/progressStore.js";
+import { getCourseReviewSummary, getModuleReviewSummary } from "../src/reviewSummary.js";
 import { generateContent } from "./generateContent.mjs";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
@@ -97,6 +98,14 @@ progress = setReviewStatus(progress, "module-02", "needs-revision");
 progress = setReviewerName(progress, "module-02", "Course reviewer");
 progress = setReviewNotes(progress, "module-02", "Spec needs a clearer cold-agent first task.");
 progress = setReviewCriterion(progress, "module-02", "gate", true);
+progress = setGateCaptured(progress, "module-03", true);
+modules[2].artifacts.forEach((_, index) => {
+  progress = setArtifactCaptured(progress, "module-03", index, true);
+});
+reviewCriteria.forEach((criterion) => {
+  progress = setReviewCriterion(progress, "module-03", criterion.id, true);
+});
+progress = setReviewStatus(progress, "module-03", "approved");
 saveProgress(progress, memoryStorage);
 const evidenceReloaded = loadProgress(memoryStorage);
 expect(isGateCaptured(evidenceReloaded, "module-02"), "gate capture persists after reload");
@@ -121,6 +130,17 @@ expect(evidenceMarkdown.includes("Spec needs a clearer cold-agent first task."),
 const courseEvidencePack = buildCourseEvidencePack(modules, evidenceReloaded, "2026-06-12T00:00:00.000Z");
 expect(courseEvidencePack.schema === "course3.course-evidence.v1", "course evidence pack has a schema");
 expect(courseEvidencePack.modules.length === 10, "course evidence pack includes all modules");
+const moduleReviewSummary = getModuleReviewSummary(modules[1], evidenceReloaded);
+expect(moduleReviewSummary.moduleId === "module-02", "module review summary identifies the module");
+expect(moduleReviewSummary.artifactCount === 1, "module review summary counts captured artifacts");
+expect(moduleReviewSummary.criteriaCount === 1, "module review summary counts met review criteria");
+expect(moduleReviewSummary.missing.includes("artifacts"), "module review summary names missing artifacts");
+const courseReviewSummary = getCourseReviewSummary(modules, evidenceReloaded);
+expect(courseReviewSummary.modules.length === 10, "course review dashboard covers all modules");
+expect(courseReviewSummary.gatesCaptured === 2, "course review summary counts captured gates");
+expect(courseReviewSummary.approvedModules === 1, "course review summary counts approved modules");
+expect(courseReviewSummary.readyModules === 1, "course review summary counts product-ready modules");
+expect(courseReviewSummary.artifactCount === 5, "course review summary counts captured artifacts across modules");
 
 const indexHtml = await readFile(join(root, "index.html"), "utf8");
 expect(indexHtml.includes("./src/main.js"), "index references app entry module");
@@ -134,8 +154,10 @@ expect(mainJs.includes("renderGateArtifactChecklist"), "gate and artifact checkl
 expect(mainJs.includes("renderTimeline"), "cohort timeline is rendered");
 expect(mainJs.includes("renderEvidenceExportPanel"), "evidence export panel is rendered");
 expect(mainJs.includes("renderReviewerRubric"), "reviewer rubric workflow is rendered");
+expect(mainJs.includes("renderCourseReviewDashboard"), "course review dashboard is rendered");
 expect(mainJs.includes("data-timeline-cadence"), "timeline cadence controls are present");
 expect(mainJs.includes("data-timeline-module-id"), "timeline module links are present");
+expect(mainJs.includes("data-review-summary-module-id"), "review dashboard module links are present");
 expect(mainJs.includes("data-artifact-captured"), "artifact checklist controls are present");
 expect(mainJs.includes("data-export-module-evidence"), "module evidence export control is present");
 expect(mainJs.includes("data-export-course-evidence"), "course evidence export control is present");
@@ -148,6 +170,8 @@ expect(stylesCss.includes(".checklist-panel"), "checklist styles are present");
 expect(stylesCss.includes(".timeline-panel"), "timeline styles are present");
 expect(stylesCss.includes(".export-panel"), "evidence export styles are present");
 expect(stylesCss.includes(".review-panel"), "review panel styles are present");
+expect(stylesCss.includes(".review-dashboard"), "review dashboard styles are present");
+expect(stylesCss.includes(".review-summary-row"), "review dashboard row styles are present");
 expect(stylesCss.includes(".rubric-list"), "rubric list styles are present");
 
 if (existsSync(join(root, "dist"))) {
@@ -205,6 +229,7 @@ async function verifyServerSmoke() {
     expect(main.includes("renderTimeline"), "server returns timeline code");
     expect(main.includes("renderEvidenceExportPanel"), "server returns evidence export code");
     expect(main.includes("renderReviewerRubric"), "server returns reviewer rubric code");
+    expect(main.includes("renderCourseReviewDashboard"), "server returns reviewer dashboard code");
     expect(generated.includes("Module 8: Verification For Games"), "server returns generated module content");
     expect(generated.includes("VERTICAL-SLICE-SPEC"), "server returns generated template content");
     expect(styles.includes("@media (max-width: 560px)"), "server returns responsive styles");

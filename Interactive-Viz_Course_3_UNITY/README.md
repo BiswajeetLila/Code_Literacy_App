@@ -21,11 +21,12 @@ Folder name: `Interactive-Viz_Course_3_UNITY/`.
 - Exportable module Markdown evidence packs
 - Exportable full-course JSON evidence pack
 - Reviewer decision, reviewer notes, and rubric criteria capture
+- 10-module reviewer summary dashboard with gate, artifact, rubric, approval, and readiness status
 
 ## Next Slice
 
 The next app slice should productize review handoff: import previously exported evidence, compare
-modules across a cohort, or prepare hosted submission/review flows.
+modules across a cohort, deploy the app, or prepare hosted submission/review flows.
 
 ## Content Source
 

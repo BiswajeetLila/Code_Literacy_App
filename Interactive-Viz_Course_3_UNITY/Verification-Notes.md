@@ -44,6 +44,10 @@ PowerShell on this machine blocks `npm.ps1`, so use `npm.cmd`.
   - module evidence pack has a versioned schema
   - full-course evidence pack includes all 10 modules
   - Markdown export includes artifact evidence and reviewer notes
+- Reviewer dashboard verification passed:
+  - module review summary counts artifact and rubric progress
+  - course review summary covers all 10 modules
+  - course review summary counts gates, approvals, ready modules, and artifacts
 - Dev-server smoke verification passed:
   - `index.html` served
   - `src/main.js` served
@@ -77,6 +81,7 @@ This verifies the first vertical slice only:
 - local gate evidence and artifact checklist capture
 - exportable module and full-course evidence packs
 - reviewer decision, notes, and rubric checklist capture
+- 10-module reviewer summary dashboard
 - local-only progress tracking
 
 It does not verify future LMS behavior, server persistence, submissions, grading, or Steamworks
