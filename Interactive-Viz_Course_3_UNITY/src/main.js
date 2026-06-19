@@ -203,6 +203,15 @@ function render() {
     button.addEventListener("click", () => setSelectedModule(button.dataset.reviewSummaryModuleId));
   });
 
+  app.querySelectorAll("[data-jump-target]").forEach((button) => {
+    button.addEventListener("click", () => {
+      app.querySelector(`[data-section-id="${button.dataset.jumpTarget}"]`)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    });
+  });
+
   app.querySelector("[data-gate-captured]")?.addEventListener("change", (event) => {
     handleGateCaptured(current.id, event.target.checked);
   });
@@ -328,6 +337,7 @@ function renderDetail(module) {
       </div>
     </section>
 
+    ${renderLearningStudio(module)}
     ${renderGateArtifactChecklist(module)}
     ${renderEvidenceExportPanel(module)}
     ${renderReviewerRubric(module)}
@@ -498,12 +508,98 @@ function formatReviewStatus(status) {
   return status.replace(/-/g, " ");
 }
 
+function renderLearningStudio(module) {
+  return `
+    <section class="learning-studio" aria-label="Interactive learner studio brief">
+      <div class="learning-visual">
+        ${renderStudioMap(module)}
+      </div>
+      <div class="learning-actions">
+        <p class="kicker">Learner Studio</p>
+        <h3>${escapeHtml(module.phase)} Mission Brief</h3>
+        <p class="learning-summary">${escapeHtml(module.summary)}</p>
+        <div class="learning-cards">
+          <article>
+            <span>Learn</span>
+            <strong>${escapeHtml(getLearningVerb(module.phase))}</strong>
+            <p>${escapeHtml(getLearningPrompt(module))}</p>
+            <button type="button" data-jump-target="source-docs">Open unit docs</button>
+          </article>
+          <article>
+            <span>Build</span>
+            <strong>${module.artifacts.length} artifacts</strong>
+            <p>Capture proof as you produce each deliverable.</p>
+            <button type="button" data-jump-target="artifact-checklist">Work checklist</button>
+          </article>
+          <article>
+            <span>Prove</span>
+            <strong>Gate review</strong>
+            <p>${escapeHtml(module.gate)}</p>
+            <button type="button" data-jump-target="review-rubric">Review rubric</button>
+          </article>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function renderStudioMap(module) {
+  const activeIndex = Math.max(0, operatingLoop.findIndex((step) => step === module.phase));
+  const nodes = operatingLoop.map((step, index) => {
+    const x = 54 + index * 58;
+    const active = index === activeIndex;
+    return `
+      <g class="${active ? "active" : ""}">
+        <circle cx="${x}" cy="${active ? 74 : 86}" r="${active ? 20 : 14}" />
+        <text x="${x}" y="130">${escapeHtml(step)}</text>
+      </g>
+    `;
+  }).join("");
+
+  return `
+    <svg class="studio-map" viewBox="0 0 520 180" role="img" aria-label="Course production loop with current module phase highlighted">
+      <rect x="18" y="22" width="484" height="132" rx="0" />
+      <path d="M58 86 H462" />
+      ${nodes}
+      <text class="studio-map-title" x="32" y="48">Module ${String(module.number).padStart(2, "0")} production position</text>
+      <text class="studio-map-gate" x="32" y="164">${escapeHtml(module.phase)} gate: ${escapeHtml(module.artifacts.length)} artifacts + review evidence</text>
+    </svg>
+  `;
+}
+
+function getLearningVerb(phase) {
+  const verbs = {
+    Intent: "Set rules",
+    Spec: "Shape scope",
+    Prototype: "Test loops",
+    Delegate: "Draw boundaries",
+    Integrate: "Merge safely",
+    Verify: "Catch failures",
+    Polish: "Clarify play",
+    Package: "Ship evidence",
+  };
+  return verbs[phase] ?? "Build proof";
+}
+
+function getLearningPrompt(module) {
+  if (module.number === 2) {
+    return "Turn an idea into a spec another agent can implement without extra chat.";
+  }
+  if (module.number === 3) {
+    return "Run playable experiments and choose the loop that deserves production time.";
+  }
+  if (module.number === 10) {
+    return "Package the demo candidate so a fresh reviewer can run and continue it.";
+  }
+  return module.gate;
+}
+
 function renderGateArtifactChecklist(module) {
   const gateCaptured = isGateCaptured(progress, module.id);
   const artifactCount = getArtifactCaptureCount(progress, module.id, module.artifacts.length);
 
   return `
-    <section class="checklist-panel" aria-label="Gate and artifact checklist">
+    <section class="checklist-panel" aria-label="Gate and artifact checklist" data-section-id="artifact-checklist">
       <div class="checklist-heading">
         <div>
           <p class="kicker">Local Gate Capture</p>
@@ -584,7 +680,7 @@ function renderReviewerRubric(module) {
   const status = getReviewStatus(progress, module.id);
 
   return `
-    <section class="review-panel" aria-label="Reviewer rubric workflow">
+    <section class="review-panel" aria-label="Reviewer rubric workflow" data-section-id="review-rubric">
       <div class="review-heading">
         <div>
           <p class="kicker">Reviewer Workflow</p>
@@ -645,15 +741,16 @@ function renderCourseReader(module) {
   const content = moduleContent[module.id];
   if (!content) {
     return `
-      <section class="course-reader" aria-label="Module reader">
-        <h3>Full Module Reader</h3>
+      <details class="course-reader source-docs" aria-label="Module reader" data-section-id="source-docs">
+        <summary>Full source docs</summary>
         <p class="empty-state">No generated content found for this module.</p>
-      </section>
+      </details>
     `;
   }
 
   return `
-    <section class="course-reader" aria-label="Module reader">
+    <details class="course-reader source-docs" aria-label="Module reader" data-section-id="source-docs">
+      <summary>Full source docs and teaching notes</summary>
       <div class="reader-heading">
         <div>
           <p class="kicker">Full Course Unit</p>
@@ -664,7 +761,7 @@ function renderCourseReader(module) {
       <div class="reader-sections">
         ${content.sections.map((section) => renderSectionDetails(section, shouldOpenModuleSection(section.title))).join("")}
       </div>
-    </section>
+    </details>
   `;
 }
 
@@ -683,7 +780,8 @@ function renderTemplateSummary(module) {
 function renderTemplateReader(module) {
   if (module.templates.length === 0) {
     return `
-      <section class="template-reader" aria-label="Template reader">
+      <details class="template-reader source-docs" aria-label="Template reader">
+        <summary>Related template docs</summary>
         <div class="reader-heading">
           <div>
             <p class="kicker">Related Templates</p>
@@ -691,12 +789,13 @@ function renderTemplateReader(module) {
           </div>
         </div>
         <p class="empty-state">This module has no dedicated template. Use the module artifacts as the working checklist.</p>
-      </section>
+      </details>
     `;
   }
 
   return `
-    <section class="template-reader" aria-label="Template reader">
+    <details class="template-reader source-docs" aria-label="Template reader">
+      <summary>Related template docs</summary>
       <div class="reader-heading">
         <div>
           <p class="kicker">Related Templates</p>
@@ -704,7 +803,7 @@ function renderTemplateReader(module) {
         </div>
       </div>
       ${module.templates.map((template) => renderTemplateCard(template)).join("")}
-    </section>
+    </details>
   `;
 }
 

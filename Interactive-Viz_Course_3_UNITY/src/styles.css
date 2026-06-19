@@ -12,6 +12,7 @@
   --shadow: rgba(29, 32, 29, 0.14);
   --mono: "IBM Plex Mono", "Space Mono", "Courier New", monospace;
   --display: "Aptos Display", "Segoe UI", sans-serif;
+  --body: "Aptos", "Segoe UI", Arial, sans-serif;
   color-scheme: light;
 }
 
@@ -32,7 +33,7 @@ body {
     var(--paper);
   background-size: 28px 28px;
   color: var(--ink);
-  font-family: var(--mono);
+  font-family: var(--body);
 }
 
 button {
@@ -74,6 +75,7 @@ h4 {
 .kicker {
   margin: 0 0 6px;
   color: var(--accent);
+  font-family: var(--mono);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -125,6 +127,7 @@ h3 {
 
 .progress-meter small {
   color: var(--muted);
+  font-family: var(--mono);
   font-size: 11px;
 }
 
@@ -178,6 +181,7 @@ h3 {
 .current-readout {
   min-width: 0;
   color: var(--muted);
+  font-family: var(--mono);
   font-size: 12px;
   font-weight: 800;
   text-align: right;
@@ -340,6 +344,7 @@ h3 {
 .timeline-module-top,
 .timeline-meta,
 .timeline-gate {
+  font-family: var(--mono);
   font-size: 11px;
 }
 
@@ -552,6 +557,7 @@ h3 {
 
 .module-meta {
   color: var(--muted);
+  font-family: var(--mono);
   font-size: 12px;
 }
 
@@ -632,6 +638,7 @@ h3 {
 .summary-strip span {
   display: block;
   color: var(--muted);
+  font-family: var(--mono);
   font-size: 11px;
   text-transform: uppercase;
 }
@@ -648,6 +655,7 @@ h3 {
 
 .detail-section p {
   margin: 0;
+  line-height: 1.5;
 }
 
 .empty-state {
@@ -675,6 +683,147 @@ li {
   margin-top: 22px;
   border-top: 2px solid var(--line);
   padding-top: 18px;
+}
+
+.learning-studio {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+  gap: 16px;
+  margin-top: 22px;
+  border-top: 2px solid var(--line);
+  padding-top: 18px;
+}
+
+.learning-visual,
+.learning-actions {
+  border: 2px solid var(--line);
+  background: var(--field);
+}
+
+.learning-visual {
+  display: grid;
+  align-self: start;
+  place-items: center;
+  padding: 16px;
+}
+
+.studio-map {
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 26 / 9;
+}
+
+.studio-map rect {
+  fill: var(--panel);
+  stroke: var(--line);
+  stroke-width: 2;
+}
+
+.studio-map path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 3;
+  stroke-dasharray: 7 8;
+}
+
+.studio-map circle {
+  fill: var(--panel);
+  stroke: var(--line);
+  stroke-width: 3;
+}
+
+.studio-map g.active circle {
+  fill: var(--accent);
+}
+
+.studio-map text {
+  fill: var(--ink);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.studio-map-title,
+.studio-map-gate {
+  text-anchor: start !important;
+}
+
+.studio-map-gate {
+  fill: var(--signal) !important;
+}
+
+.learning-actions {
+  padding: 16px;
+}
+
+.learning-actions h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.learning-summary {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.learning-cards {
+  display: grid;
+  gap: 10px;
+}
+
+.learning-cards article {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  align-items: start;
+  border: 2px solid var(--line);
+  background: var(--panel);
+  padding: 12px;
+}
+
+.learning-cards span {
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.learning-cards strong {
+  display: block;
+  font-size: 15px;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.learning-cards p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.learning-cards button {
+  justify-self: start;
+  min-width: 132px;
+  border: 2px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 9px 10px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.learning-cards button:hover {
+  background: var(--accent);
 }
 
 .checklist-heading {
@@ -752,6 +901,7 @@ li {
 
 .evidence-field span {
   color: var(--muted);
+  font-family: var(--mono);
   font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
@@ -764,7 +914,7 @@ li {
   border-radius: 0;
   background: var(--panel);
   color: var(--ink);
-  font: inherit;
+  font-family: var(--mono);
   font-size: 13px;
   padding: 9px 10px;
 }
@@ -847,7 +997,7 @@ li {
   border-radius: 0;
   background: var(--field);
   color: var(--ink);
-  font: inherit;
+  font-family: var(--mono);
   font-size: 12px;
   font-weight: 800;
   padding: 9px 10px;
@@ -897,6 +1047,29 @@ li {
   padding-top: 18px;
 }
 
+.source-docs {
+  border: 2px solid var(--line);
+  background: var(--panel);
+  padding: 0;
+}
+
+.source-docs > summary {
+  min-height: 50px;
+  cursor: pointer;
+  border-bottom: 0;
+  padding: 14px 16px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 800;
+  list-style-position: inside;
+  text-transform: uppercase;
+}
+
+.source-docs[open] > summary {
+  border-bottom: 2px solid var(--line);
+}
+
 .reader-heading,
 .template-card-header {
   display: flex;
@@ -904,6 +1077,7 @@ li {
   justify-content: space-between;
   gap: 14px;
   margin-bottom: 12px;
+  padding: 0 14px;
 }
 
 .reader-heading h3,
@@ -924,6 +1098,7 @@ li {
 .reader-sections {
   display: grid;
   gap: 10px;
+  padding: 0 14px 14px;
 }
 
 .reader-sections.compact {
@@ -1003,6 +1178,11 @@ li {
   border: 2px solid var(--line);
   background: var(--panel);
   padding: 14px;
+  margin: 0 14px;
+}
+
+.template-card:last-child {
+  margin-bottom: 14px;
 }
 
 .template-card + .template-card {
@@ -1070,6 +1250,7 @@ li {
   .timeline-stats,
   .week-modules,
   .review-stats,
+  .learning-studio,
   .review-grid,
   .rubric-list {
     grid-template-columns: 1fr;
@@ -1109,3 +1290,18 @@ li {
     text-align: left;
   }
 }
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);
+  font-family: var(--mono);

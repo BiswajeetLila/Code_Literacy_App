@@ -155,6 +155,9 @@ expect(mainJs.includes("renderTimeline"), "cohort timeline is rendered");
 expect(mainJs.includes("renderEvidenceExportPanel"), "evidence export panel is rendered");
 expect(mainJs.includes("renderReviewerRubric"), "reviewer rubric workflow is rendered");
 expect(mainJs.includes("renderCourseReviewDashboard"), "course review dashboard is rendered");
+expect(mainJs.includes("renderLearningStudio"), "learner studio brief is rendered");
+expect(mainJs.includes("renderStudioMap"), "visual studio map is rendered");
+expect(mainJs.includes("data-jump-target"), "learner studio jump controls are present");
 expect(mainJs.includes("data-timeline-cadence"), "timeline cadence controls are present");
 expect(mainJs.includes("data-timeline-module-id"), "timeline module links are present");
 expect(mainJs.includes("data-review-summary-module-id"), "review dashboard module links are present");
@@ -172,6 +175,9 @@ expect(stylesCss.includes(".export-panel"), "evidence export styles are present"
 expect(stylesCss.includes(".review-panel"), "review panel styles are present");
 expect(stylesCss.includes(".review-dashboard"), "review dashboard styles are present");
 expect(stylesCss.includes(".review-summary-row"), "review dashboard row styles are present");
+expect(stylesCss.includes(".learning-studio"), "learner studio styles are present");
+expect(stylesCss.includes(".studio-map"), "visual studio map styles are present");
+expect(stylesCss.includes(".source-docs"), "source document collapse styles are present");
 expect(stylesCss.includes(".rubric-list"), "rubric list styles are present");
 
 if (existsSync(join(root, "dist"))) {
@@ -230,6 +236,7 @@ async function verifyServerSmoke() {
     expect(main.includes("renderEvidenceExportPanel"), "server returns evidence export code");
     expect(main.includes("renderReviewerRubric"), "server returns reviewer rubric code");
     expect(main.includes("renderCourseReviewDashboard"), "server returns reviewer dashboard code");
+    expect(main.includes("renderLearningStudio"), "server returns learner studio code");
     expect(generated.includes("Module 8: Verification For Games"), "server returns generated module content");
     expect(generated.includes("VERTICAL-SLICE-SPEC"), "server returns generated template content");
     expect(styles.includes("@media (max-width: 560px)"), "server returns responsive styles");
