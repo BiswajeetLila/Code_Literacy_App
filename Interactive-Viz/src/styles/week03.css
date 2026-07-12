@@ -1,0 +1,42 @@
+.w3-lab { --w3-bg:#111315; --w3-panel:#1a1d20; --w3-line:rgba(244,241,232,.2); --w3-text:#f3f0e7; --w3-muted:#aaa9a0; --w3-good:#79d19d; border:1px solid var(--ink); background:var(--w3-bg); color:var(--w3-text); padding:16px; }
+.w3-head { border-bottom:1px solid var(--w3-line); padding-bottom:12px; }
+.w3-head h2 { color:var(--w3-text); border-color:var(--w3-line); }
+.w3-head p:last-child { margin:0; color:var(--w3-muted); }
+.w3-kicker { margin:0 0 4px; color:var(--amber); font-size:10px; font-weight:700; letter-spacing:.08em; }
+.w3-start { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); border:1px solid var(--ink); margin:18px 0; }
+.w3-start div { min-width:0; border-right:1px solid var(--ink); background:var(--paper-2); padding:13px; }
+.w3-start div:last-child { border-right:0; }
+.w3-start b { font-family:var(--grotesk); text-transform:uppercase; }
+.w3-start p { margin:4px 0 0; color:var(--muted); font-size:12px; }
+.w3-recipe-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.8fr); gap:10px; margin-top:14px; }
+.w3-recipe-card,.w3-dish,.w3-trace-stage { min-width:0; border:1px solid var(--w3-line); background:var(--w3-panel); padding:12px; }
+.w3-card-bar { border-bottom:1px solid var(--w3-line); padding-bottom:7px; color:var(--cyan); overflow-wrap:anywhere; }
+.w3-recipe-card label { display:grid; gap:4px; margin-top:10px; color:var(--w3-muted); font-size:11px; text-transform:uppercase; }
+.w3-recipe-card input,.w3-recipe-card select { width:100%; min-width:0; border:1px solid var(--w3-line); border-radius:0; background:#0b0d0f; color:var(--w3-text); padding:8px; font:13px var(--mono); }
+.w3-recipe-card button,.w3-lab>button { margin-top:12px; background:var(--w3-text); border-color:var(--w3-text); color:var(--w3-bg); }
+.w3-dish output { display:block; min-height:70px; border-left:3px solid var(--cyan); background:#0b0d0f; padding:12px; color:var(--w3-good); overflow-wrap:anywhere; }
+.w3-predict { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:14px 0; border:1px solid var(--w3-line); padding:10px; }
+.w3-predict legend { color:var(--amber); font-size:11px; }
+.w3-predict label { display:grid; grid-template-columns:18px 1fr; gap:6px; border:1px solid var(--w3-line); padding:8px; }
+.w3-scrub-label { display:grid; gap:4px; color:var(--w3-muted); font-size:11px; text-transform:uppercase; }
+.w3-scrub-label input { width:100%; accent-color:var(--cyan); }
+.w3-trace-stage { display:grid; grid-template-columns:minmax(0,1fr) minmax(160px,.6fr); gap:12px; margin-top:10px; }
+.w3-trace-stage h3 { color:var(--w3-text); }
+.w3-trace-stage output { display:block; color:var(--w3-good); font-size:24px; }
+.w3-trace-stage p { color:var(--w3-muted); font-size:12px; }
+.w3-scope-list { margin:0; }
+.w3-scope-list dt { color:var(--amber); font-size:10px; }
+.w3-scope-list dd { margin:0 0 8px; border-left:3px solid var(--w3-line); padding:5px 8px; color:var(--w3-muted); font-size:11px; }
+.w3-scope-list dd.is-active { border-color:var(--w3-good); color:var(--w3-text); }
+.w3-scope-list dd.is-out { opacity:.45; text-decoration:line-through; }
+.w3-feedback { margin-top:10px; border:1px solid transparent; padding:0 10px; }
+.w3-feedback:empty { display:none; }
+.w3-feedback.is-pass { border-color:var(--w3-good); background:rgba(121,209,157,.1); }
+.w3-feedback.is-review { border-color:var(--amber); background:rgba(232,163,61,.1); }
+.w3-feedback h3 { margin:9px 0 4px; color:var(--w3-text); font-size:12px; text-transform:uppercase; }
+.w3-feedback p { margin:0 0 9px; color:var(--w3-muted); font-size:11px; }
+.w3-status { min-height:22px; border-left:3px solid var(--amber); padding-left:9px; color:var(--w3-muted); font-size:11px; }
+.w3-reflection { border-left:4px solid var(--amber); background:var(--paper-2); padding:10px 12px; font-size:13px; }
+@media (prefers-reduced-motion:reduce){.w3-lab *{transition:none!important;}}
+@media (max-width:620px){.w3-start,.w3-recipe-grid,.w3-trace-stage{grid-template-columns:1fr}.w3-start div{border-right:0;border-bottom:1px solid var(--ink)}.w3-start div:last-child{border-bottom:0}}
+@media (max-width:420px){.w3-lab{padding:10px}.w3-predict{grid-template-columns:1fr}}

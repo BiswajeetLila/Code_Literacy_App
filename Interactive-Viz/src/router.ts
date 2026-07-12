@@ -4,6 +4,8 @@ import { renderHome } from "./pages/home.ts";
 import { renderWeek } from "./pages/week.ts";
 import { WEEKS } from "./weekMeta.ts";
 
+const WEEK_COUNT = WEEKS.length;
+
 type Route =
   | { name: "home" }
   | { name: "weeks" }
@@ -43,7 +45,10 @@ function parseHash(hash: string): Route {
 
   if (path === "/" || parts.length === 0) return { name: "home" };
   if (parts[0] === "weeks" && parts.length === 1) return { name: "weeks" };
-  if (parts[0] === "week" && parts[1]) return { name: "week", id: parts[1].padStart(2, "0") };
+  if (parts[0] === "week" && parts.length === 2 && /^\d{1,2}$/.test(parts[1])) {
+    const id = parts[1].padStart(2, "0");
+    if (WEEKS.some((week) => week.id === id)) return { name: "week", id };
+  }
   if (parts[0] === "glossary" && parts.length === 1) return { name: "glossary" };
   if (parts[0] === "review" && parts.length === 1) return { name: "review" };
 
@@ -52,6 +57,7 @@ function parseHash(hash: string): Route {
 }
 
 function renderRoute(view: HTMLElement, route: Route): void {
+  window.dispatchEvent(new Event("app:before-route-change"));
   view.replaceChildren();
 
   if (route.name === "home") renderHome(view);
@@ -68,40 +74,45 @@ function markActiveNav(route: Route): void {
   });
 
   const status = document.querySelector<HTMLElement>("#route-status");
-  if (status) {
-    status.innerHTML = routeStatusMarkup(route);
-  }
+  if (status) status.replaceChildren(buildRouteStatus(route));
 }
 
-function routeStatusMarkup(route: Route): string {
+function buildRouteStatus(route: Route): DocumentFragment {
+  const fragment = document.createDocumentFragment();
   const label = routeStatusText(route);
   const currentWeek = route.name === "week" ? Number(route.id) : 0;
-
-  return `
-    <span class="route-status-label">${label}</span>
-    <span class="week-strip" role="img" aria-label="${weekStripLabel(currentWeek)}">
-      ${Array.from({ length: 10 }, (_, index) => weekSquare(index + 1, currentWeek)).join("")}
-    </span>
-  `;
+  const labelNode = document.createElement("span");
+  labelNode.className = "route-status-label";
+  labelNode.textContent = label;
+  const strip = document.createElement("span");
+  strip.className = "week-strip";
+  strip.setAttribute("role", "img");
+  strip.setAttribute("aria-label", weekStripLabel(currentWeek));
+  Array.from({ length: WEEK_COUNT }, (_, index) => strip.appendChild(weekSquare(index + 1, currentWeek)));
+  fragment.append(labelNode, strip);
+  return fragment;
 }
 
 function routeStatusText(route: Route): string {
   if (route.name === "week") {
     const week = WEEKS.find((item) => item.id === route.id);
-    if (week) return `Week ${week.id} of 10`;
-    return `Week ${route.id} of 10`;
+    if (week) return `Week ${week.id} of ${WEEK_COUNT}`;
+    return `Week ${route.id} of ${WEEK_COUNT}`;
   }
-  return "10 week course";
+  return `${WEEK_COUNT} week course`;
 }
 
 function weekStripLabel(currentWeek: number): string {
-  if (currentWeek === 0) return "Ten week course map. No week route selected.";
-  return `Week ${currentWeek} of 10 selected. Earlier squares are completed, the bright square is current, and later squares are empty.`;
+  if (currentWeek === 0) return `${WEEK_COUNT} week course map. No week route selected.`;
+  return `Week ${currentWeek} of ${WEEK_COUNT} selected. Earlier squares are completed, the bright square is current, and later squares are empty.`;
 }
 
-function weekSquare(week: number, currentWeek: number): string {
+function weekSquare(week: number, currentWeek: number): HTMLSpanElement {
   let state = "future";
   if (currentWeek > 0 && week < currentWeek) state = "complete";
   if (week === currentWeek) state = "current";
-  return `<span class="week-square ${state}" title="Week ${week}"></span>`;
+  const square = document.createElement("span");
+  square.className = `week-square ${state}`;
+  square.title = `Week ${week}`;
+  return square;
 }

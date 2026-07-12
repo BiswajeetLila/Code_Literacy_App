@@ -4,7 +4,7 @@ export function renderHome(host: HTMLElement): void {
       <p class="route-kicker">MANUAL START</p>
       <h2>Interact first, then read the code</h2>
       <p class="ftue-lead">
-        Code Literacy is a 10-week course for beginners who use AI to build things.
+        Code Literacy is an 11-week course for beginners who use AI to build things.
         Each idea starts as something you can click, predict, break, reveal, or move.
         Then you read the real code shape behind it.
       </p>
@@ -34,12 +34,13 @@ export function renderHome(host: HTMLElement): void {
 
     <section class="route-panel">
       <p class="route-kicker">CURRENT POSITION</p>
-      <h2>Week 01 is built</h2>
+      <h2>Weeks 01-11 are built</h2>
       <p>
-        The first week teaches the screen, the browser, client/server, project files,
-        entry points, and where errors print. Later routes are visible now so the app
-        has the shape of the full course before the deeper PWA work begins.
+        The full Course 1 path is open: start with the screen, browser, project files, and error
+        windows, then move through dependencies, data flow, APIs, debugging, Git, async work,
+        architecture, and spec-driven delivery.
       </p>
+      <a class="app-button" href="#/weeks">Open the course map</a>
     </section>
   `;
 }

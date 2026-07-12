@@ -1,3 +1,5 @@
+import { escapeHtml, safeExternalUrl } from "./html.ts";
+
 // resources.ts
 // The "Read more" tab. Every week MUST ship one (mirrors the Obsidian vault's
 // 07-Resources notes). A week just supplies an array; this renders it.
@@ -94,12 +96,12 @@ function section(title: string, items: Resource[]): string {
   const rows = items
     .map(
       (r) => `
-      <a class="res-item" href="${r.url}" target="_blank" rel="noopener noreferrer">
+      <a class="res-item" href="${safeExternalUrl(r.url)}" target="_blank" rel="noopener noreferrer">
         <div class="res-main">
-          <span class="res-title">${r.title}</span>
-          <span class="res-meta">${r.source} · ${r.time}</span>
+          <span class="res-title">${escapeHtml(r.title)}</span>
+          <span class="res-meta">${escapeHtml(r.source)} · ${escapeHtml(r.time)}</span>
         </div>
-        <p class="res-why">${r.why}</p>
+        <p class="res-why">${escapeHtml(r.why)}</p>
         <span class="res-go">open ↗</span>
       </a>`,
     )

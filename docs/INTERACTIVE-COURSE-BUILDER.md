@@ -57,6 +57,38 @@ Use these patterns repeatedly:
 - **Build up:** assemble a whole from small named parts.
 - **Trace:** follow a token, value, ball, sound, or decision through a system.
 
+## Lab UI Standard
+
+Week 1 established the reusable UI pattern for Code Literacy lessons:
+
+- The outer course remains a light NASA technical-manual page: square tabs, paper background,
+  dense labels, and predictable navigation.
+- A lesson may contain a dark instrument lab when it needs focus, live output, or 3D motion.
+  This is a teaching surface, not a decorative hero.
+- The primary lab gets the space. Avoid dead side panels. Put decode/help content in compact
+  strips, reveals, or console lanes unless it is actively used during the whole lesson.
+- 3D scenes must be meaningful and inspectable: rotate, zoom, click, hover, trace, or scrub.
+  If the learner cannot manipulate the model, ask whether a simpler 2D instrument would teach
+  better.
+- WebGPU/Three.js is appropriate for flows, routing, ownership, state changes, and spatial
+  mental models. It is not required for file lists, static definitions, FAQ, or reading lists.
+- Every lab needs a reduced-motion path, visible focus states, live status text, and verified
+  375px mobile behavior with no horizontal overflow.
+- Manual/reference tabs stay text-heavy and scan-friendly. FAQ and Read more support the
+  interaction; they do not need to match the lab's visual weight.
+
+## Week 1 Reference Labs
+
+Use these as the quality bar when building later weeks:
+
+- **Round Trip Lab:** a WebGPU/WebGL signal path where code-line clicks focus request, server
+  work, or response; controls affect latency, payload, and server failure.
+- **Project Folder Lab:** a structured project tree with Web/Python modes, entry-file trace,
+  details, real snippets, and installed-parts warnings. This intentionally stays mostly 2D
+  because the concept is hierarchy, not space.
+- **Error Routing Lab:** a rotatable/clickable 3D router showing whether Python, page JS, or API
+  failures belong in the terminal or browser console; red lines decode into plain language.
+
 ## Week Shape
 
 Every week should ship:

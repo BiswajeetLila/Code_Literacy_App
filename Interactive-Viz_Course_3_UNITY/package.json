@@ -1,0 +1,14 @@
+{
+  "name": "interactive-viz-course-3-unity",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive Viz Course 3 Unity Solo AI Game Studio interface.",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "build:sites": "node scripts/buildSites.mjs",
+    "verify": "node scripts/verify.mjs",
+    "smoke:browser": "node scripts/browserSmoke.mjs"
+  }
+}

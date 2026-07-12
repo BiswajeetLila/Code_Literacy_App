@@ -1,0 +1,147 @@
+import type { WeekData } from "../types.ts";
+
+export const WEEK_02: WeekData = {
+  meta: {
+    id: "02",
+    title: "What does this project need before it can run?",
+    capability: "SMELL",
+    picture: "a shopping list, the exact receipt, and package names checked before buying",
+    status: "built",
+  },
+  lessons: [
+    {
+      id: "w2-l1",
+      number: "01",
+      title: "Shopping List & Receipt",
+      summary: "Predict which versions a range allows, then compare the list with the receipt.",
+      widgetId: "week02-shopping",
+      code: {
+        title: "Allowed range and exact receipt",
+        lang: "JSON",
+        lines: [
+          { code: "\"dependencies\": {", note: "shopping-list section" },
+          { code: "  \"parcel\": \"^1.2.3\"", note: "compatible 1.x versions" },
+          { code: "}", note: "end of the list" },
+          { code: "\"parcel\": { \"version\": \"1.3.0\" }", note: "exact version on receipt" },
+        ],
+      },
+    },
+    {
+      id: "w2-l2",
+      number: "02",
+      title: "Spot the Fake",
+      summary: "Classify package names, then learn what to verify before installing one.",
+      widgetId: "week02-fake",
+      code: {
+        title: "Import only after verification",
+        lang: "TypeScript",
+        lines: [
+          { code: "import express from 'express';", note: "real package name" },
+          { code: "import helper from 'instant-perfect-ai';", note: "unverified suggestion" },
+          { code: "// Check the package registry first.", note: "verify before install" },
+          { code: "// Compare spelling, owner, and project age.", note: "catch close copies" },
+        ],
+      },
+    },
+  ],
+  cards: [
+    {
+      lessonId: "w2-l1",
+      q: "Does `^1.2.3` allow version `1.3.0`?",
+      a: "Yes. The caret allows compatible updates within major version 1, but not 2.0.0.",
+    },
+    {
+      lessonId: "w2-l1",
+      q: "Why keep a lockfile when package.json already lists versions?",
+      a: "package.json states the allowed range. The lockfile records the exact version installed this time.",
+    },
+    {
+      lessonId: "w2-l1",
+      q: "Is a dev dependency shipped as part of the app's runtime behavior?",
+      a: "Usually no. It is a tool used while building or checking the project, such as Vite or TypeScript.",
+    },
+    {
+      lessonId: "w2-l2",
+      q: "An AI suggests `npm install instant-perfect-ai`. What should you do first?",
+      a: "Search the official registry and inspect the package name, owner, history, and documentation before installing it.",
+    },
+    {
+      lessonId: "w2-l2",
+      q: "Why is `reqests` more dangerous than an obviously invented name?",
+      a: "It looks close to the real `requests` package, so a rushed reader may install the wrong code.",
+    },
+  ],
+  resources: [
+    {
+      title: "About semantic versioning",
+      source: "npm Docs",
+      time: "12 min read",
+      why: "Explains version numbers and ranges used in package.json.",
+      url: "https://docs.npmjs.com/about-semantic-versioning",
+      group: "core",
+    },
+    {
+      title: "Specifying dependencies and devDependencies",
+      source: "npm Docs",
+      time: "10 min read",
+      why: "Shows the two package-list sections you will meet in web projects.",
+      url: "https://docs.npmjs.com/specifying-dependencies-and-devdependencies-in-a-package-json-file",
+      group: "core",
+    },
+    {
+      title: "npm package provenance",
+      source: "npm Docs",
+      time: "12 min read",
+      why: "A deeper look at evidence that helps people verify where a package came from.",
+      url: "https://docs.npmjs.com/generating-provenance-statements",
+      group: "deeper",
+    },
+  ],
+  glossaryTerms: [
+    {
+      slug: "version-range",
+      term: "version range",
+      weekId: "02",
+      plain: "A rule describing which package editions are allowed.",
+      picture: "A shopping note that allows any compatible 1-point-something box, not version 2.",
+      code: "\"parcel\": \"^1.2.3\"",
+      where: "Dependency lists such as package.json and pyproject.toml.",
+    },
+    {
+      slug: "lockfile",
+      term: "lockfile",
+      weekId: "02",
+      plain: "A generated receipt recording the exact package versions installed.",
+      picture: "The receipt showing the exact boxes bought from an allowed shopping list.",
+      code: "\"parcel\": { \"version\": \"1.3.0\" }",
+      where: "package-lock.json, pnpm-lock.yaml, uv.lock, and similar files.",
+    },
+    {
+      slug: "dev-dependency",
+      term: "dev dependency",
+      weekId: "02",
+      plain: "A package used to build or check the project, not normal runtime behavior.",
+      picture: "A mixing bowl used in the kitchen but never served with the meal.",
+      code: "\"devDependencies\": { \"vite\": \"^5.4.0\" }",
+      where: "The devDependencies section of package.json.",
+    },
+    {
+      slug: "hallucinated-import",
+      term: "hallucinated import",
+      weekId: "02",
+      plain: "An import naming a package or export that does not actually exist.",
+      picture: "A shopping-list item no real store carries.",
+      code: "import helper from 'instant-perfect-ai';",
+      where: "AI-generated code that confidently names an unverified dependency.",
+    },
+    {
+      slug: "slopsquatting",
+      term: "slopsquatting",
+      weekId: "02",
+      plain: "A risky package name made to resemble a real package an AI or person may misspell.",
+      picture: "A knock-off box whose label differs from the trusted one by one letter.",
+      code: "npm install reqests // not requests",
+      where: "Package install commands and generated dependency suggestions.",
+    },
+  ],
+};

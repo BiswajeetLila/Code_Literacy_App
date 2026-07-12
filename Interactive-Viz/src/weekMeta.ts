@@ -2,7 +2,7 @@ export type WeekMeta = {
   id: string;
   title: string;
   picture: string;
-  status: "built" | "planned";
+  status: "built" | "in_progress" | "next" | "planned";
 };
 
 export const WEEKS: WeekMeta[] = [
@@ -14,56 +14,62 @@ export const WEEKS: WeekMeta[] = [
   },
   {
     id: "02",
-    title: "Dependencies = a shopping list",
-    picture: "the list of outside parts a project needs",
-    status: "planned",
+    title: "What does this project need before it can run?",
+    picture: "dependencies, versions, lockfiles, and fake imports",
+    status: "built",
   },
   {
     id: "03",
-    title: "Functions = recipes",
-    picture: "small named instructions with inputs and an output",
-    status: "planned",
+    title: "Recipes that take what you give them",
+    picture: "functions, parameters, arguments, returns, defaults, and scope",
+    status: "built",
   },
   {
     id: "04",
-    title: "Where does data come from?",
-    picture: "forms, files, memory, and rented storage",
-    status: "planned",
+    title: "Where did this number on screen come from?",
+    picture: "variables, state, props, data flow, and modules",
+    status: "built",
   },
   {
     id: "05",
-    title: "APIs = ordering off a menu",
-    picture: "asking another program for exactly what it offers",
-    status: "planned",
+    title: "Ordering from a menu",
+    picture: "APIs, endpoints, verbs, status codes, JSON, headers, and keys",
+    status: "built",
   },
   {
     id: "06",
-    title: "Where is the bug?",
-    picture: "follow the clue from the red line to the cause",
-    status: "planned",
+    title: "Reading the note that says what went wrong",
+    picture: "stack traces, your code vs library code, and layer triage",
+    status: "built",
   },
   {
     id: "07",
-    title: "Branches & time travel",
-    picture: "git snapshots, history, and safe experiments",
-    status: "planned",
+    title: "Undo, and going back to an earlier save",
+    picture: "commits, branches, merges, diffs, and pull requests",
+    status: "built",
   },
   {
     id: "08",
-    title: "Reading AI diffs like a reviewer",
-    picture: "what changed, why it changed, and what might break",
-    status: "planned",
+    title: "Checking the AI's work before you say yes",
+    picture: "diff review, failure modes, plan mode, and bug reports",
+    status: "built",
   },
   {
     id: "09",
-    title: "Async, races & pipelines",
-    picture: "work that happens while other work keeps moving",
-    status: "planned",
+    title: "When the kitchen has many cooks",
+    picture: "sync vs async, await, promises, races, idempotency, and retry",
+    status: "built",
   },
   {
     id: "10",
-    title: "Architectural conversations",
-    picture: "talking to the AI about shape, tradeoffs, and maintainability",
-    status: "planned",
+    title: "Talking about the whole system, not just one file",
+    picture: "layers, separation of concerns, deploy, and architecture",
+    status: "built",
+  },
+  {
+    id: "11",
+    title: "The spec is the prompt",
+    picture: "spec-driven development, verification criteria, and plan review",
+    status: "built",
   },
 ];
