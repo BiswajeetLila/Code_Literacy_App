@@ -1,0 +1,3 @@
+import { WEEK_05 } from "../content/weeks/week05.ts";
+import { renderContentWeek } from "./contentWeek.ts";
+export function renderWeek05(host: HTMLElement): void { renderContentWeek(host, WEEK_05, { figureTitle: "FIG. 5 - Order from the API menu", subtitle: "Endpoints are menu items, verbs are actions, JSON is the ticket, and the status code tells you how the order went.", startTitle: "Address, action, ticket, verdict", startLead: "You will send requests through controlled failure modes, decide whose side needs attention, and trace JSON keys into visible interface elements.", reflections: ["Which status points to your request, and which points first to the server?", "How does a dotted code path match the nested JSON ticket?"] }); }

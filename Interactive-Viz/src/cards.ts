@@ -1,7 +1,11 @@
+import { escapeHtml } from "./html.ts";
+
 // Predict-then-peek cards. Same idea as the review cards: read the question,
 // say your answer out loud, then click to reveal. Guessing first is the point.
 
 export type Card = { q: string; a: string };
+
+let cardId = 0;
 
 export const LESSON_1_CARDS: Card[] = [
   {
@@ -82,16 +86,21 @@ export function mountCards(container: HTMLElement, cards: Card[]): void {
   for (const card of cards) {
     const el = document.createElement("div");
     el.className = "card";
+    cardId += 1;
+    const answerId = `card-answer-${cardId}`;
     el.innerHTML = `
-      <div class="card-q" role="button" tabindex="0">
-        <span>${card.q}</span>
+      <div class="card-q" role="button" tabindex="0" aria-expanded="false" aria-controls="${answerId}">
+        <span>${escapeHtml(card.q)}</span>
         <span class="card-reveal">reveal</span>
       </div>
-      <div class="card-a">${card.a}</div>
+      <div class="card-a" id="${answerId}">${escapeHtml(card.a)}</div>
     `;
 
     const question = el.querySelector<HTMLElement>(".card-q")!;
-    const toggle = () => el.classList.toggle("open");
+    const toggle = () => {
+      const open = el.classList.toggle("open");
+      question.setAttribute("aria-expanded", String(open));
+    };
     question.addEventListener("click", toggle);
     question.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {

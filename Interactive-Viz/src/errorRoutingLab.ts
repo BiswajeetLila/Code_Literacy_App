@@ -170,7 +170,8 @@ class ErrorRouteScene {
   private activeTarget: ErrorTarget | null = null;
   private hovered: ScenePick | null = null;
   private progress = 0.18;
-  private running = true;
+  private running = false;
+  private destroyed = false;
   private reduced = false;
   private lastCaption = "";
   private onCaption?: (text: string) => void;
@@ -188,6 +189,7 @@ class ErrorRouteScene {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setClearColor(0x000000, 0);
     await this.renderer.init();
+    if (this.destroyed) return "stopped";
 
     this.camera = new THREE.PerspectiveCamera(43, 1, 0.1, 100);
     this.camera.position.set(0, 0.75, 7.8);
@@ -211,8 +213,10 @@ class ErrorRouteScene {
     this.bindPointer(canvas);
     this.resize(canvas.clientWidth, canvas.clientHeight);
 
+    this.running = true;
     const loop = (): void => {
-      if (this.running) requestAnimationFrame(loop);
+      if (!this.running) return;
+      requestAnimationFrame(loop);
       void this.tick();
     };
     requestAnimationFrame(loop);
@@ -249,9 +253,15 @@ class ErrorRouteScene {
   }
 
   destroy(): void {
+    if (this.destroyed) return;
+    this.destroyed = true;
     this.running = false;
-    this.controls.dispose();
-    this.renderer.dispose();
+    this.controls?.dispose();
+    this.renderer?.dispose();
+  }
+
+  get isDestroyed(): boolean {
+    return this.destroyed;
   }
 
   private backendLabel(): string {
@@ -504,9 +514,10 @@ class ErrorRouteScene {
   }
 }
 
-export function mountErrorRoutingLab(host: HTMLElement): void {
+export function mountErrorRoutingLab(host: HTMLElement): () => void {
   let activeCase: ErrorCase | null = null;
   const scene = new ErrorRouteScene();
+  let observer: ResizeObserver | null = null;
 
   host.innerHTML = `
     <div class="error-lab">
@@ -603,7 +614,7 @@ export function mountErrorRoutingLab(host: HTMLElement): void {
     }
     selectCase(CASES[2]);
   });
-  void startErrorScene(scene, stage, canvas, renderer, caption);
+  void startErrorScene(scene, stage, canvas, renderer, caption, (value) => { observer = value; });
 
   function renderLines(list: HTMLOListElement, lines: ErrorLine[]): void {
     list.innerHTML = lines
@@ -690,6 +701,10 @@ export function mountErrorRoutingLab(host: HTMLElement): void {
   host.querySelector<HTMLButtonElement>("#err-clear")!.addEventListener("click", clear);
 
   clear();
+  return () => {
+    observer?.disconnect();
+    scene.destroy();
+  };
 }
 
 async function startErrorScene(
@@ -698,14 +713,21 @@ async function startErrorScene(
   canvas: HTMLCanvasElement,
   renderer: HTMLElement,
   caption: HTMLElement,
+  setObserver: (observer: ResizeObserver) => void,
 ): Promise<void> {
   try {
     const backend = await scene.mount(canvas);
+    if (scene.isDestroyed || !stage.isConnected) {
+      scene.destroy();
+      return;
+    }
     renderer.textContent = `renderer: ${backend}`;
 
     const resize = () => scene.resize(stage.clientWidth, stage.clientHeight);
     resize();
-    new ResizeObserver(resize).observe(stage);
+    const observer = new ResizeObserver(resize);
+    observer.observe(stage);
+    setObserver(observer);
   } catch (error) {
     console.error("[ErrorRouteScene] failed to start:", error);
     renderer.textContent = "3D unavailable";

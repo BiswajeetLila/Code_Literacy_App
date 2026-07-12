@@ -6,7 +6,22 @@ import { SignalLab, type SignalFocus, type SignalTripEvent } from "../signalLab.
 import { mountSignalCodeWalk } from "../signalCodeWalk.ts";
 import { setupTabs } from "../tabs.ts";
 
+type RegisterCleanup = (cleanup: () => void) => void;
+
 export function renderWeek01(host: HTMLElement): void {
+  const cleanups = new Set<() => void>();
+  let tornDown = false;
+  const registerCleanup: RegisterCleanup = (cleanup) => {
+    if (tornDown) cleanup();
+    else cleanups.add(cleanup);
+  };
+  const teardown = () => {
+    tornDown = true;
+    cleanups.forEach((cleanup) => cleanup());
+    cleanups.clear();
+  };
+  window.addEventListener("app:before-route-change", teardown, { once: true });
+
   host.innerHTML = `
     <section class="week-manual">
       <header class="doc-head week-head">
@@ -200,9 +215,9 @@ export function renderWeek01(host: HTMLElement): void {
   `;
 
   setupTabs((id) => {
-    if (id === "l1") buildLesson1(host);
+    if (id === "l1") buildLesson1(host, registerCleanup);
     if (id === "l2") buildLesson2(host);
-    if (id === "l3") buildLesson3(host);
+    if (id === "l3") buildLesson3(host, registerCleanup);
     if (id === "l5") buildLesson4(host);
   }, host);
 
@@ -280,7 +295,7 @@ const WEEK_01_FAQ = [
   },
 ];
 
-function buildLesson1(root: HTMLElement): void {
+function buildLesson1(root: HTMLElement, registerCleanup: RegisterCleanup): void {
   const stage = root.querySelector<HTMLElement>("#signal-stage")!;
   const canvas = root.querySelector<HTMLCanvasElement>("#signal-canvas")!;
   const badge = root.querySelector<HTMLElement>("#signal-badge")!;
@@ -295,12 +310,13 @@ function buildLesson1(root: HTMLElement): void {
   const browser = root.querySelector<HTMLOListElement>("#signal-browser")!;
 
   const lab = new SignalLab();
+  registerCleanup(() => lab.destroy());
   lab.setCaptionSink((text) => {
     caption.textContent = text;
   });
   lab.setTripSink((event) => printTrip(terminal, browser, event));
 
-  void startSignalLab(lab, stage, canvas, badge, caption, latencyRead);
+  void startSignalLab(lab, stage, canvas, badge, caption, latencyRead, registerCleanup);
 
   mountSignalCodeWalk(
     root.querySelector<HTMLElement>("#signal-codewalk")!,
@@ -338,15 +354,22 @@ async function startSignalLab(
   badge: HTMLElement,
   caption: HTMLElement,
   latencyRead: HTMLElement,
+  registerCleanup: RegisterCleanup,
 ): Promise<void> {
   try {
     const backend = await lab.mount(canvas);
+    if (lab.isDestroyed || !stage.isConnected) {
+      lab.destroy();
+      return;
+    }
     badge.textContent = `renderer: ${backend}`;
     latencyRead.textContent = `${lab.latencyMs}ms`;
 
     const resize = () => lab.resize(stage.clientWidth, stage.clientHeight);
     resize();
-    new ResizeObserver(resize).observe(stage);
+    const observer = new ResizeObserver(resize);
+    observer.observe(stage);
+    registerCleanup(() => observer.disconnect());
   } catch (error) {
     console.error("[SignalLab] failed to start:", error);
     badge.textContent = "3D unavailable";
@@ -396,8 +419,8 @@ function buildLesson2(root: HTMLElement): void {
   mountCards(root.querySelector("#cards-l2")!, LESSON_2_CARDS);
 }
 
-function buildLesson3(root: HTMLElement): void {
-  mountErrorRoutingLab(root.querySelector("#error-routing-lab")!);
+function buildLesson3(root: HTMLElement, registerCleanup: RegisterCleanup): void {
+  registerCleanup(mountErrorRoutingLab(root.querySelector("#error-routing-lab")!));
   mountCards(root.querySelector("#cards-l3")!, LESSON_3_CARDS);
 }
 

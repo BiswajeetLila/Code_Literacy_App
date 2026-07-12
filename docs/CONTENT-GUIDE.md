@@ -140,9 +140,55 @@ These findings are now project-wide rules.
 | dev dependency | A tool used while building, not a part shipped to the user. | `"devDependencies": { "vite": "..." }` |
 | hallucinated import | Asking for a part that does not exist on the shelf. | `import { missingThing } from "fake-package"` |
 | slopsquatting | A fake or risky package name that looks close enough to fool you. | `npm install expres` instead of `express` |
+| plan mode | Suggested edits laid on the desk before anyone changes the document. | a plan that lists files and intended edits, then waits for approval |
+| diff review | Track Changes for code: inspect each added and removed line before accepting it. | `- old line` and `+ new line` in a Git or AI change preview |
+| failure mode | A checklist of known weak spots you inspect before accepting delivery. | a made-up import, deleted state update, or missing `await` |
+| CLAUDE.md / AGENTS.md | House rules pinned where every coding helper sees them before starting. | project instructions such as `Run the build before finishing` |
+| bug report | A clear note attached to the broken item for the next person. | `{ changed, expected, actual: exactErrorText }` |
+| function | A recipe card you can use more than once. | `function double(value) { return value * 2; }` |
+| parameter | The ingredient blank printed on a recipe card. | `function greet(name) { ... }` |
+| argument | The actual ingredient placed into the recipe's blank. | `greet('Maya')` |
+| return value | The finished dish handed across the counter. | `return total;` |
+| default value | The recipe's normal serving size when nobody asks for another amount. | `function serve(count = 2) { ... }` |
+| scope | What is on this counter, not every item in the whole pantry. | `function f() { const local = 1; }` |
+| variable | A label stuck to a parcel so people can refer to it. | `const total = 3;` |
+| state | A whiteboard everyone checks for the current number. | `const [count, setCount] = useState(0);` |
+| props | A labeled parcel passed to the next desk. | `<Summary total={cart.length} />` |
+| data flow | A parcel route through several desks in a building. | `data -> props -> label -> screen` |
+| module | One desk with its own work, passing named parcels to other desks. | `export const total = 3; import { total } from './data';` |
+| API | A menu describing what another program can do. | `await fetch('/api/orders')` |
+| endpoint | One line on the menu for a specific resource or action. | `'/api/orders'` |
+| HTTP verb | Whether you are reading the menu or placing a new order. | `method: 'POST'` |
+| status code | The bill verdict: accepted, missing, rejected, or failed. | `response.status === 401` |
+| JSON | The structured order ticket carried between rooms. | `{ "item": { "price": 12 } }` |
+| header | Notes attached to the order ticket. | `headers: { 'Content-Type': 'application/json' }` |
+| API key | A membership card shown before ordering. | `Authorization: \`Bearer ${apiKey}\`` |
+| stack trace | A phone-tree record showing who called whom before the failure. | `Error: bad value\n at renderCart (src/cart.ts:27:16)` |
+| traceback | A phone-tree record naming the Python calls that led to an exception. | `File "app.py", line 8, in total` |
+| library code | A hired specialist's recipe book your project calls for help. | `node_modules/library/index.js` |
+| layer triage | Three fuse boxes: screen, server, and settings. | `classify(error) === 'backend'` |
+| commit | A saved document point with a short note about what changed. | `git commit -m "Add details"` |
+| branch | A safe copy of the document for trying an idea. | `git switch -c volunteer-signup` |
+| merge | Folding useful edits from one copy into the main document. | `git merge volunteer-signup` |
+| diff | Track Changes showing exactly what came in and went away. | `+ setSubmitted(true)\n- setSubmitted(false)` |
+| pull request | Handing an edited copy to the group for inspection before folding it in. | `Compare volunteer-signup into main` |
+| synchronous | One customer waits at the counter before the next order starts. | `const result = calculateTotal(order);` |
+| asynchronous | A buzzer lets the customer do something else while the kitchen works. | `const result = await fetch('/api/order');` |
+| await | Waiting for the buzzer before picking up the finished drink. | `const data = await response.json();` |
+| promise | The buzzer handed over while a drink is still being made. | `const orderPromise = fetch('/api/order');` |
+| race condition | Two customers reach for the last croissant before the display updates. | `if (stock > 0) stock -= 1;` |
+| idempotency | Pressing the lift button twice does not send two lifts. | `if (processed.has(orderId)) return previousResult;` |
+| separation of concerns | The waiter orders, the kitchen cooks, and the pantry stores ingredients. | `pricing.calculate(order); orders.save(order);` |
+| layer | One area of the building with one broad responsibility. | `screen -> logic -> data -> outsideService` |
+| deploy | Opening the finished restaurant to customers. | `cloud deploy ./dist` |
+| architecture | The building plan showing where rooms and connections belong. | `screen -> api -> database` |
+| spec-driven development (SDD) | A renovation brief that names the finished room and final inspection. | `# Outcome\nAdd a route\n# Verification\nnpm run build` |
+| spec | The signed brief with the work, boundaries, and proof of done. | `## Scope\nOnly src/content/weeks/week11.ts` |
+| verification criteria | An inspection list with a clear pass or fail for each item. | `Open #/week/11; check 375px overflow` |
+| plan-review gate | Reviewing the builder's work plan before walls are opened. | `Plan: inspect -> list edits -> wait for approval` |
 
-Extend this table as later weeks are written. Each new concept must land here before its lesson
-is considered done.
+Extend this table with each future course or revision. Every new concept must land here before its
+lesson is considered done.
 
 ## Words To Avoid
 

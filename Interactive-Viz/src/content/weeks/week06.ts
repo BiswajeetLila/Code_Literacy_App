@@ -1,0 +1,146 @@
+import type { WeekData } from "../types.ts";
+
+export const WEEK_06: WeekData = {
+  meta: {
+    id: "06",
+    title: "Reading the note that says what went wrong",
+    capability: "DEBUG",
+    picture: "a phone-tree record and three fuse boxes for the screen, server, and settings",
+    status: "built",
+  },
+  lessons: [
+    {
+      id: "w6-l1",
+      number: "01",
+      title: "The Phone Tree",
+      summary: "Inspect each call frame, separate your code from library code, and predict the line that caused the failure.",
+      widgetId: "week06-phone-tree",
+      code: {
+        title: "The caller that sent the wrong value",
+        lang: "TypeScript",
+        lines: [
+          { code: "function renderCart(item) {", note: "your frame begins" },
+          { code: "  const label = formatPrice(item.cost);", note: "bug: the real key is price" },
+          { code: "  return `<strong>${label}</strong>`;", note: "screen waits for a label" },
+          { code: "}", note: "your frame ends" },
+        ],
+      },
+    },
+    {
+      id: "w6-l2",
+      number: "02",
+      title: "Three Fuse Boxes",
+      summary: "Sort concrete symptoms into frontend, backend, or config and get immediate evidence-based feedback.",
+      widgetId: "week06-triage",
+      code: {
+        title: "Choose the first place to inspect",
+        lang: "TypeScript",
+        lines: [
+          { code: "const layer = classify(error);", note: "read the symptom first" },
+          { code: "if (layer === 'frontend') inspectBrowser();", note: "screen and browser code" },
+          { code: "if (layer === 'backend') inspectServer();", note: "server work and data" },
+          { code: "if (layer === 'config') inspectSettings();", note: "keys, ports, and setup" },
+        ],
+      },
+    },
+  ],
+  cards: [
+    {
+      lessonId: "w6-l1",
+      q: "The top frame is inside a library. Does that prove the library contains the bug?",
+      a: "No. The library is where the bad value finally broke. Walk into the nearest frame from your own files and inspect what your code passed in.",
+    },
+    {
+      lessonId: "w6-l1",
+      q: "A frame says `src/cart.ts:27:16`. What do 27 and 16 point to?",
+      a: "Line 27 and column 16 in src/cart.ts. Start at that exact place instead of reading the whole project.",
+    },
+    {
+      lessonId: "w6-l1",
+      q: "Why does a traceback show several files for one error?",
+      a: "Each frame records one call in the phone tree. The failure traveled through all of those calls before the program stopped.",
+    },
+    {
+      lessonId: "w6-l2",
+      q: "The browser receives a 500 response. Which layer should you inspect first?",
+      a: "Backend. The browser reported the symptom, but 500 means the server failed while making the response.",
+    },
+    {
+      lessonId: "w6-l2",
+      q: "The app says `API_KEY is missing` before any request is sent. Which layer comes first?",
+      a: "Config. Check the environment setting or secret before changing frontend or backend logic.",
+    },
+  ],
+  resources: [
+    {
+      title: "Error.prototype.stack",
+      source: "MDN Web Docs",
+      time: "10 min read",
+      why: "Shows the real JavaScript stack shape: function, file, line, and call order.",
+      url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/stack",
+      group: "core",
+    },
+    {
+      title: "Errors and Exceptions",
+      source: "Python Docs",
+      time: "20 min read",
+      why: "Introduces Python tracebacks and how the final line names the exception.",
+      url: "https://docs.python.org/3/tutorial/errors.html",
+      group: "core",
+    },
+    {
+      title: "Console overview",
+      source: "Chrome DevTools",
+      time: "15 min read",
+      why: "Shows where frontend errors print and how to inspect browser evidence.",
+      url: "https://developer.chrome.com/docs/devtools/console/",
+      group: "core",
+    },
+    {
+      title: "Inspect network activity",
+      source: "Chrome DevTools",
+      time: "20 min read",
+      why: "Helps separate a browser symptom from a failed server response.",
+      url: "https://developer.chrome.com/docs/devtools/network/",
+      group: "deeper",
+    },
+  ],
+  glossaryTerms: [
+    {
+      slug: "stack-trace",
+      term: "stack trace",
+      weekId: "06",
+      plain: "A record of the function calls that were active when a program failed.",
+      picture: "A phone-tree record: A called B, B called C, and C was holding the phone when something broke.",
+      code: "at renderCart (src/cart.ts:27:16)",
+      where: "Browser consoles, server logs, test failures, and error reports.",
+    },
+    {
+      slug: "traceback",
+      term: "traceback",
+      weekId: "06",
+      plain: "Python's name for the call record printed with an error.",
+      picture: "The same phone-tree record, read down to the final note that names what went wrong.",
+      code: "Traceback (most recent call last):\n  File \"app.py\", line 8\nTypeError: ...",
+      where: "Python terminal output, logs, notebooks, and test results.",
+    },
+    {
+      slug: "library-code",
+      term: "library code",
+      weekId: "06",
+      plain: "Code supplied by an installed package instead of written in your project.",
+      picture: "The printed form around your handwriting: it is part of the work, but it did not come from your pen.",
+      code: "node_modules/currency-kit/index.js:84",
+      where: "Stack frames inside node_modules, site-packages, SDKs, and frameworks.",
+    },
+    {
+      slug: "layer-triage",
+      term: "layer triage",
+      weekId: "06",
+      plain: "Using the symptom to choose the first part of a system to inspect.",
+      picture: "When lights fail, check whether the bulb, wiring, or fuse box matches the evidence.",
+      code: "frontend | backend | config",
+      where: "Blank screens, failed requests, server errors, missing keys, and deployment failures.",
+    },
+  ],
+};

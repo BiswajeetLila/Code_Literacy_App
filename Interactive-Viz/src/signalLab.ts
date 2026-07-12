@@ -59,7 +59,8 @@ export class SignalLab {
   private payload01 = 0.5;
   private errorMode = false;
   private focus: SignalFocus = null;
-  private running = true;
+  private running = false;
+  private destroyed = false;
   private reduced = false;
   private lastCaption = "";
   private onCaption?: (text: string) => void;
@@ -77,6 +78,7 @@ export class SignalLab {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setClearColor(0x000000, 0);
     await this.renderer.init();
+    if (this.destroyed) return "stopped";
 
     this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
     this.camera.position.set(0, 0.55, 8.1);
@@ -97,8 +99,10 @@ export class SignalLab {
     this.setPayload(this.payload01);
     this.resize(canvas.clientWidth, canvas.clientHeight);
 
+    this.running = true;
     const loop = (): void => {
-      if (this.running) requestAnimationFrame(loop);
+      if (!this.running) return;
+      requestAnimationFrame(loop);
       void this.tick();
     };
     requestAnimationFrame(loop);
@@ -146,8 +150,15 @@ export class SignalLab {
   }
 
   destroy(): void {
+    if (this.destroyed) return;
+    this.destroyed = true;
     this.running = false;
-    this.renderer.dispose();
+    this.controls?.dispose();
+    this.renderer?.dispose();
+  }
+
+  get isDestroyed(): boolean {
+    return this.destroyed;
   }
 
   get latencyMs(): number {

@@ -1,0 +1,147 @@
+import type { WeekData } from "../types.ts";
+
+export const WEEK_11: WeekData = {
+  meta: {
+    id: "11",
+    title: "The spec is the prompt",
+    capability: "STEER +",
+    picture: "a renovation brief that names what done means before a builder starts work",
+    status: "built",
+  },
+  lessons: [
+    {
+      id: "w11-l1",
+      number: "01",
+      title: "Vague vs Spec",
+      summary: "Predict which instruction drifts, then reveal two realistic agent outcomes for the same course-map task.",
+      widgetId: "week11-compare",
+      code: {
+        title: "A brief gives the agent a checkable target",
+        lang: "Markdown",
+        lines: [
+          { code: "## Outcome", note: "name the visible result, not just an activity" },
+          { code: "Add a Week 11 card that opens #/week/11.", note: "a learner can see and try this" },
+          { code: "## Constraints", note: "protect the decisions already made" },
+          { code: "Use the manual card pattern; do not restyle the shell.", note: "the agent knows what must stay unchanged" },
+          { code: "## Verification", note: "state the evidence before implementation starts" },
+          { code: "Build passes; route opens; 375px has no horizontal overflow.", note: "each check has a clear pass or fail" },
+        ],
+      },
+    },
+    {
+      id: "w11-l2",
+      number: "02",
+      title: "Write the Brief",
+      summary: "Assemble six real spec parts, then use the checklist to see whether the brief is complete and testable.",
+      widgetId: "week11-brief",
+      code: {
+        title: "The six-part spec shape",
+        lang: "Markdown",
+        lines: [
+          { code: "1. Outcome: what a learner can see or do when this is done", note: "the finish line" },
+          { code: "2. Scope: files and behavior that may change", note: "the work boundary" },
+          { code: "3. Constraints: decisions that must remain true", note: "the guardrails" },
+          { code: "4. Prior decisions: rules already agreed by the project", note: "the existing context" },
+          { code: "5. Task breakdown: small ordered pieces of work", note: "the build path" },
+          { code: "6. Verification: observable checks that prove the result", note: "the evidence" },
+        ],
+      },
+    },
+  ],
+  cards: [
+    {
+      lessonId: "w11-l1",
+      q: "Why can one sentence such as 'add Week 11 to the course map' cause drift?",
+      a: "It leaves the outcome, allowed files, existing decisions, and proof of done unstated. The agent has to guess those parts.",
+    },
+    {
+      lessonId: "w11-l1",
+      q: "What does a spec give an agent that a vague prompt does not?",
+      a: "A shared source of truth: the intended result, boundaries, constraints, work steps, and checks to satisfy.",
+    },
+    {
+      lessonId: "w11-l1",
+      q: "Does a detailed spec remove the need to review the plan and the diff?",
+      a: "No. A spec gives the target; the plan-review gate checks the intended route, and verification checks the finished work.",
+    },
+    {
+      lessonId: "w11-l2",
+      q: "Which part of a spec says what must not change?",
+      a: "Constraints. They keep prior choices, such as the existing shell or a no-shared-files boundary, from being accidentally reopened.",
+    },
+    {
+      lessonId: "w11-l2",
+      q: "Why is 'make it work on mobile' weaker than a 375px overflow check?",
+      a: "The first is a wish. The second names a viewport and a visible pass or fail, so someone can actually verify it.",
+    },
+    {
+      lessonId: "w11-l2",
+      q: "What are this app's own examples of an SDD artifact?",
+      a: "PROJECT-PLAN.md and CONTENT-GUIDE.md. They record the product direction and content rules that guided this app before individual features were built.",
+    },
+  ],
+  resources: [
+    {
+      title: "About the repository README file",
+      source: "GitHub Docs",
+      time: "8 min read",
+      why: "Official guidance on using a repository document to communicate a project's purpose, use, and expectations.",
+      url: "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes",
+      group: "core",
+    },
+    {
+      title: "About pull request reviews",
+      source: "GitHub Docs",
+      time: "10 min read",
+      why: "Connects a written target to the review gate where collaborators approve or request changes before merging.",
+      url: "https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews",
+      group: "core",
+    },
+    {
+      title: "About repositories",
+      source: "GitHub Docs",
+      time: "8 min read",
+      why: "A quick reference for the shared project home where specifications, code, history, and collaboration live together.",
+      url: "https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories",
+      group: "deeper",
+    },
+  ],
+  glossaryTerms: [
+    {
+      slug: "spec-driven-development",
+      term: "spec-driven development (SDD)",
+      weekId: "11",
+      plain: "Building against a written, checkable brief instead of trying to steer the work through repeated vague prompts.",
+      picture: "A renovation brief that names the finished room, the rooms not to touch, and the final inspection before builders begin.",
+      code: "# Outcome\nAdd a Week 11 route.\n\n# Verification\nnpm run build",
+      where: "Project plans, feature briefs, agent instructions, and implementation handoffs.",
+    },
+    {
+      slug: "spec",
+      term: "spec",
+      weekId: "11",
+      plain: "The written source of truth for a piece of work: what to make, its boundaries, and how to prove it is done.",
+      picture: "The signed brief a builder follows instead of a series of changing hallway conversations.",
+      code: "## Scope\nOnly src/content/weeks/week11.ts\n\n## Constraints\nDo not edit shared files.",
+      where: "Issue descriptions, product requirements, technical design notes, and agent prompts.",
+    },
+    {
+      slug: "verification-criteria",
+      term: "verification criteria",
+      weekId: "11",
+      plain: "Specific checks that can show whether the promised result is true.",
+      picture: "An inspection list with a clear pass or fail for each item, not 'looks good.'",
+      code: "npm run build\nOpen #/week/11\nCheck 375px for horizontal overflow",
+      where: "Acceptance criteria, test plans, pull request checklists, and release notes.",
+    },
+    {
+      slug: "plan-review-gate",
+      term: "plan-review gate",
+      weekId: "11",
+      plain: "A deliberate pause to inspect an agent's intended files and steps before it edits the project.",
+      picture: "Reviewing the builder's work plan before materials arrive and walls are opened.",
+      code: "Plan: inspect -> list intended edits -> wait for approval",
+      where: "AI coding sessions, implementation briefs, and team design reviews before a change begins.",
+    },
+  ],
+};

@@ -34,12 +34,13 @@ export function renderHome(host: HTMLElement): void {
 
     <section class="route-panel">
       <p class="route-kicker">CURRENT POSITION</p>
-      <h2>Week 01 is built</h2>
+      <h2>Weeks 01-11 are built</h2>
       <p>
-        The first week teaches the screen, the browser, client/server, project files,
-        entry points, and where errors print. The next canonical build target is Week 08,
-        where the learner reviews AI diffs before accepting them.
+        The full Course 1 path is open: start with the screen, browser, project files, and error
+        windows, then move through dependencies, data flow, APIs, debugging, Git, async work,
+        architecture, and spec-driven delivery.
       </p>
+      <a class="app-button" href="#/weeks">Open the course map</a>
     </section>
   `;
 }

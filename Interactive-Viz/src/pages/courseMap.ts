@@ -16,8 +16,9 @@ export function renderCourseMap(host: HTMLElement): void {
       <p class="route-kicker">COURSE MAP</p>
       <h2>11 weeks, all open</h2>
       <p>
-        Week 01 is the locked quality bar. Week 08 is the next target in the
-        canonical build order, because it tests the failure modes the earlier weeks plant.
+        Every Course 1 week is implemented. Follow the path from the first screen map through
+        dependencies, functions, data flow, APIs, debugging, Git, async work, architecture,
+        and a checkable spec for AI-assisted work.
       </p>
     </section>
     <section class="week-grid" aria-label="Course weeks">
